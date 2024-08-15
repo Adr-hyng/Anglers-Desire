@@ -1,0 +1,105 @@
+{
+  "format_version": "1.16.0",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "yn:particle_spawner",
+      "is_spawnable": false,
+      "is_summonable": true,
+      "is_experimental": false,
+      "properties": {
+        "yn:particle_state": {
+          "type": "int",
+          "client_sync": true,
+          "range": [0, 5],
+          "default": 0
+        }
+      }
+    },
+    "component_groups": {
+      "despawn": {
+        "minecraft:instant_despawn": {}
+      }
+    },
+    "components": {
+      "minecraft:timer": {
+        "looping": false,
+        "time": 4,
+        "time_down_event": {
+          "event": "despawn"
+        }
+      },
+      "minecraft:type_family": {
+        "family": [
+          "particle_spawner"
+        ]
+      },
+      "minecraft:movement": {
+        "value": 0
+      },
+      "minecraft:collision_box": {
+        "width": 0.001,
+        "height": 0.001
+      },
+      "minecraft:health": {
+        "value": 20,
+        "max": 20
+      },
+      "minecraft:damage_sensor": {
+        "triggers": {
+          "cause": "all",
+          "deals_damage": false
+        }
+      },
+      "minecraft:physics": {
+        "has_collision": true,
+        "has_gravity": false
+      },
+      "minecraft:knockback_resistance": {
+        "value": 100
+      },
+      "minecraft:pushable": {
+        "is_pushable": false,
+        "is_pushable_by_piston": false
+      }
+    },
+    "events": {
+      "minecraft:entity_spawned": {
+      },
+      "show_fish_caught_particle": {
+        "set_property": {
+          "yn:particle_state": 1
+        }
+      },
+      "show_fishing_particle": {
+        "set_property": {
+          "yn:particle_state": 2
+        }
+      },
+      "show_fish_escaped_particle": {
+        "set_property": {
+          "yn:particle_state": 3
+        }
+      },
+      "show_fish_interested_particle": {
+        "set_property": {
+          "yn:particle_state": 4
+        }
+      },
+      "show_fish_notfound_particle": {
+        "set_property": {
+          "yn:particle_state": 5
+        }
+      },
+      "despawn": {
+        "sequence": [
+          {
+            "set_property": {
+              "yn:particle_state": 0
+            },
+            "add": { "component_groups": [ "despawn" ] }
+          }
+        ]
+      }
+    }
+  }
+}

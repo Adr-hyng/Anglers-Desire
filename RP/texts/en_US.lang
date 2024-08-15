@@ -1,0 +1,9 @@
+## Texts
+yn.anvil_repair.on_load_message=§a§lFishing Got Reel Addon§r §ahas been loaded successfully. Created by Adr-hyng.
+Reelz.events.caught.text=There's something in the hook, start reeling!
+Reelz.events.finding.text=I hope there's fish in here...
+Reelz.events.escaped.text=Fish got away..
+Reelz.events.interested.text=I think a fish is interested..
+Reelz.events.notFound.text=No luck.. Try at different spots.
+
+entity.yn:particle_spawner.name=Particle Builder

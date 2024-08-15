@@ -1,0 +1,70 @@
+{
+    "format_version": 2,
+    "header": {
+        "name": "Fishing Got Reel BP 1.0.0 [DEBUG]",
+        "description": "Adding immersion to vanilla fishing mechanics in Minecraft \n @Made By: https://twitter.com/h_YanG_0A",
+        "uuid": "f36713ae-a50d-4eae-ab09-14bef4e580ec",
+        "version": [
+            1,
+            0,
+            0
+        ],
+        "min_engine_version": [
+            1,
+            21,
+            0
+        ]
+    },
+    "modules": [
+        {
+            "description": "item and entity definitions",
+            "type": "data",
+            "uuid": "f0bc63f7-f2b2-4de2-a27c-6a3d5ac7cee4",
+            "version": [
+                1,
+                0,
+                0
+            ]
+        },
+        {
+            "description": "scripts",
+            "type": "script",
+            "language": "javascript",
+            "uuid": "02a44d23-5962-4bb5-8a78-ef87d1eb0726",
+            "version": [
+                1,
+                0,
+                0
+            ],
+            "entry": "scripts/main.js"
+        }
+    ],
+    "capabilities": [
+        "script_eval"
+    ],
+    "dependencies": [
+        {
+            "module_name": "@minecraft/server",
+            "version": "1.13.0"
+        },
+        {
+            "module_name": "@minecraft/server-ui",
+            "version": "1.2.0"
+        },
+        {
+            "uuid": "54ee84f3-7b81-421c-8602-2d399940fd59",
+            "version": [
+                1,
+                0,
+                0
+            ]
+        }
+    ],
+    "metadata": {
+        "authors": [
+            "@h_YanG_0A"
+        ],
+        "license": "GPL-3.0-or-later",
+        "url": "https://twitter.com/h_YanG_0A"
+    }
+}

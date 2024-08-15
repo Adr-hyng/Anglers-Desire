@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "@minecraft/common": "^1.2.0",
+    "@minecraft/server": "^1.13.0",
+    "@minecraft/server-ui": "^1.2.0"
+  }
+}

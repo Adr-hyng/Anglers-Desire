@@ -1,0 +1,67 @@
+{
+  "minInterestTimer": {
+    "description": "The amount of ticks in seconds that a fish will stay interested in a bait.",
+    "default": 10
+  },
+  "maxInterestTimer": {
+    "description": "The amount of ticks in seconds that a fish will stay interested in a bait.",
+    "default": 30
+  },
+  "minFindingTimer": {
+    "description": "The amount of time in seconds for finding a fish i.g 10 seconds",
+    "default": 10
+  },
+  "maxFindingTimer": {
+    "description": "The amount of time in seconds for finding a fish.",
+    "default": 30
+  },
+  "minReelTimer": {
+    "description": "The amount of time in seconds for reeling in a fish before it flees.",
+    "default": 2
+  },
+  "maxReelTimer": {
+    "description": "The amount of time in seconds for reeling in a fish before it flees.",
+    "default": 4
+  },
+  "includedFamily": {
+    "description": "Any Included family of entities that you can reel and get attracted to the fishing hook.",
+    "default": []
+  },
+  "excludedFamily": {
+    "description": "Any Excluded family to ignore when fishing.",
+    "default": []
+  },
+  "backDestinationOffset": {
+    "description": "The value of 2 means the back of the player's looking direction.\nIncrease if you want the fish to be far away when reeled in.\nDecrease if you want the fish to be in front of you.\nNote: Preferably, the value should be 1 or 2.",
+    "default": 1
+  },
+  "minRadius": {
+    "description": "Number of radius of the fishing hook can attract fishes.",
+    "default": 2
+  },
+  "maxRadius": {
+    "description": "Number of radius of the fishing hook can attract fishes.",
+    "default": 4
+  },
+  "enableWatchDogTerminateLog": {
+    "description": "Enable the watchdog terminate log. Makes sending the WatchDog Error either Message in-game or Creator's Log.",
+    "default": false
+  },
+  "expirationTimer": {
+    "description": "Number of seconds before cancelling the fishing system.",
+    "default": 600
+  },
+  "depthMultiplierRoll": {
+    "description": "Random Depth chances for better fishes at the bottom of the sea. Total of 100%.\n+2 blocks below = 45% Chance\n+4 blocks below = 30% Chance\n+7 blocks below = 15% Chance\n+15 blocks below = 10% Chance",
+    "default": {
+        "5": 0.45,
+        "8": 0.3,
+        "11": 0.15,
+        "15": 0.1
+    }
+  },
+  "successRate": {
+    "description": "Success rate you will guarantee to reel or catch any included mob in the water.",
+    "default": 60
+  }
+}
