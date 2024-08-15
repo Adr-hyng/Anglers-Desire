@@ -1,4 +1,4 @@
-import { EnchantmentSlot, Dimension, ItemStack, ItemComponentTypes, EnchantmentType } from '@minecraft/server';
+import { EnchantmentSlot, Dimension, ItemStack, ItemComponentTypes, EnchantmentType, EntityTypes } from '@minecraft/server';
 import { randomEnchantByLevel } from 'enchantment_system/enchantment_table';
 import { OverTakes } from "./partial_overtakes";
 import { Logger, Random } from 'utils/index';
@@ -196,16 +196,25 @@ OverTakes(Dimension.prototype, {
                             item.getComponent(ItemComponentTypes.Enchantable).addEnchantment(enchant);
                         }
                     }
+                    if (entry?.toEntity && Boolean(EntityTypes.get(entry.toEntity) !== undefined)) {
+                        item.asEntity = entry.toEntity;
+                    }
                     rollEntries.addEntry(item, entry.weight);
                 }
             }
             for (let i = 0; i < pool.rolls; i++) {
-                spawnedItems.push(this.spawnItem(rollEntries.getRandom(), location));
+                const entityToSpawn = rollEntries.getRandom();
+                if (entityToSpawn?.asEntity) {
+                    spawnedItems.push(this.spawnEntity(entityToSpawn.asEntity, location));
+                }
+                else {
+                    spawnedItems.push(this.spawnItem(entityToSpawn, location));
+                }
             }
             return spawnedItems;
         }
         catch (e) {
-            Logger.error(e.stack);
+            Logger.error(e, e.stack);
             return [];
         }
     }

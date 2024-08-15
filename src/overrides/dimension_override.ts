@@ -1,11 +1,11 @@
 
-import { Enchantment, EnchantmentSlot, Dimension, Vector3, Entity, ItemStack, ItemComponentTypes, ItemDurabilityComponent, ItemEnchantableComponent, EnchantmentType } from '@minecraft/server';
+import { Enchantment, EnchantmentSlot, Dimension, Vector3, Entity, ItemStack, ItemComponentTypes, ItemDurabilityComponent, ItemEnchantableComponent, EnchantmentType, EntityTypes } from '@minecraft/server';
 import { randomEnchantByLevel} from 'enchantment_system/enchantment_table';
 import { OverTakes } from "./partial_overtakes";
 import { Logger, Random } from 'utils/index';
 import { RangeInternal, LootTableType, PollsTableType} from 'types/index';
 import { EquipmentMaterialType, ItemMaterialType } from 'enchantment_system/enchantability';
-import { MinecraftItemTypes } from 'vanilla-types/index';
+import { MinecraftEntityTypes, MinecraftItemTypes } from 'vanilla-types/index';
 
 /**
   loot: a variable similar to JSON loot_tables.
@@ -214,6 +214,12 @@ OverTakes(Dimension.prototype, {
               (item.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).addEnchantment(enchant);
             }
           }
+
+          // check if it's summonable
+          if(entry?.toEntity && Boolean(EntityTypes.get(entry.toEntity) !== undefined)) {
+            item.asEntity = entry.toEntity;
+          }
+
           // Spawns the item at the specified location.
           rollEntries.addEntry(item, entry.weight);
         }
@@ -221,8 +227,12 @@ OverTakes(Dimension.prototype, {
 
       // Random Weighted Selection
       for(let i = 0; i < pool.rolls; i++) {
-        // spawnedItems.push(this.spawnItem(rollEntries.getRandom(), location));
-        spawnedItems.push(this.spawnItem(rollEntries.getRandom(), location));
+        const entityToSpawn: ItemStack = rollEntries.getRandom();
+        if(entityToSpawn?.asEntity) {
+          spawnedItems.push( this.spawnEntity(entityToSpawn.asEntity, location) );
+        } else {
+          spawnedItems.push( this.spawnItem(entityToSpawn, location) );
+        }
       }
       return spawnedItems; // List of Entity
     } catch (e) {

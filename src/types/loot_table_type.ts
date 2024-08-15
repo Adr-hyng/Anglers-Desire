@@ -11,6 +11,7 @@ export interface PollsTableType {
       item: string;
       weight: number;
       count?: UniformRange | number;
+      toEntity?: string,
       setCanDestroy?: string[];
       setCanPlaceOn?: string[];
       setName?: string;
