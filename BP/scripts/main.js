@@ -12,7 +12,6 @@ world.afterEvents.playerSpawn.subscribe((e) => {
 world.beforeEvents.itemUse.subscribe((event) => {
     const player = event.source;
     let fisher = fetchFisher(player);
-    fisher.particleVectorLocations.clear();
     if (!fisher.fishingRod.isEquipped)
         return;
     system.run(() => {
@@ -28,6 +27,11 @@ world.beforeEvents.itemUse.subscribe((event) => {
             const removedEntity = removedEvent.typeId;
             if (removedEntity !== "minecraft:fishing_hook")
                 return;
+            if (fisher.particleVectorLocations.getVectors().length > 5) {
+                fisher.fishingOutputMap().Caught.reset().then((_) => {
+                    fisher.particleVectorLocations.clear();
+                });
+            }
             if (!fisher.fishingHook.isSubmerged)
                 return;
             onHookedItem(fisher);

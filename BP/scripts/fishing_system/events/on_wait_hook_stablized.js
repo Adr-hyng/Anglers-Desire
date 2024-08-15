@@ -7,6 +7,7 @@ import { MinecraftBlockTypes } from "vanilla-types/index";
 import server_configuration from "fishing_system/configuration/server_configuration";
 overrideEverything();
 const HOOK_SUBMERGE_OFFSET = 0.2;
+const HOOK_TREASURE_OFFSET = 1.0;
 export async function onHookLanded(player) {
     let fisher = fetchFisher(player);
     const oldLog = fishingCallingLogMap.get(player.id);
@@ -57,7 +58,9 @@ export async function onHookLanded(player) {
         return;
     const expirationTimer = new Timer(SERVER_CONFIGURATION.expirationTimer * TicksPerSecond);
     const FishingStateIndicator = fisher.fishingOutputMap();
+    ;
     const hookSubmergeState = new StateController(fisher.fishingHook.isSubmerged);
+    const hookTreasureFoundState = new StateController(fisher.fishingHook.isDeeplySubmerged);
     const initialHookPosition = fisher.fishingHook.stablizedLocation;
     let luckOfTheSeaLevel = fisher.fishingRod.getLuckOfSea()?.level ?? 0;
     let lureLevel = fisher.fishingRod.getLure()?.level ?? 0;
@@ -72,8 +75,9 @@ export async function onHookLanded(player) {
             if (caughtFish || caughtFish?.isValid())
                 throw new Error("A Fish is already caught");
             fisher.fishingHook.isSubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_SUBMERGE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
-            fisher.fishingHook.isDeeplySubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - 1.5 >= parseFloat(hookEntity.location.y.toFixed(2)));
+            fisher.fishingHook.isDeeplySubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_TREASURE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
             hookSubmergeState.setValue(fisher.fishingHook.isSubmerged);
+            hookTreasureFoundState.setValue(fisher.fishingHook.isDeeplySubmerged);
             expirationTimer.update();
             Logger.info("FINDING INTERVAL RUNNING. ID=", tuggingEvent);
             HookOnSubmergedForItemFishing();
@@ -95,9 +99,15 @@ export async function onHookLanded(player) {
         if (hookSubmergeState.hasChanged()) {
             if (hookSubmergeState.getCurrentValue()) {
                 FishingStateIndicator.Caught.run();
+                player.playSound('note.chime');
             }
             else {
                 FishingStateIndicator.Escaped.run();
+            }
+        }
+        if (hookTreasureFoundState.hasChanged()) {
+            if (hookTreasureFoundState.getCurrentValue()) {
+                player.playSound('random.orb');
             }
         }
     }

@@ -3,7 +3,7 @@ import { fishingCallingLogMap, fetchFisher, fishers } from "constant";
 import { SERVER_CONFIGURATION } from "fishing_system/configuration/config_handler";
 import { Fisher } from "fishing_system/entities/fisher";
 import { RangeInternal } from "types/index";
-import { ExecuteAtGivenTick, Logger, StateController, Timer } from "utils/index";
+import { ExecuteAtGivenTick, Logger, sleep, StateController, Timer } from "utils/index";
 import { onHookedItem } from "./on_hook_item";
 
 import {overrideEverything} from "overrides/index";
@@ -13,6 +13,7 @@ import server_configuration from "fishing_system/configuration/server_configurat
 overrideEverything();
 
 const HOOK_SUBMERGE_OFFSET: number = 0.2;
+const HOOK_TREASURE_OFFSET: number = 1.0;
 
 export async function onHookLanded(player: Player): Promise<void> {
   let fisher: Fisher = fetchFisher(player);
@@ -68,8 +69,9 @@ export async function onHookLanded(player: Player): Promise<void> {
   // let isDeeplySubmerged: boolean = false;
   // let isHookSubmerged: boolean = false;
   
-  const FishingStateIndicator = fisher.fishingOutputMap();
+  const FishingStateIndicator = fisher.fishingOutputMap();;
   const hookSubmergeState = new StateController(fisher.fishingHook.isSubmerged);
+  const hookTreasureFoundState = new StateController(fisher.fishingHook.isDeeplySubmerged);
   
   const initialHookPosition = fisher.fishingHook.stablizedLocation;
   let luckOfTheSeaLevel = fisher.fishingRod.getLuckOfSea()?.level ?? 0;
@@ -85,8 +87,9 @@ export async function onHookLanded(player: Player): Promise<void> {
       if(caughtFish || caughtFish?.isValid()) throw new Error("A Fish is already caught");
 
       fisher.fishingHook.isSubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_SUBMERGE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
-      fisher.fishingHook.isDeeplySubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - 1.5 >= parseFloat(hookEntity.location.y.toFixed(2)));
+      fisher.fishingHook.isDeeplySubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_TREASURE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
       hookSubmergeState.setValue(fisher.fishingHook.isSubmerged);
+      hookTreasureFoundState.setValue(fisher.fishingHook.isDeeplySubmerged);
       expirationTimer.update();
 
       Logger.info("FINDING INTERVAL RUNNING. ID=", tuggingEvent);
@@ -108,13 +111,18 @@ export async function onHookLanded(player: Player): Promise<void> {
 
   function HookOnSubmergedForItemFishing(): void {
     if(hookSubmergeState.hasChanged()) {
-      // On hook being submerged
       if(hookSubmergeState.getCurrentValue()) {
         FishingStateIndicator.Caught.run();
-        // Logger.debug("SHOW ITEM FOUND ICON");
+        player.playSound('note.chime');
       } else { 
         FishingStateIndicator.Escaped.run();
-       }
+      }
+    }
+
+    if(hookTreasureFoundState.hasChanged()) {
+      if(hookTreasureFoundState.getCurrentValue()) {
+        player.playSound('random.orb');
+      } 
     }
   }
 }
