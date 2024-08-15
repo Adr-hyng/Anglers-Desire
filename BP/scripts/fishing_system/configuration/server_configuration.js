@@ -1,5 +1,5 @@
 export default {
-    debug: true,
+    debug: false,
     minInterestTimer: 10,
     maxInterestTimer: 30,
     minFindingTimer: 10,

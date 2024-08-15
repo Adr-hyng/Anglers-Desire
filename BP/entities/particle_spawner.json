@@ -64,6 +64,9 @@
     },
     "events": {
       "minecraft:entity_spawned": {
+        "set_property": {
+          "yn:particle_state": 1
+        }
       },
       "show_fish_caught_particle": {
         "set_property": {

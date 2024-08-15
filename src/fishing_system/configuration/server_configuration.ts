@@ -2,7 +2,7 @@ export default {
   /**
    * Enables debug messages to content logs.
    */
-  debug: true,
+  debug: false,
   /**
    * The amount of ticks in seconds that a fish will stay interested in a bait.
    */

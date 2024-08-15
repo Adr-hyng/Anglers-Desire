@@ -53,7 +53,7 @@ export async function onHookLanded(player: Player): Promise<void> {
             throw new Error("Fishing Hook is stuck on ground");
           }
         } catch (e) {
-          if(server_configuration.debug) Logger.error(e, e.stack);
+          Logger.error(e, e.stack);
           system.clearRun(inWaterIndicator);
           resolve(onHookStablized);
         }
@@ -102,7 +102,7 @@ export async function onHookLanded(player: Player): Promise<void> {
         throw new Error("AFK Fishing detected");
       }
     } catch (e){
-      if(server_configuration.debug) Logger.error(e, e.stack);
+      Logger.error(e, e.stack);
       system.clearRun(tuggingEvent);
       FishingStateIndicator.Finding.reset().then((_) => {});
       return;

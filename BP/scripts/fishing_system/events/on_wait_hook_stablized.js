@@ -4,7 +4,6 @@ import { SERVER_CONFIGURATION } from "fishing_system/configuration/config_handle
 import { Logger, StateController, Timer } from "utils/index";
 import { overrideEverything } from "overrides/index";
 import { MinecraftBlockTypes } from "vanilla-types/index";
-import server_configuration from "fishing_system/configuration/server_configuration";
 overrideEverything();
 const HOOK_SUBMERGE_OFFSET = 0.2;
 const HOOK_TREASURE_OFFSET = 1.0;
@@ -46,8 +45,7 @@ export async function onHookLanded(player) {
                     }
                 }
                 catch (e) {
-                    if (server_configuration.debug)
-                        Logger.error(e, e.stack);
+                    Logger.error(e, e.stack);
                     system.clearRun(inWaterIndicator);
                     resolve(onHookStablized);
                 }
@@ -88,8 +86,7 @@ export async function onHookLanded(player) {
             }
         }
         catch (e) {
-            if (server_configuration.debug)
-                Logger.error(e, e.stack);
+            Logger.error(e, e.stack);
             system.clearRun(tuggingEvent);
             FishingStateIndicator.Finding.reset().then((_) => { });
             return;

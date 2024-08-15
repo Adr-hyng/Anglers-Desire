@@ -1,7 +1,7 @@
 // Import your configuration if necessary
 
 import { system } from "@minecraft/server";
-import { getServerConfiguration, SERVER_CONFIGURATION } from "fishing_system/index";
+import { SERVER_CONFIGURATION } from "fishing_system/index";
 
 export enum LogLevel {
   DEBUG = 'DEBUG',
@@ -41,14 +41,14 @@ export class Logger {
   }
 
   static debug(...message: any[]): void {
-    Logger.log(LogLevel.DEBUG, message);
+    if(SERVER_CONFIGURATION.debug) Logger.log(LogLevel.DEBUG, message);
   }
 
   static info(...message: any[]): void {
-    Logger.log(LogLevel.INFO, message);
+    if(SERVER_CONFIGURATION.debug) Logger.log(LogLevel.INFO, message);
   }
 
   static error(...message: any[]): void {
-    Logger.log(LogLevel.ERROR, message);
+    if(SERVER_CONFIGURATION.debug) Logger.log(LogLevel.ERROR, message);
   }
 }

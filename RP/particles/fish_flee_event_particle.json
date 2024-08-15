@@ -19,7 +19,7 @@
 				"offset": [0, 0, 0]
 			},
 			"minecraft:particle_lifetime_expression": {
-				"expiration_expression": "q.property('yn:particle_state') == 0",
+				"expiration_expression": "q.is_on_screen ? q.property('yn:particle_state') == 0 : 0",
 				"max_lifetime": 2
 			},
 			"minecraft:particle_initial_speed": 0,

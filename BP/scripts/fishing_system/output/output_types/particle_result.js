@@ -11,6 +11,8 @@ export class ParticleResult {
         return new Promise((resolve) => {
             system.run(() => {
                 try {
+                    if (!this.fisher.particleSpawner || !this.fisher.particleSpawner?.isValid())
+                        throw new Error("Particle spawned is undefined or not existing");
                     const nearestNeighbor = this.fisher.particleVectorLocations.getNearby(this.fisher.particleSpawner.location, this.fisher.particleVectorLocations.distance);
                     const nV = this.fisher.source.dimension.getEntities({ location: nearestNeighbor, closest: 30, maxDistance: this.fisher.particleVectorLocations.distance, type: "yn:particle_spawner" });
                     if (nV.length)
