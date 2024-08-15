@@ -8,7 +8,7 @@ export function onHookedItem(fisher) {
     const player = fisher.source;
     system.run(() => {
         try {
-            if (fisher.fishingRod.damageDurability(3))
+            if (fisher.fishingRod.damageDurability(5))
                 return;
             const hookLandedVector = fisher.fishingHook.stablizedLocation;
             const isDeeplySubmerged = fisher.fishingHook.isDeeplySubmerged;

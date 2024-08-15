@@ -1,10 +1,6 @@
 import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource} from "@minecraft/server";
-
-
-
 import { ADDON_IDENTIFIER, fetchFisher } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
-import { Logger } from "./utils/index";
 import { Fisher } from "./fishing_system/entities/fisher";
 
 import {overrideEverything} from "overrides/index";

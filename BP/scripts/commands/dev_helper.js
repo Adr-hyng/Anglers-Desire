@@ -1,7 +1,6 @@
-import { EnchantmentTypes, EntityComponentTypes, ItemComponentTypes, ItemEnchantableComponent, ItemStack, system } from "@minecraft/server";
+import { EnchantmentTypes, EntityComponentTypes, ItemComponentTypes, ItemStack, system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { MinecraftItemTypes, MinecraftEnchantmentTypes } from "vanilla-types/index";
-import { ActionFormData } from "@minecraft/server-ui";
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
     REQUIRED_PARAMETER["GET"] = "get";
@@ -41,24 +40,6 @@ const command = {
                 if (!player.StableIsOp())
                     break;
                 system.run(() => {
-                    const item = new ItemStack(MinecraftItemTypes.IronSword);
-                    item.getComponent(ItemEnchantableComponent.componentId).addEnchantments([
-                        { type: EnchantmentTypes.get("mending"), level: 1 },
-                        { type: EnchantmentTypes.get("sharpness"), level: 5 },
-                        { type: EnchantmentTypes.get("fire_aspect"), level: 1 },
-                    ]);
-                    const loreModifier = item.getComponent(ItemEnchantableComponent.componentId).getEnchantments().map((ench) => {
-                        return { level: ench.level, type: ench.type };
-                    });
-                    const form = new ActionFormData();
-                    form.title(`test`);
-                    form.body(player.name + JSON.stringify(loreModifier));
-                    form.button("ok");
-                    form.show(player).then(result => {
-                        if (result.selection === 0) {
-                            giveitem(player, MinecraftItemTypes.IronSword, 1, loreModifier, 10);
-                        }
-                    });
                 });
                 break;
             default:

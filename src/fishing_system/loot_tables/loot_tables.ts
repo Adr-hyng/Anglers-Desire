@@ -1,19 +1,17 @@
 import {RangeInternal, LootTableType } from "types/index";
-import { Jungle, Default } from "./index";
+import { JungleCatch, DefaultCatch } from "./index";
 
-const LUCK_MODIFIER: number = 5;
 
 export class LootTable {
-  private static fishingModifier(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false) {
-    const enchantmentModifier = (level * LUCK_MODIFIER);
-    const deepTreasureModifier = (isDeeplySubmerged ? 45 : 0);
-    return (enchantmentModifier + deepTreasureModifier);
+  private static fishingModifier(LoTSLevel: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false) {
+    const deepTreasureModifier = (isDeeplySubmerged ? 34.5 : 0);
+    return {LoTSModifier: LoTSLevel, deepnessModifier: deepTreasureModifier};
   }
   static FishingJunk(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false): LootTableType {
-    return Default.loot(this.fishingModifier(level, isDeeplySubmerged));
+    return DefaultCatch.loot( this.fishingModifier(level, isDeeplySubmerged));
   }
 
   static FishingJungleJunk(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false): LootTableType {
-    return Jungle.loot(this.fishingModifier(level, isDeeplySubmerged));
+    return JungleCatch.loot( this.fishingModifier(level, isDeeplySubmerged));
   }
 }

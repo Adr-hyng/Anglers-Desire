@@ -10,7 +10,7 @@ export function onHookedItem(fisher: Fisher) {
   const player = fisher.source;
   system.run(() => {
     try {
-      if(fisher.fishingRod.damageDurability(3)) return;
+      if(fisher.fishingRod.damageDurability(5)) return;
       const hookLandedVector = fisher.fishingHook.stablizedLocation;
       const isDeeplySubmerged = fisher.fishingHook.isDeeplySubmerged;
       const enchantmentLevel = fisher.fishingRod.getLuckOfSea()?.level ?? 0;

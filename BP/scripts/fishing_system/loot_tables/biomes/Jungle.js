@@ -1,11 +1,11 @@
 import { MinecraftItemTypes } from "vanilla-types/index";
-export class Jungle {
-    static loot(fishingModifier) {
+export class JungleCatch {
+    static loot(overallModifier) {
         return {
             pools: [
                 {
                     "rolls": 1,
-                    "weight": 85 - fishingModifier,
+                    "weight": 10 * (1 - overallModifier),
                     "entries": [
                         {
                             "item": MinecraftItemTypes.LeatherBoots,
@@ -66,7 +66,7 @@ export class Jungle {
                 },
                 {
                     "rolls": 1,
-                    "weight": 15 + fishingModifier,
+                    "weight": 5 * (1 + overallModifier),
                     "entries": [
                         {
                             "item": MinecraftItemTypes.NautilusShell,

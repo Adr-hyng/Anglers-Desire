@@ -1,2 +1,2 @@
-export { Jungle } from "./biomes/Jungle";
-export { Default } from "./biomes/Default";
+export { JungleCatch} from "./biomes/JungleCatch";
+export { DefaultCatch } from "./biomes/DefaultCatch";

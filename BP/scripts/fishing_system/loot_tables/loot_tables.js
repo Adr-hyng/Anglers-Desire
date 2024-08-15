@@ -1,15 +1,13 @@
-import { Jungle, Default } from "./index";
-const LUCK_MODIFIER = 5;
+import { JungleCatch, DefaultCatch } from "./index";
 export class LootTable {
-    static fishingModifier(level, isDeeplySubmerged = false) {
-        const enchantmentModifier = (level * LUCK_MODIFIER);
-        const deepTreasureModifier = (isDeeplySubmerged ? 45 : 0);
-        return (enchantmentModifier + deepTreasureModifier);
+    static fishingModifier(LoTSLevel, isDeeplySubmerged = false) {
+        const deepTreasureModifier = (isDeeplySubmerged ? 34.5 : 0);
+        return { LoTSModifier: LoTSLevel, deepnessModifier: deepTreasureModifier };
     }
     static FishingJunk(level, isDeeplySubmerged = false) {
-        return Default.loot(this.fishingModifier(level, isDeeplySubmerged));
+        return DefaultCatch.loot(this.fishingModifier(level, isDeeplySubmerged));
     }
     static FishingJungleJunk(level, isDeeplySubmerged = false) {
-        return Jungle.loot(this.fishingModifier(level, isDeeplySubmerged));
+        return JungleCatch.loot(this.fishingModifier(level, isDeeplySubmerged));
     }
 }

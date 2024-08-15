@@ -1,9 +1,7 @@
-import { Enchantment, EnchantmentType, EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, EntityTypes, ItemComponentTypes, ItemDurabilityComponent, ItemEnchantableComponent, ItemStack, system } from "@minecraft/server";
+import { EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, ItemComponentTypes, ItemDurabilityComponent, ItemEnchantableComponent, ItemStack, system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
-import { MinecraftItemTypes, MinecraftEnchantmentTypes, MinecraftEntityTypes } from "vanilla-types/index";
+import { MinecraftItemTypes, MinecraftEnchantmentTypes } from "vanilla-types/index";
 import { ICommandBase} from "./ICommandBase";
-import { fetchFisher } from "constant";
-import { ActionFormData } from "@minecraft/server-ui";
 
 // Automate this, the values should be the description.
 enum REQUIRED_PARAMETER {
@@ -42,24 +40,7 @@ const command: ICommandBase = {
             case REQUIRED_PARAMETER.TEST:
                 if(!player.StableIsOp()) break;
                 system.run( () => {
-                    const item = new ItemStack(MinecraftItemTypes.IronSword);
-                    (item.getComponent(ItemEnchantableComponent.componentId) as ItemEnchantableComponent).addEnchantments([
-                        {type: EnchantmentTypes.get("mending"), level: 1},
-                        {type: EnchantmentTypes.get("sharpness"), level: 5},
-                        {type: EnchantmentTypes.get("fire_aspect"), level: 1},
-                    ]);
-                    const loreModifier = (item.getComponent(ItemEnchantableComponent.componentId) as ItemEnchantableComponent).getEnchantments().map((ench) => {
-                        return {level: ench.level, type: ench.type};
-                    });
-
-                    const form = new ActionFormData();
-                    form.title(`test`)
-                    form.body(player.name + JSON.stringify(loreModifier));
-                    form.button("ok")
-                    form.show(player).then(result => {
-                    if (result.selection === 0) {
-                        giveitem(player, MinecraftItemTypes.IronSword, 1, loreModifier, 10);
-                    }});
+                    
                 });
                 break;
             default:
