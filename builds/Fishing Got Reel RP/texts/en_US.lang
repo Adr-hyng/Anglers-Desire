@@ -1,0 +1,7 @@
+## Texts
+yn.fishing_got_reel.on_load_message=§a§lFishing Got Reel Addon§r §ahas been loaded successfully. Created by Adr-hyng.
+yn.fishing_got_reel.on_caught_message=There's something caught by the hook...
+yn.fishing_got_reel.on_drop_hook=It got away...
+yn.fishing_got_reel.on_afk_detected=Afk Detected. Cancelled the fishing system.
+
+entity.yn:particle_spawner.name=Particle Builder

@@ -1,0 +1,15 @@
+{
+	"format_version": "1.10.0",
+	"animation_controllers": {
+		"controller.animation.particle_spawner.controller": {
+			"states": {
+				"default": {
+					"animations": [
+						{"fish_caught": "q.property('yn:particle_state') == 1"},
+						{"fish_escaped": "q.property('yn:particle_state') == 2"}
+					]
+				}
+			}
+		}
+	}
+}
