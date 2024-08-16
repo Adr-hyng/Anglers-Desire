@@ -7,7 +7,7 @@ overrideEverything();
 world.afterEvents.playerSpawn.subscribe((e) => {
     if (!e.initialSpawn)
         return;
-    e.player.runCommandAsync(`tellraw ${e.player.name} {"rawtext":[{"translate":"yn.anvil_repair.on_load_message"}]}`);
+    e.player.runCommandAsync(`tellraw ${e.player.name} {"rawtext":[{"translate":"yn.fishing_got_reel.on_load_message"}]}`);
 });
 world.beforeEvents.itemUse.subscribe((event) => {
     const player = event.source;
@@ -56,7 +56,7 @@ system.afterEvents.scriptEventReceive.subscribe((event) => {
         }
         catch (err) {
             if (err instanceof ReferenceError) {
-                player.sendMessage(`§cInvalid Command ${cmd}\nCheck If The Command Actually Exists. Use /scriptevent yn:immersif help`);
+                player.sendMessage(`§cInvalid Command ${cmd}\nCheck If The Command Actually Exists. Use /scriptevent ${ADDON_IDENTIFIER} help`);
             }
             else {
                 console.error(err);

@@ -47,8 +47,8 @@ class Fisher {
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
         this._fishingOutputMap = {
-            Caught: FishingResultBuilder.createActionResult(this.clientConfiguration.Caught, "Reelz.events.caught.text", ParticleState.CAUGHT, this),
-            Escaped: FishingResultBuilder.createActionResult(this.clientConfiguration.Escaped, "Reelz.events.escaped.text", ParticleState.ESCAPED, this),
+            Caught: FishingResultBuilder.createActionResult(this.clientConfiguration.Caught, "yn.fishing_got_reel.on_caught_message", ParticleState.CAUGHT, this),
+            Escaped: FishingResultBuilder.createActionResult(this.clientConfiguration.Escaped, "yn.fishing_got_reel.on_drop_hook", ParticleState.ESCAPED, this),
         };
     }
 

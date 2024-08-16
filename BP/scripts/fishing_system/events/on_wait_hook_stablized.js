@@ -80,8 +80,8 @@ export async function onHookLanded(player) {
             Logger.info("FINDING INTERVAL RUNNING. ID=", tuggingEvent);
             HookOnSubmergedForItemFishing();
             if (expirationTimer.isDone()) {
-                FishingStateIndicator.Escaped.run();
                 fisher.reset(true);
+                player.runCommandAsync(`tellraw ${player.name} {"rawtext":[{"translate":"yn.fishing_got_reel.on_afk_detected"}]}`);
                 throw new Error("AFK Fishing detected");
             }
         }
