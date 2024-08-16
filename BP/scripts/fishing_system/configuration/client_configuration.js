@@ -15,7 +15,9 @@ export class FormBuilder {
     }
 }
 export const clientConfiguration = {
-    "SoundEffectToggle": new FormBuilder("Enable Sound Effect").createToggle(true),
+    "OnInitializeMessage": new FormBuilder("Enable Addon Init Message").createToggle(true),
+    "OnSubmergeSE": new FormBuilder("Enable Submerged Sound").createToggle(true),
+    "OnTreasureSE": new FormBuilder("Enable Treasure Sound").createToggle(true),
     "Caught": new FormBuilder("Caught Output Option").createDropdown(["ICON", "TEXT", "BOTH", "OFF"], "ICON"),
-    "Escaped": new FormBuilder("Escaped Output Option").createDropdown(["ICON", "TEXT", "BOTH", "OFF"], "ICON")
+    "Escaped": new FormBuilder("Escaped Output Option").createDropdown(["ICON", "TEXT", "BOTH", "OFF"], "ICON"),
 };

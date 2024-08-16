@@ -6,11 +6,9 @@ import {
     system, 
     EntityEquippableComponent,
     EntityItemComponent,
-    EasingType,
 } from "@minecraft/server";
 
 import {MinecraftEntityTypes} from "vanilla-types/index";
-import {ParticleState} from "types/index";
 
 import {
     Random
@@ -21,17 +19,24 @@ import {
     StateController,
     VectorContainer,
 } from "utils/index";
-import { SERVER_CONFIGURATION, LootTable, FishingResultBuilder } from "fishing_system/index";
-import { clientConfiguration, FormBuilder } from "../configuration/client_configuration";
+import { SERVER_CONFIGURATION, LootTable, FishingOutputBuilder } from "fishing_system/index";
+import { clientConfiguration } from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
-import { FishingStateTypes } from "fishing_system/output/fishing_output_indicator";
 import { FishingHook } from "./hook";
+import { IFishingOutput } from "fishing_system/outputs/IFishingOutput";
+
+export type FishingStateTypes = {
+    Caught: IFishingOutput;
+    Escaped: IFishingOutput;
+}
 
 const ReelingCompleteProcess: number = 0.96;
-const FishingTimeInterval: number = 0.03; // 0.03 - Make this dependent in distance. Like at uprise it is fast, at middle to end it is slow.
+const FishingTimeInterval: number = 0.03; 
 class Fisher {
     private _source: Player = null;
     private _fishingOutputManager: FishingStateTypes;
+    particleSpawner: Entity = null;
+    particleVectorLocations: VectorContainer = null;
     clientConfiguration: typeof clientConfiguration = clientConfiguration;
     
     fishingHook: FishingHook = null;
@@ -39,16 +44,13 @@ class Fisher {
 
     currentBiomeLootTable: Array<string> = Object.getOwnPropertyNames(LootTable).filter(prop => !['name', 'prototype', 'length', 'fishingModifier'].includes(prop));
     currentBiome: number = 0;
-
-    particleSpawner: Entity = null;
-    particleVectorLocations: VectorContainer = null;
     
     constructor(player: Player) {
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
         this._fishingOutputManager = {
-            "Caught": FishingResultBuilder.create(this.clientConfiguration.Caught, this),
-            "Escaped": FishingResultBuilder.create(this.clientConfiguration.Escaped, this),
+            "Caught": FishingOutputBuilder.create(this.clientConfiguration.Caught, this),
+            "Escaped": FishingOutputBuilder.create(this.clientConfiguration.Escaped, this),
         };
     }
 
@@ -77,8 +79,8 @@ class Fisher {
     }
 
     public reelHook(): Fisher {
-        if(!this.source) return this;
-        if(!this.caughtByHook) return this;
+        if(!this.source || !this.source?.isValid()) return this;
+        if(!this.caughtByHook || !this.caughtByHook?.isValid()) return this;
         
         this.gainExperience().then((_)=> {});
         const currentEntityCaughtByHook = this.caughtByHook;

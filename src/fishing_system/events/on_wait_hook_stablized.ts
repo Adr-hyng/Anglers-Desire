@@ -1,6 +1,6 @@
 import { Player, TicksPerSecond, system, BlockTypes} from "@minecraft/server";
 import { fishingCallingLogMap, fetchFisher } from "constant";
-import { SERVER_CONFIGURATION } from "fishing_system/configuration/config_handler";
+import { SERVER_CONFIGURATION } from "fishing_system/configuration/configuration_handler";
 import { Fisher } from "fishing_system/entities/fisher";
 import { Logger, StateController, Timer } from "utils/index";
 

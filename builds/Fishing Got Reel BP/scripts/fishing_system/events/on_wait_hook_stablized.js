@@ -1,14 +1,14 @@
 import { TicksPerSecond, system, BlockTypes } from "@minecraft/server";
 import { fishingCallingLogMap, fetchFisher } from "constant";
-import { SERVER_CONFIGURATION } from "fishing_system/configuration/config_handler";
-import { ExecuteAtGivenTick, Logger, StateController, Timer } from "utils/index";
-import { onHookedItem } from "./on_hook_item";
+import { SERVER_CONFIGURATION } from "fishing_system/configuration/configuration_handler";
+import { Logger, StateController, Timer } from "utils/index";
 import { overrideEverything } from "overrides/index";
 import { MinecraftBlockTypes } from "vanilla-types/index";
 overrideEverything();
 const HOOK_SUBMERGE_OFFSET = 0.2;
+const HOOK_TREASURE_OFFSET = 1.0;
 export async function onHookLanded(player) {
-    const fisher = fetchFisher(player);
+    let fisher = fetchFisher(player);
     const oldLog = fishingCallingLogMap.get(player.id);
     fishingCallingLogMap.set(player.id, Date.now());
     if ((oldLog + 500) >= Date.now())
@@ -19,7 +19,7 @@ export async function onHookLanded(player) {
             const isHookStabilized = (velX, velY, velZ) => Math.round(velX * 100) / 100 === -0.00 &&
                 Math.round(velY * 100) / 100 === -0.05 &&
                 Math.round(velZ * 100) / 100 === -0.00;
-            const isBobberPositionValid = (currentFishingHook) => !fisher.initialHookPosition &&
+            const isBobberPositionValid = (currentFishingHook) => !fisher.fishingHook.stablizedLocation &&
                 currentFishingHook.dimension.getBlock(currentFishingHook.location).type !== BlockTypes.get(MinecraftBlockTypes.BubbleColumn);
             const isHookInGround = (velX, velY, velZ) => velX === 0 && velY === 0 && velZ === 0;
             const inWaterIndicator = system.runInterval(() => {
@@ -27,17 +27,13 @@ export async function onHookLanded(player) {
                 let onHookStablized = false;
                 try {
                     const currentFishingHook = fisher.fishingHook;
-                    if (!currentFishingHook)
+                    if (!currentFishingHook || !currentFishingHook?.isValid())
                         throw new Error("Fishing hook not found / undefined");
-                    if (!fisher.fishingRod.isEquipped)
-                        throw new Error("Fishing rod is not equipped while fishing");
-                    if (fisher.isReeling())
-                        throw new Error("The fishing rod was withdrawn from the mainhand");
-                    if (fisher.fishCaught)
+                    if (fisher.caughtByHook || fisher.caughtByHook?.isValid())
                         throw new Error("A Fish is already caught");
                     const { x, y, z } = currentFishingHook.getVelocity();
                     if (isHookStabilized(x, y, z) && isBobberPositionValid(currentFishingHook)) {
-                        fisher.initialHookPosition = currentFishingHook.location;
+                        fisher.fishingHook.stablizedLocation = currentFishingHook.location;
                         onHookStablized = true;
                         throw new Error("Fishing hook has stabled position in water");
                     }
@@ -57,50 +53,36 @@ export async function onHookLanded(player) {
     if (!isInWater)
         return;
     const expirationTimer = new Timer(SERVER_CONFIGURATION.expirationTimer * TicksPerSecond);
-    let isDeeplySubmerged = false;
-    let isHookSubmerged = false;
-    const FishingStateIndicator = fisher.fishingOutputMap();
-    const hookSubmergeState = new StateController(isHookSubmerged);
-    const initialHookPosition = fisher.initialHookPosition;
-    let luckOfTheSeaLevel = fisher.fishingRod.getLuckOfSea()?.level ?? 0;
-    let lureLevel = fisher.fishingRod.getLure()?.level ?? 0;
-    let tuggingEvent = system.runInterval(async () => {
+    const FishingStateIndicator = fisher.fishingOutputManager();
+    ;
+    const hookSubmergeState = new StateController(fisher.fishingHook.isSubmerged);
+    const hookTreasureFoundState = new StateController(fisher.fishingHook.isDeeplySubmerged);
+    const initialHookPosition = fisher.fishingHook.stablizedLocation;
+    let tuggingEvent = system.runInterval(() => {
         try {
             const hookEntity = fisher.fishingHook;
-            const caughtFish = fisher.fishCaught;
-            if (fisher.isReeling()) {
-                if (hookSubmergeState.getCurrentValue())
-                    onHookedItem(fisher, initialHookPosition, luckOfTheSeaLevel, isDeeplySubmerged);
-                throw new Error("The fishing rod was withdrawn from the mainhand");
-            }
-            if (!fisher.fishingRod.isEquipped)
-                throw new Error("Fishing rod is not equipped while fishing");
-            if (!hookEntity)
+            const caughtFish = fisher.caughtByHook;
+            if (!hookEntity || !hookEntity?.isValid())
                 throw new Error("Fishing hook not found / undefined");
-            if (!hookEntity.location)
-                throw new Error("Fishing hook location is undefined");
-            if (caughtFish)
+            if (caughtFish || caughtFish?.isValid())
                 throw new Error("A Fish is already caught");
-            luckOfTheSeaLevel = fisher.fishingRod.getLuckOfSea()?.level ?? 0;
-            const { y } = hookEntity.location;
-            isHookSubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_SUBMERGE_OFFSET >= parseFloat(y.toFixed(2)));
-            hookSubmergeState.setValue(isHookSubmerged);
-            isDeeplySubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - 1.5 >= parseFloat(y.toFixed(2)));
+            fisher.fishingHook.isSubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_SUBMERGE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
+            fisher.fishingHook.isDeeplySubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_TREASURE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
+            hookSubmergeState.setValue(fisher.fishingHook.isSubmerged);
+            hookTreasureFoundState.setValue(fisher.fishingHook.isDeeplySubmerged);
             expirationTimer.update();
             Logger.info("FINDING INTERVAL RUNNING. ID=", tuggingEvent);
-            if (ExecuteAtGivenTick(25) && !hookSubmergeState.getCurrentValue()) {
-                FishingStateIndicator.Finding.run();
-            }
             HookOnSubmergedForItemFishing();
             if (expirationTimer.isDone()) {
-                FishingStateIndicator.NotFound.run();
                 fisher.reset(true);
+                player.runCommandAsync(`tellraw ${player.name} {"rawtext":[{"translate":"yn.fishing_got_reel.on_afk_detected"}]}`);
                 throw new Error("AFK Fishing detected");
             }
         }
         catch (e) {
             Logger.error(e, e.stack);
             system.clearRun(tuggingEvent);
+            FishingStateIndicator.Escaped.reset().then((_) => { });
             return;
         }
     }, 1);
@@ -108,8 +90,16 @@ export async function onHookLanded(player) {
         if (hookSubmergeState.hasChanged()) {
             if (hookSubmergeState.getCurrentValue()) {
                 FishingStateIndicator.Caught.run();
+                player.playSound('note.chime');
             }
-            else { }
+            else {
+                FishingStateIndicator.Escaped.run();
+            }
+        }
+        if (hookTreasureFoundState.hasChanged()) {
+            if (hookTreasureFoundState.getCurrentValue()) {
+                player.playSound('random.orb');
+            }
         }
     }
 }

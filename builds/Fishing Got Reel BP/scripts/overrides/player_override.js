@@ -4,7 +4,7 @@ import { OverTakes } from "overrides/partial_overtakes";
 const screenConfigs = new WeakMap();
 OverTakes(Player.prototype, {
     isSurvival() {
-        return this.dimension.getPlayers({ gameMode: GameMode.survival, name: this.name, location: this.location, maxDistance: 1, closest: 1 }).length > 0;
+        return this.getGameMode() === GameMode.survival;
     },
     get Configuration() {
         let sc = screenConfigs.get(this);

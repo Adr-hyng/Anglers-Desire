@@ -4,6 +4,37 @@ export default {
    */
   debug: true,
   /**
+   * Any Included family of entities that you can reel and get attracted to the fishing hook.
+   */
+  includedFamily: [],
+  /**
+   * Any Excluded family to ignore when fishing.
+   */
+  excludedFamily: [],
+  /**
+   * The value of 2 means the back of the player's looking direction.
+   * Increase if you want the fish to be far away when reeled in.
+   * Decrease if you want the fish to be in front of you.
+   * Note: Preferably, the value should be 1 or 2.
+   */
+  backDestinationOffset: 1,
+  /**
+   * Toggle to enable message upon addon successfully loaded in world.
+   */
+  ShowMessageUponJoin: false,
+  /**
+   * Number of seconds before cancelling the fishing system.
+   */
+  expirationTimer: 600,
+  /**
+   * Random Depth chances for better fishes at the bottom of the sea. Total of 100%.
+   * +2 blocks below = 45% Chance
+   * +4 blocks below = 30% Chance
+   * +7 blocks below = 15% Chance
+   * +15 blocks below = 10% Chance
+   */
+  depthMultiplierRoll: {'5': 0.45, '8': 0.3, '11': 0.15, '15': 0.1},
+  /**
    * The amount of ticks in seconds that a fish will stay interested in a bait.
    */
   minInterestTimer: 10,
@@ -28,21 +59,6 @@ export default {
    */
   maxReelTimer: 4,
   /**
-   * Any Included family of entities that you can reel and get attracted to the fishing hook.
-   */
-  includedFamily: [],
-  /**
-   * Any Excluded family to ignore when fishing.
-   */
-  excludedFamily: [],
-  /**
-   * The value of 2 means the back of the player's looking direction.
-   * Increase if you want the fish to be far away when reeled in.
-   * Decrease if you want the fish to be in front of you.
-   * Note: Preferably, the value should be 1 or 2.
-   */
-  backDestinationOffset: 1,
-  /**
    * Number of radius of the fishing hook can attract fishes.
    */
   minRadius: 2,
@@ -54,18 +70,6 @@ export default {
    * Enable the watchdog terminate log. Makes sending the WatchDog Error either Message in-game or Creator's Log.
    */
   enableWatchDogTerminateLog: false,
-  /**
-   * Number of seconds before cancelling the fishing system.
-   */
-  expirationTimer: 600,
-  /**
-   * Random Depth chances for better fishes at the bottom of the sea. Total of 100%.
-   * +2 blocks below = 45% Chance
-   * +4 blocks below = 30% Chance
-   * +7 blocks below = 15% Chance
-   * +15 blocks below = 10% Chance
-   */
-  depthMultiplierRoll: {'5': 0.45, '8': 0.3, '11': 0.15, '15': 0.1},
   /**
    * Success rate you will guarantee to reel or catch any included mob in the water.
    */

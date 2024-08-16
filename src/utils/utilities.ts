@@ -1,5 +1,5 @@
 import { system } from "@minecraft/server";
-import { SERVER_CONFIGURATION } from "fishing_system/configuration/config_handler";
+import { SERVER_CONFIGURATION } from "fishing_system/configuration/configuration_handler";
 
 export function getValidFamily(){
   return [...SERVER_CONFIGURATION.includedFamily, "fish"].filter(fam => !SERVER_CONFIGURATION.excludedFamily.includes(fam));

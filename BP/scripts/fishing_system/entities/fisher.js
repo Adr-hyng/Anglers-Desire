@@ -2,7 +2,7 @@ import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemCom
 import { MinecraftEntityTypes } from "vanilla-types/index";
 import { Random } from "utils/Random/random";
 import { Logger, StateController, VectorContainer, } from "utils/index";
-import { SERVER_CONFIGURATION, LootTable, FishingResultBuilder } from "fishing_system/index";
+import { SERVER_CONFIGURATION, LootTable, FishingOutputBuilder } from "fishing_system/index";
 import { clientConfiguration } from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
 import { FishingHook } from "./hook";
@@ -11,18 +11,18 @@ const FishingTimeInterval = 0.03;
 class Fisher {
     constructor(player) {
         this._source = null;
+        this.particleSpawner = null;
+        this.particleVectorLocations = null;
         this.clientConfiguration = clientConfiguration;
         this.fishingHook = null;
         this.caughtByHook = null;
         this.currentBiomeLootTable = Object.getOwnPropertyNames(LootTable).filter(prop => !['name', 'prototype', 'length', 'fishingModifier'].includes(prop));
         this.currentBiome = 0;
-        this.particleSpawner = null;
-        this.particleVectorLocations = null;
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
         this._fishingOutputManager = {
-            "Caught": FishingResultBuilder.create(this.clientConfiguration.Caught, this),
-            "Escaped": FishingResultBuilder.create(this.clientConfiguration.Escaped, this),
+            "Caught": FishingOutputBuilder.create(this.clientConfiguration.Caught, this),
+            "Escaped": FishingOutputBuilder.create(this.clientConfiguration.Escaped, this),
         };
     }
     get fishingRod() {
@@ -46,9 +46,9 @@ class Fisher {
         });
     }
     reelHook() {
-        if (!this.source)
+        if (!this.source || !this.source?.isValid())
             return this;
-        if (!this.caughtByHook)
+        if (!this.caughtByHook || !this.caughtByHook?.isValid())
             return this;
         this.gainExperience().then((_) => { });
         const currentEntityCaughtByHook = this.caughtByHook;

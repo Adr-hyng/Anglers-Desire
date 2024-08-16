@@ -1,22 +1,24 @@
-import { EnchantmentSlot, Dimension, ItemStack, ItemComponentTypes, EnchantmentType } from '@minecraft/server';
+import { EnchantmentSlot, Dimension, ItemStack, ItemComponentTypes, EnchantmentType, EntityTypes } from '@minecraft/server';
 import { randomEnchantByLevel } from 'enchantment_system/enchantment_table';
 import { OverTakes } from "./partial_overtakes";
-import { Logger, WeightedRandom } from 'utils/index';
+import { Logger, Random } from 'utils/index';
 import { MinecraftItemTypes } from 'vanilla-types/index';
 OverTakes(Dimension.prototype, {
     spawnLoot(loot, location) {
         try {
             let spawnedItems = [];
-            const rollPools = new WeightedRandom();
-            const rollEntries = new WeightedRandom();
+            const rollPools = Random.weighted();
+            const rollEntries = Random.weighted();
+            if (!loot.pools.length)
+                throw new Error("loot: loot pools is empty");
             for (const pool of loot.pools) {
                 rollPools.addEntry(pool, pool.weight ?? 100);
             }
             const pool = rollPools.getRandom();
             if (!pool?.rolls)
-                Logger.error(`/'rolls/' is missing at pools[${loot.pools.indexOf(pool)}]`);
+                throw new Error(`/'rolls/' is missing at pools[${loot.pools.indexOf(pool)}]`);
             if (pool.rolls <= 0)
-                Logger.error(`>>rolls: ${pool.rolls}<< is very low, it should be at least 1, at pools[${loot.pools.indexOf(pool)}]`);
+                throw new Error(`>>rolls: ${pool.rolls}<< is very low, it should be at least 1, at pools[${loot.pools.indexOf(pool)}]`);
             pool.rolls = typeof pool.rolls === "number" ? pool.rolls : typeof pool.rolls === "object" ? Math.floor(Math.random() * (pool.rolls.max - pool.rolls.min + 1)) + pool.rolls.min : 1;
             for (let i = 0; i < pool.rolls; i++) {
                 for (const entry of pool.entries) {
@@ -194,16 +196,25 @@ OverTakes(Dimension.prototype, {
                             item.getComponent(ItemComponentTypes.Enchantable).addEnchantment(enchant);
                         }
                     }
+                    if (entry?.toEntity && Boolean(EntityTypes.get(entry.toEntity) !== undefined)) {
+                        item.asEntity = entry.toEntity;
+                    }
                     rollEntries.addEntry(item, entry.weight);
                 }
             }
             for (let i = 0; i < pool.rolls; i++) {
-                spawnedItems.push(this.spawnItem(rollEntries.getRandom(), location));
+                const entityToSpawn = rollEntries.getRandom();
+                if (entityToSpawn?.asEntity) {
+                    spawnedItems.push(this.spawnEntity(entityToSpawn.asEntity, { x: location.x, y: location.y - 0.8, z: location.z }));
+                }
+                else {
+                    spawnedItems.push(this.spawnItem(entityToSpawn, location));
+                }
             }
             return spawnedItems;
         }
         catch (e) {
-            Logger.error(e.stack);
+            Logger.error(e, e.stack);
             return [];
         }
     }

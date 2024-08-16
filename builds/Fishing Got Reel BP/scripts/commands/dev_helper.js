@@ -1,13 +1,10 @@
 import { EnchantmentTypes, EntityComponentTypes, ItemComponentTypes, ItemStack, system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
-import { MinecraftItemTypes } from "vanilla-types/index";
-import { MinecraftEnchantmentTypes } from "vanilla-types/mojang-enchantment";
+import { MinecraftItemTypes, MinecraftEnchantmentTypes } from "vanilla-types/index";
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
     REQUIRED_PARAMETER["GET"] = "get";
     REQUIRED_PARAMETER["TEST"] = "test";
-    REQUIRED_PARAMETER["LOOK_PATHFIND"] = "look_pathfind";
-    REQUIRED_PARAMETER["CLEAR_PATHFIND"] = "clear_pathfind";
 })(REQUIRED_PARAMETER || (REQUIRED_PARAMETER = {}));
 const command = {
     name: 'dev_helper',
@@ -20,8 +17,6 @@ const command = {
         Usage:
         > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.GET} = GETS an enchanted fishing rod for development.
         > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.TEST} = TEST a Working-in-progress features.
-        > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.LOOK_PATHFIND} = TEST Pathfinding by looking.
-        > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.CLEAR_PATHFIND} = Clear Pathfinding paths (structure void).
         `).replaceAll("        ", "");
     },
     execute(player, args) {
@@ -45,7 +40,6 @@ const command = {
                 if (!player.StableIsOp())
                     break;
                 system.run(() => {
-                    player.sendMessage("HELLO WORLD!");
                 });
                 break;
             default:
@@ -54,3 +48,12 @@ const command = {
     }
 };
 export default command;
+function giveitem(player, itemid, amount, loreModifier, durability) {
+    const inv = player.getComponent("inventory").container;
+    const item = new ItemStack(itemid, amount);
+    const durabilityy = item.getComponent("durability");
+    durabilityy.damage = durability;
+    const enchantable = item.getComponent("enchantable");
+    enchantable.addEnchantments(loreModifier);
+    inv.addItem(item);
+}

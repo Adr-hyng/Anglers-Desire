@@ -1,16 +1,23 @@
-import { ActionResultConstant } from "types/index";
-const ActionResultOptions = ["ICON", "TEXT", "BOTH", "OFF"];
-export const ActionResultContent = {
-    "Finding Event": ActionResultOptions,
-    "Interested Event": ActionResultOptions,
-    "Escaped Event": ActionResultOptions,
-    "Caught Event": ActionResultOptions,
-    "No Fish Found Event": ActionResultOptions,
-};
+export const ParticleStateOptions = ["TEXT", "ICON", "BOTH", "OFF"];
+export class FormBuilder {
+    constructor(name) {
+        this.name = name;
+        this.values = [];
+    }
+    createToggle(defaultValue) {
+        this.defaultValue = defaultValue;
+        return this;
+    }
+    createDropdown(dropDownOptions, defaultValue) {
+        this.defaultValue = defaultValue;
+        this.values = dropDownOptions;
+        return this;
+    }
+}
 export const clientConfiguration = {
-    [ActionResultConstant.Finding]: "ICON",
-    [ActionResultConstant.Interested]: "ICON",
-    [ActionResultConstant.Caught]: "ICON",
-    [ActionResultConstant.Escaped]: "ICON",
-    [ActionResultConstant.NotFound]: "ICON",
+    "OnInitializeMessage": new FormBuilder("Enable Addon Init Message").createToggle(true),
+    "OnSubmergeSE": new FormBuilder("Enable Submerged Sound").createToggle(true),
+    "OnTreasureSE": new FormBuilder("Enable Treasure Sound").createToggle(true),
+    "Caught": new FormBuilder("Caught Output Option").createDropdown(["ICON", "TEXT", "BOTH", "OFF"], "ICON"),
+    "Escaped": new FormBuilder("Escaped Output Option").createDropdown(["ICON", "TEXT", "BOTH", "OFF"], "ICON"),
 };

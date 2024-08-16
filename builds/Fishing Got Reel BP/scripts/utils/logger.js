@@ -31,13 +31,16 @@ export class Logger {
         }
     }
     static debug(...message) {
-        Logger.log(LogLevel.DEBUG, message);
+        if (SERVER_CONFIGURATION.debug)
+            Logger.log(LogLevel.DEBUG, message);
     }
     static info(...message) {
-        Logger.log(LogLevel.INFO, message);
+        if (SERVER_CONFIGURATION.debug)
+            Logger.log(LogLevel.INFO, message);
     }
     static error(...message) {
-        Logger.log(LogLevel.ERROR, message);
+        if (SERVER_CONFIGURATION.debug)
+            Logger.log(LogLevel.ERROR, message);
     }
 }
 Logger.level = SERVER_CONFIGURATION.debug ? LogLevel.DEBUG : LogLevel.INFO;

@@ -1,8 +1,8 @@
 import { Player } from "@minecraft/server";
 import { ActionFormData, ActionFormResponse, FormCancelationReason, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
-import { getServerConfiguration, resetServerConfiguration, SERVER_CONFIGURATION, setServerConfiguration } from "./config_handler";
+import { getServerConfiguration, resetServerConfiguration, SERVER_CONFIGURATION, setServerConfiguration } from "./configuration_handler";
 import {ADDON_NAME, db, fishers, fetchFisher} from "constant";
-import { clientConfiguration, FormBuilder } from "./client_configuration";
+import { FormBuilder } from "./client_configuration";
 
 export type ConfigurationTypes = "SERVER" | "CLIENT";
 const ConfigurationCollections_DB = (player: Player, configType: ConfigurationTypes = "CLIENT") => `${ADDON_NAME}|${player.id}|${configType}`;
@@ -71,25 +71,17 @@ export class __Configuration {
 
     const cachedConfigurationValues: Array<number | boolean> = [];
     
-    try {
-      Object.values(fisher.clientConfiguration).forEach((builder, index) => {
-        console.warn(builder.name, JSON.stringify(builder.values));
-        if (typeof builder.defaultValue !== "boolean") {
-          const currentValue = builder.values.indexOf(builder.defaultValue);
-          console.warn(builder.defaultValue, typeof builder.defaultValue);
-          cachedConfigurationValues[index] = currentValue !== -1 ? currentValue : parseInt(builder.defaultValue);
-          form.dropdown(builder.name, builder.values, cachedConfigurationValues[index] as number);
-        } else {
-          cachedConfigurationValues[index] = builder.defaultValue;
-          form.toggle(builder.name, cachedConfigurationValues[index] as boolean);
-        }
-      });
-    } catch (e) {
-      console.warn(e, e.stack);
-    }  
+    Object.values(fisher.clientConfiguration).forEach((builder, index) => {
+      if (typeof builder.defaultValue !== "boolean") {
+        const currentValue = builder.values.indexOf(builder.defaultValue);
+        cachedConfigurationValues[index] = currentValue !== -1 ? currentValue : parseInt(builder.defaultValue);
+        form.dropdown(builder.name, builder.values, cachedConfigurationValues[index] as number);
+      } else {
+        cachedConfigurationValues[index] = builder.defaultValue;
+        form.toggle(builder.name, cachedConfigurationValues[index] as boolean);
+      }
+    });
 
-    console.warn(fisher.clientConfiguration['Caught'].name);
-    //! Wait first if they player just exited the chat. (IF THIS IS POSSIBLE IN THE FUTURE)
     form.show(this.player).then((result: ModalFormResponse) => {
       if (!result.formValues) return;
       const hadChanges: boolean = !cachedConfigurationValues.every((element, index) => element === result.formValues[index]);

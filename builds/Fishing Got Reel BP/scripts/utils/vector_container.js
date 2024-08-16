@@ -118,7 +118,7 @@ export class VectorContainer {
         this.distance = distance;
         this.kdTree = new KDTree();
     }
-    addOrUpdateVector(newVector) {
+    set(newVector) {
         const nearestNode = this.kdTree.nearest(newVector, this.distance);
         if (nearestNode !== null) {
             nearestNode.point = newVector;
@@ -127,7 +127,7 @@ export class VectorContainer {
             this.kdTree.insert(newVector);
         }
     }
-    getNearestVector(vector, maxDist) {
+    getNearby(vector, maxDist) {
         const nearestNode = this.kdTree.nearest(vector, maxDist);
         return nearestNode ? nearestNode.point : null;
     }
@@ -145,5 +145,8 @@ export class VectorContainer {
         };
         traverse(this.kdTree.root);
         return vectors;
+    }
+    clear() {
+        this.kdTree.root = null;
     }
 }

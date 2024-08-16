@@ -1,5 +1,5 @@
 import { ActionFormData, FormCancelationReason, ModalFormData } from "@minecraft/server-ui";
-import { getServerConfiguration, resetServerConfiguration, SERVER_CONFIGURATION, setServerConfiguration } from "./config_handler";
+import { getServerConfiguration, resetServerConfiguration, SERVER_CONFIGURATION, setServerConfiguration } from "./configuration_handler";
 import { ADDON_NAME, db, fishers, fetchFisher } from "constant";
 const ConfigurationCollections_DB = (player, configType = "CLIENT") => `${ADDON_NAME}|${player.id}|${configType}`;
 export class __Configuration {
@@ -68,25 +68,17 @@ export class __Configuration {
             }
         }
         const cachedConfigurationValues = [];
-        try {
-            Object.values(fisher.clientConfiguration).forEach((builder, index) => {
-                console.warn(builder.name, JSON.stringify(builder.values));
-                if (typeof builder.defaultValue !== "boolean") {
-                    const currentValue = builder.values.indexOf(builder.defaultValue);
-                    console.warn(builder.defaultValue, typeof builder.defaultValue);
-                    cachedConfigurationValues[index] = currentValue !== -1 ? currentValue : parseInt(builder.defaultValue);
-                    form.dropdown(builder.name, builder.values, cachedConfigurationValues[index]);
-                }
-                else {
-                    cachedConfigurationValues[index] = builder.defaultValue;
-                    form.toggle(builder.name, cachedConfigurationValues[index]);
-                }
-            });
-        }
-        catch (e) {
-            console.warn(e, e.stack);
-        }
-        console.warn(fisher.clientConfiguration['Caught'].name);
+        Object.values(fisher.clientConfiguration).forEach((builder, index) => {
+            if (typeof builder.defaultValue !== "boolean") {
+                const currentValue = builder.values.indexOf(builder.defaultValue);
+                cachedConfigurationValues[index] = currentValue !== -1 ? currentValue : parseInt(builder.defaultValue);
+                form.dropdown(builder.name, builder.values, cachedConfigurationValues[index]);
+            }
+            else {
+                cachedConfigurationValues[index] = builder.defaultValue;
+                form.toggle(builder.name, cachedConfigurationValues[index]);
+            }
+        });
         form.show(this.player).then((result) => {
             if (!result.formValues)
                 return;
