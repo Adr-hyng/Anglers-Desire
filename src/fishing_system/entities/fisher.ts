@@ -16,6 +16,7 @@ import {
 
 import {
     Logger,
+    StateController,
     VectorContainer,
 } from "utils/index";
 
@@ -97,18 +98,24 @@ class Fisher {
             (startPoint.z + endPoint.z) / 2
         ); // 3rd point
 
+        const reeledEntityOnAir = new StateController(false); // state controller for when reeled entity goes into air after being in water then spawn particle
 
         let reelingEventInterval: number = system.runInterval( () => {
             Logger.info("REELING INTERVAL RUNNING. ID=", reelingEventInterval);
-
             try {
                 if(fishHealth?.currentValue <= 0) throw new Error("Caught fish died while in mid air");
                 if (currentReelingProcess >= ReelingCompleteProcess) throw new Error("Fish successfully caught");
-                if (!currentEntityCaughtByHook) throw new Error("Fish is not existing anymore");
+                if (!currentEntityCaughtByHook || !currentEntityCaughtByHook?.isValid()) throw new Error("Fish is not existing anymore");
                 
                 currentReelingProcess += FishingTimeInterval;
                 const point: Vector3 = Vec3.quadracticBezier(startPoint, controlPoint, endPoint, currentReelingProcess);
                 let isReeling: boolean = currentEntityCaughtByHook.tryTeleport( { x: point.x, y: point.y, z: point.z}, { facingLocation: endPoint, keepVelocity: false, checkForBlocks: true } );
+                reeledEntityOnAir.setValue(!currentEntityCaughtByHook.isInWater && !currentEntityCaughtByHook.isOnGround);
+                if(reeledEntityOnAir.hasChanged() && reeledEntityOnAir.getCurrentValue()) {
+                    // await system.waitTicks(2);
+                    this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
+                    console.warn("ON AIR");
+                }
                 if (!isReeling) throw new Error("Fish has collided to a block or was interrupted mid air");
             } catch (e) {
                 Logger.error(e, e.stack);

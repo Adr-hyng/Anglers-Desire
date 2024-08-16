@@ -229,7 +229,7 @@ OverTakes(Dimension.prototype, {
       for(let i = 0; i < pool.rolls; i++) {
         const entityToSpawn: ItemStack = rollEntries.getRandom();
         if(entityToSpawn?.asEntity) {
-          spawnedItems.push( this.spawnEntity(entityToSpawn.asEntity, location) );
+          spawnedItems.push( this.spawnEntity(entityToSpawn.asEntity, {x: location.x, y: location.y - 0.8, z: location.z}) );
         } else {
           spawnedItems.push( this.spawnItem(entityToSpawn, location) );
         }

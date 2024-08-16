@@ -2,7 +2,7 @@ import { EntityHealthComponent, system, EntityEquippableComponent, } from "@mine
 import { MinecraftEntityTypes } from "vanilla-types/index";
 import { ParticleState } from "types/index";
 import { Random } from "utils/Random/random";
-import { Logger, VectorContainer, } from "utils/index";
+import { Logger, StateController, VectorContainer, } from "utils/index";
 import { SERVER_CONFIGURATION, LootTable, FishingResultBuilder } from "fishing_system/index";
 import { clientConfiguration } from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
@@ -65,6 +65,7 @@ class Fisher {
         const endPoint = new Vec3(x - SERVER_CONFIGURATION.backDestinationOffset * viewX, y, z - SERVER_CONFIGURATION.backDestinationOffset * viewZ);
         const magnitude = endPoint.distance(startPoint);
         const controlPoint = new Vec3((startPoint.x + endPoint.x) / 2, startPoint.y + (magnitude * 1.65), (startPoint.z + endPoint.z) / 2);
+        const reeledEntityOnAir = new StateController(false);
         let reelingEventInterval = system.runInterval(() => {
             Logger.info("REELING INTERVAL RUNNING. ID=", reelingEventInterval);
             try {
@@ -72,11 +73,16 @@ class Fisher {
                     throw new Error("Caught fish died while in mid air");
                 if (currentReelingProcess >= ReelingCompleteProcess)
                     throw new Error("Fish successfully caught");
-                if (!currentEntityCaughtByHook)
+                if (!currentEntityCaughtByHook || !currentEntityCaughtByHook?.isValid())
                     throw new Error("Fish is not existing anymore");
                 currentReelingProcess += FishingTimeInterval;
                 const point = Vec3.quadracticBezier(startPoint, controlPoint, endPoint, currentReelingProcess);
                 let isReeling = currentEntityCaughtByHook.tryTeleport({ x: point.x, y: point.y, z: point.z }, { facingLocation: endPoint, keepVelocity: false, checkForBlocks: true });
+                reeledEntityOnAir.setValue(!currentEntityCaughtByHook.isInWater && !currentEntityCaughtByHook.isOnGround);
+                if (reeledEntityOnAir.hasChanged() && reeledEntityOnAir.getCurrentValue()) {
+                    this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
+                    console.warn("ON AIR");
+                }
                 if (!isReeling)
                     throw new Error("Fish has collided to a block or was interrupted mid air");
             }
