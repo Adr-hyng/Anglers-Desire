@@ -104,7 +104,7 @@ export async function onHookLanded(player: Player): Promise<void> {
     } catch (e){
       Logger.error(e, e.stack);
       system.clearRun(tuggingEvent);
-      FishingStateIndicator.Finding.reset().then((_) => {});
+      FishingStateIndicator.Escaped.reset().then((_) => {});
       return;
     }
   }, 1);

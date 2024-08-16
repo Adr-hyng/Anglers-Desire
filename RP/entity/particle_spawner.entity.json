@@ -14,10 +14,7 @@
 			},
 			"animations": {
 				"fish_caught": "animation.particle_spawner.fish_caught",
-				"fish_finding": "animation.particle_spawner.fish_finding",
 				"fish_escaped": "animation.particle_spawner.fish_escaped",
-				"fish_interested": "animation.particle_spawner.fish_interested",
-				"fish_not_found": "animation.particle_spawner.fish_not_found",
 				"particle_controller": "controller.animation.particle_spawner.controller"
 			},
 			"scripts": {
@@ -28,10 +25,7 @@
       },
 			"particle_effects": {
         "show_fish_caught": "yn:fish_caught_event_particle",
-        "show_fishing": "yn:fish_finding_event_particle",
-        "show_fish_escaped": "yn:fish_flee_event_particle",
-        "show_fish_interested": "yn:fish_interested_event_particle",
-        "show_fish_notfound": "yn:fish_not_found_event_particle"
+        "show_fish_escaped": "yn:fish_flee_event_particle"
       },
 			"render_controllers": ["controller.render.default"]
 		}

@@ -8,9 +8,6 @@ export interface IFishingOutput {
 }
 
 export type FishingStateTypes = {
-  Finding: IFishingOutput;
-  Interest: IFishingOutput;
   Caught: IFishingOutput;
   Escaped: IFishingOutput;
-  NotFound: IFishingOutput;
 }

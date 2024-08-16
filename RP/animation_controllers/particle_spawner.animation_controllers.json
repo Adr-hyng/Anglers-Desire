@@ -6,10 +6,7 @@
 				"default": {
 					"animations": [
 						{"fish_caught": "q.property('yn:particle_state') == 1"},
-						{"fish_finding": "q.property('yn:particle_state') == 2"},
-						{"fish_escaped": "q.property('yn:particle_state') == 3"},
-						{"fish_interested": "q.property('yn:particle_state') == 4"},
-						{"fish_not_found": "q.property('yn:particle_state') == 5"}
+						{"fish_escaped": "q.property('yn:particle_state') == 2"}
 					]
 				}
 			}

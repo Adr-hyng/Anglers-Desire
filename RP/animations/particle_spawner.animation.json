@@ -10,39 +10,12 @@
 				}
 			}
 		},
-		"animation.particle_spawner.fish_finding": {
-			"loop": true,
-			"animation_length": 1,
-			"particle_effects": {
-				"0.0": {
-					"effect": "show_fishing"
-				}
-			}
-		},
 		"animation.particle_spawner.fish_escaped": {
 			"loop": true,
 			"animation_length": 4,
 			"particle_effects": {
 				"0.0": {
 					"effect": "show_fish_escaped"
-				}
-			}
-		},
-		"animation.particle_spawner.fish_interested": {
-			"loop": true,
-			"animation_length": 1,
-			"particle_effects": {
-				"0.0": {
-					"effect": "show_fish_interested"
-				}
-			}
-		},
-		"animation.particle_spawner.fish_not_found": {
-			"loop": true,
-			"animation_length": 2,
-			"particle_effects": {
-				"0.0": {
-					"effect": "show_fish_notfound"
 				}
 			}
 		}

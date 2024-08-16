@@ -88,7 +88,7 @@ export async function onHookLanded(player) {
         catch (e) {
             Logger.error(e, e.stack);
             system.clearRun(tuggingEvent);
-            FishingStateIndicator.Finding.reset().then((_) => { });
+            FishingStateIndicator.Escaped.reset().then((_) => { });
             return;
         }
     }, 1);

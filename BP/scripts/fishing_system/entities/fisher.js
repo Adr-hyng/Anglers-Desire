@@ -22,11 +22,8 @@ class Fisher {
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
         this._fishingOutputMap = {
-            Finding: FishingResultBuilder.createActionResult(this.clientConfiguration.Finding, "Reelz.events.finding.text", ParticleState.FINDING, this),
-            Interest: FishingResultBuilder.createActionResult(this.clientConfiguration.Interested, "Reelz.events.interested.text", ParticleState.INTERESTED, this),
             Caught: FishingResultBuilder.createActionResult(this.clientConfiguration.Caught, "Reelz.events.caught.text", ParticleState.CAUGHT, this),
             Escaped: FishingResultBuilder.createActionResult(this.clientConfiguration.Escaped, "Reelz.events.escaped.text", ParticleState.ESCAPED, this),
-            NotFound: FishingResultBuilder.createActionResult(this.clientConfiguration.NotFound, "Reelz.events.notFound.text", ParticleState.NOT_FOUND, this)
         };
     }
     get fishingRod() {

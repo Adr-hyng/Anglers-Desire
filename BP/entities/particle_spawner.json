@@ -10,7 +10,7 @@
         "yn:particle_state": {
           "type": "int",
           "client_sync": true,
-          "range": [0, 5],
+          "range": [0, 2],
           "default": 1
         }
       }
@@ -23,7 +23,7 @@
     "components": {
       "minecraft:timer": {
         "looping": false,
-        "time": 4,
+        "time": 2,
         "time_down_event": {
           "event": "despawn"
         }
@@ -73,24 +73,9 @@
           "yn:particle_state": 1
         }
       },
-      "show_fishing_particle": {
-        "set_property": {
-          "yn:particle_state": 2
-        }
-      },
       "show_fish_escaped_particle": {
         "set_property": {
-          "yn:particle_state": 3
-        }
-      },
-      "show_fish_interested_particle": {
-        "set_property": {
-          "yn:particle_state": 4
-        }
-      },
-      "show_fish_notfound_particle": {
-        "set_property": {
-          "yn:particle_state": 5
+          "yn:particle_state": 2
         }
       },
       "despawn": {
