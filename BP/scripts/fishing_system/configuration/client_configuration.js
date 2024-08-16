@@ -1,10 +1,21 @@
-import { ActionResultConstant } from "types/index";
-const ActionResultOptions = ["ICON", "TEXT", "BOTH", "OFF"];
-export const ActionResultContent = {
-    "Escaped Event": ActionResultOptions,
-    "Caught Event": ActionResultOptions,
-};
+export const ParticleStateOptions = ["TEXT", "ICON", "BOTH", "OFF"];
+export class FormBuilder {
+    constructor(name) {
+        this.name = name;
+        this.values = [];
+    }
+    createToggle(defaultValue) {
+        this.defaultValue = defaultValue;
+        return this;
+    }
+    createDropdown(dropDownOptions, defaultValue) {
+        this.defaultValue = defaultValue;
+        this.values = dropDownOptions;
+        return this;
+    }
+}
 export const clientConfiguration = {
-    [ActionResultConstant.Caught]: "ICON",
-    [ActionResultConstant.Escaped]: "ICON",
+    "SoundEffectToggle": new FormBuilder("Enable Sound Effect").createToggle(true),
+    "Caught": new FormBuilder("Caught Output Option").createDropdown(["ICON", "TEXT", "BOTH", "OFF"], "ICON"),
+    "Escaped": new FormBuilder("Escaped Output Option").createDropdown(["ICON", "TEXT", "BOTH", "OFF"], "ICON")
 };

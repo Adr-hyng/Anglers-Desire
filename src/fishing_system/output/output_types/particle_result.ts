@@ -15,7 +15,7 @@ export class ParticleResult implements IFishingOutput {
   // Each particle created is stored in the vector max heap, where the max heap is the nearest vector, whenever there's nearest vector 
   // Whenever you create another particle it will check first if its 1 block or more away, if it does then it will not
   // overwrite the particle, if it does it will overwrite or kill it first, then write new particle.
-	constructor(private particleState: ParticleState, private fisher: Fisher) { 
+	constructor(private particleState: string, private fisher: Fisher) { 
     this.id = generateUUID16();
   }
 	async reset(): Promise<void> {

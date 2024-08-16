@@ -21,10 +21,8 @@ import {
     StateController,
     VectorContainer,
 } from "utils/index";
-
-import { ActionResultType } from "types/enums/action_result_constant";
 import { SERVER_CONFIGURATION, LootTable, FishingResultBuilder } from "fishing_system/index";
-import { clientConfiguration } from "../configuration/client_configuration";
+import { clientConfiguration, FormBuilder } from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
 import { FishingStateTypes } from "fishing_system/output/fishing_output_indicator";
 import { FishingHook } from "./hook";
@@ -32,11 +30,13 @@ import { FishingHook } from "./hook";
 const ReelingCompleteProcess: number = 0.96;
 const FishingTimeInterval: number = 0.03; // 0.03 - Make this dependent in distance. Like at uprise it is fast, at middle to end it is slow.
 class Fisher {
-    private _source: Player | null = null;
-    private _fishingOutputMap: FishingStateTypes;
-    fishingHook: FishingHook | null = null;
-    caughtByHook: Entity | null = null;
-    clientConfiguration: Record<string, ActionResultType | boolean> = clientConfiguration;
+    private _source: Player = null;
+    private _fishingOutputManager: FishingStateTypes;
+    clientConfiguration: typeof clientConfiguration = clientConfiguration;
+    
+    fishingHook: FishingHook = null;
+    caughtByHook: Entity = null;
+
     currentBiomeLootTable: Array<string> = Object.getOwnPropertyNames(LootTable).filter(prop => !['name', 'prototype', 'length', 'fishingModifier'].includes(prop));
     currentBiome: number = 0;
 
@@ -46,9 +46,9 @@ class Fisher {
     constructor(player: Player) {
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
-        this._fishingOutputMap = {
-            Caught: FishingResultBuilder.createActionResult(this.clientConfiguration.Caught, "yn.fishing_got_reel.on_caught_message", ParticleState.CAUGHT, this),
-            Escaped: FishingResultBuilder.createActionResult(this.clientConfiguration.Escaped, "yn.fishing_got_reel.on_drop_hook", ParticleState.ESCAPED, this),
+        this._fishingOutputManager = {
+            "Caught": FishingResultBuilder.create(this.clientConfiguration.Caught, this),
+            "Escaped": FishingResultBuilder.create(this.clientConfiguration.Escaped, this),
         };
     }
 
@@ -60,8 +60,8 @@ class Fisher {
         return this._source;
     }
     
-    public fishingOutputMap(): FishingStateTypes {
-        return this._fishingOutputMap;
+    public fishingOutputManager(): FishingStateTypes {
+        return this._fishingOutputManager;
     }
 
     private async gainExperience(): Promise<void> {
@@ -117,11 +117,9 @@ class Fisher {
                 if(reeledEntityOnAir.hasChanged() && reeledEntityOnAir.getCurrentValue()) {
                     if(currentEntityCaughtByHook.hasComponent(EntityItemComponent.componentId)){
                         this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
-                        console.warn("ON AIR");
                     } else {
                         await system.waitTicks(3);
                         this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
-                        console.warn("ON AIR");
                     }
                 }
                 if (!isReeling) throw new Error("Fish has collided to a block or was interrupted mid air");

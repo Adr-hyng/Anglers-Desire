@@ -3,6 +3,7 @@ import { CommandHandler } from "commands/command_handler";
 import { ICommandBase} from "./ICommandBase";
 
 import {overrideEverything} from "overrides/index";
+import { fetchFisher } from "constant";
 overrideEverything();
 
 enum REQUIRED_PARAMETER {

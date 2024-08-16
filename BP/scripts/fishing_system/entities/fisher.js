@@ -1,6 +1,5 @@
 import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemComponent, } from "@minecraft/server";
 import { MinecraftEntityTypes } from "vanilla-types/index";
-import { ParticleState } from "types/index";
 import { Random } from "utils/Random/random";
 import { Logger, StateController, VectorContainer, } from "utils/index";
 import { SERVER_CONFIGURATION, LootTable, FishingResultBuilder } from "fishing_system/index";
@@ -12,18 +11,18 @@ const FishingTimeInterval = 0.03;
 class Fisher {
     constructor(player) {
         this._source = null;
+        this.clientConfiguration = clientConfiguration;
         this.fishingHook = null;
         this.caughtByHook = null;
-        this.clientConfiguration = clientConfiguration;
         this.currentBiomeLootTable = Object.getOwnPropertyNames(LootTable).filter(prop => !['name', 'prototype', 'length', 'fishingModifier'].includes(prop));
         this.currentBiome = 0;
         this.particleSpawner = null;
         this.particleVectorLocations = null;
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
-        this._fishingOutputMap = {
-            Caught: FishingResultBuilder.createActionResult(this.clientConfiguration.Caught, "yn.fishing_got_reel.on_caught_message", ParticleState.CAUGHT, this),
-            Escaped: FishingResultBuilder.createActionResult(this.clientConfiguration.Escaped, "yn.fishing_got_reel.on_drop_hook", ParticleState.ESCAPED, this),
+        this._fishingOutputManager = {
+            "Caught": FishingResultBuilder.create(this.clientConfiguration.Caught, this),
+            "Escaped": FishingResultBuilder.create(this.clientConfiguration.Escaped, this),
         };
     }
     get fishingRod() {
@@ -32,8 +31,8 @@ class Fisher {
     get source() {
         return this._source;
     }
-    fishingOutputMap() {
-        return this._fishingOutputMap;
+    fishingOutputManager() {
+        return this._fishingOutputManager;
     }
     async gainExperience() {
         const experience_gained = Random.randomInt(1, 6);
@@ -82,12 +81,10 @@ class Fisher {
                 if (reeledEntityOnAir.hasChanged() && reeledEntityOnAir.getCurrentValue()) {
                     if (currentEntityCaughtByHook.hasComponent(EntityItemComponent.componentId)) {
                         this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
-                        console.warn("ON AIR");
                     }
                     else {
                         await system.waitTicks(3);
                         this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
-                        console.warn("ON AIR");
                     }
                 }
                 if (!isReeling)

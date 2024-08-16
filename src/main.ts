@@ -30,7 +30,7 @@ world.beforeEvents.itemUse.subscribe((event) => {
       const removedEntity = removedEvent.typeId;
       if(removedEntity !== "minecraft:fishing_hook") return;
       if(fisher.particleVectorLocations.getVectors().length > 5) {
-        fisher.fishingOutputMap().Caught.reset().then((_) => {
+        fisher.fishingOutputManager().Caught.reset().then((_) => {
           fisher.particleVectorLocations.clear();
         });
       }

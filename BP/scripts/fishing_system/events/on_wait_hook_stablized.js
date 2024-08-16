@@ -27,11 +27,9 @@ export async function onHookLanded(player) {
                 let onHookStablized = false;
                 try {
                     const currentFishingHook = fisher.fishingHook;
-                    if (!currentFishingHook?.isValid())
+                    if (!currentFishingHook || !currentFishingHook?.isValid())
                         throw new Error("Fishing hook not found / undefined");
-                    if (!fisher.fishingRod.isEquipped)
-                        throw new Error("Fishing rod is not equipped while fishing");
-                    if (fisher.caughtByHook)
+                    if (fisher.caughtByHook || fisher.caughtByHook?.isValid())
                         throw new Error("A Fish is already caught");
                     const { x, y, z } = currentFishingHook.getVelocity();
                     if (isHookStabilized(x, y, z) && isBobberPositionValid(currentFishingHook)) {
@@ -55,19 +53,15 @@ export async function onHookLanded(player) {
     if (!isInWater)
         return;
     const expirationTimer = new Timer(SERVER_CONFIGURATION.expirationTimer * TicksPerSecond);
-    const FishingStateIndicator = fisher.fishingOutputMap();
+    const FishingStateIndicator = fisher.fishingOutputManager();
     ;
     const hookSubmergeState = new StateController(fisher.fishingHook.isSubmerged);
     const hookTreasureFoundState = new StateController(fisher.fishingHook.isDeeplySubmerged);
     const initialHookPosition = fisher.fishingHook.stablizedLocation;
-    let luckOfTheSeaLevel = fisher.fishingRod.getLuckOfSea()?.level ?? 0;
-    let lureLevel = fisher.fishingRod.getLure()?.level ?? 0;
     let tuggingEvent = system.runInterval(() => {
         try {
             const hookEntity = fisher.fishingHook;
             const caughtFish = fisher.caughtByHook;
-            if (!fisher.fishingRod.isEquipped || !fisher.fishingRod?.isValid())
-                throw new Error("Fishing rod is not equipped while fishing");
             if (!hookEntity || !hookEntity?.isValid())
                 throw new Error("Fishing hook not found / undefined");
             if (caughtFish || caughtFish?.isValid())

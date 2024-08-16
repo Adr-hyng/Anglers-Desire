@@ -8,7 +8,7 @@ import { IFishingOutput } from "../fishing_output_indicator";
 export class BothResult implements IFishingOutput {
   private executed = false;
   public id: string;
-  constructor(private message: string, private particleState: ParticleState, private fisher: Fisher) { this.id = generateUUID16() }
+  constructor(private message: string, private particleState: string, private fisher: Fisher) { this.id = generateUUID16() }
   async reset(): Promise<void> {
     return new Promise((resolve) => {
       system.run(() => {

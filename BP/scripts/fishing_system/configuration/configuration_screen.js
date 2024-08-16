@@ -1,6 +1,5 @@
 import { ActionFormData, FormCancelationReason, ModalFormData } from "@minecraft/server-ui";
 import { getServerConfiguration, resetServerConfiguration, SERVER_CONFIGURATION, setServerConfiguration } from "./config_handler";
-import { ActionResultContent } from "./client_configuration";
 import { ADDON_NAME, db, fishers, fetchFisher } from "constant";
 const ConfigurationCollections_DB = (player, configType = "CLIENT") => `${ADDON_NAME}|${player.id}|${configType}`;
 export class __Configuration {
@@ -10,7 +9,7 @@ export class __Configuration {
         this.SERVER_CONFIGURATION_DB = ConfigurationCollections_DB(this.player, "SERVER");
     }
     __load() {
-        if (db.isValid) {
+        if (db.isValid()) {
             if (db.has(this.SERVER_CONFIGURATION_DB))
                 setServerConfiguration(db.get(this.SERVER_CONFIGURATION_DB));
             else
@@ -20,13 +19,13 @@ export class __Configuration {
             throw new Error("Database not found. Please check through !db_show, and !db_clear");
     }
     __save() {
-        if (db.isValid)
+        if (db.isValid())
             db.set(this.SERVER_CONFIGURATION_DB, getServerConfiguration());
         else
             throw new Error("Database not found. Please check through !db_show, and !db_clear");
     }
     reset(configurationType) {
-        if (db.isValid) {
+        if (db.isValid()) {
             if (configurationType === "SERVER") {
                 resetServerConfiguration();
                 db.set(this.SERVER_CONFIGURATION_DB, getServerConfiguration());
@@ -40,62 +39,69 @@ export class __Configuration {
             throw new Error("Database not found. Please check through !db_show, and !db_clear");
     }
     showMainScreen() {
-        this.player.sendMessage("Close chat to open configuration.");
         const form = new ActionFormData()
-            .title("Immersive Fishing")
+            .title(ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase()))
             .button("CLIENT SIDE");
         if (this.player.StableIsOp())
             form.button("SERVER SIDE");
         form.button("MORE INFO");
-        form.show(this.player).then(async (response) => {
+        form.show(this.player).then((response) => {
             if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
                 return;
             if (response.selection === 0)
-                await this.showClientScreen();
+                this.showClientScreen();
             if (response.selection === 1)
                 this.showServerScreen();
             if (response.selection === 2)
                 this.showMoreInfoScreen();
         });
     }
-    async showClientScreen() {
+    showClientScreen() {
         const fisher = fetchFisher(this.player);
         const form = new ModalFormData().title("CLIENT SETTINGS");
-        if (db.isValid) {
-            if (db.has(this.CLIENT_CONFIGURATION_DB))
+        if (db.isValid()) {
+            if (db.has(this.CLIENT_CONFIGURATION_DB)) {
                 fisher.clientConfiguration = db.get(this.CLIENT_CONFIGURATION_DB);
-            else
+            }
+            else {
                 db.set(this.CLIENT_CONFIGURATION_DB, fisher.clientConfiguration);
+            }
         }
-        const clientConfigurationArray = Object.entries(fisher.clientConfiguration).map(([key, value]) => [key, value]);
-        const preResultFlags = [];
-        Object.keys(ActionResultContent).forEach((eventName, index) => {
-            const value = ActionResultContent[eventName];
-            if (typeof value === 'boolean') {
-                preResultFlags[index] = clientConfigurationArray[index][1];
-                form.toggle(eventName, preResultFlags[index]);
-            }
-            else if (Array.isArray(value)) {
-                preResultFlags[index] = value.indexOf(clientConfigurationArray[index][1]);
-                form.dropdown(eventName, value, preResultFlags[index]);
-            }
-        });
+        const cachedConfigurationValues = [];
+        try {
+            Object.values(fisher.clientConfiguration).forEach((builder, index) => {
+                console.warn(builder.name, JSON.stringify(builder.values));
+                if (typeof builder.defaultValue !== "boolean") {
+                    const currentValue = builder.values.indexOf(builder.defaultValue);
+                    console.warn(builder.defaultValue, typeof builder.defaultValue);
+                    cachedConfigurationValues[index] = currentValue !== -1 ? currentValue : parseInt(builder.defaultValue);
+                    form.dropdown(builder.name, builder.values, cachedConfigurationValues[index]);
+                }
+                else {
+                    cachedConfigurationValues[index] = builder.defaultValue;
+                    form.toggle(builder.name, cachedConfigurationValues[index]);
+                }
+            });
+        }
+        catch (e) {
+            console.warn(e, e.stack);
+        }
+        console.warn(fisher.clientConfiguration['Caught'].name);
         form.show(this.player).then((result) => {
             if (!result.formValues)
                 return;
-            const hadChanges = !preResultFlags.every((element, index) => element === result.formValues[index]);
+            const hadChanges = !cachedConfigurationValues.every((element, index) => element === result.formValues[index]);
             if (result.canceled || result.cancelationReason === FormCancelationReason.UserClosed || result.cancelationReason === FormCancelationReason.UserBusy) {
                 return;
             }
             if (hadChanges) {
-                result.formValues.forEach((value, formIndex) => {
-                    const eventName = Object.keys(ActionResultContent)[formIndex];
-                    if (typeof value === 'boolean')
-                        fisher.clientConfiguration[clientConfigurationArray[formIndex][0]] = value;
-                    else
-                        fisher.clientConfiguration[clientConfigurationArray[formIndex][0]] = ActionResultContent[eventName][value];
+                result.formValues.forEach((newValue, formIndex) => {
+                    const key = Object.keys(fisher.clientConfiguration)[formIndex];
+                    const builder = fisher.clientConfiguration[key];
+                    builder.defaultValue = newValue;
+                    fisher.clientConfiguration[key] = builder;
                 });
-                if (db.isValid)
+                if (db.isValid())
                     db.set(this.CLIENT_CONFIGURATION_DB, fisher.clientConfiguration);
             }
             this.showMainScreen();

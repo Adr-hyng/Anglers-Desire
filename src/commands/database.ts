@@ -2,6 +2,7 @@ import { Player, world } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { db, ADDON_NAME } from "constant";
 import { ICommandBase} from "./ICommandBase";
+import { resetServerConfiguration } from "fishing_system";
 
 enum REQUIRED_PARAMETER {
     SHOW = "show",

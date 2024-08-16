@@ -1,15 +1,12 @@
-import { Player, TicksPerSecond, Entity, system, BlockTypes} from "@minecraft/server";
-import { fishingCallingLogMap, fetchFisher, fishers } from "constant";
+import { Player, TicksPerSecond, system, BlockTypes} from "@minecraft/server";
+import { fishingCallingLogMap, fetchFisher } from "constant";
 import { SERVER_CONFIGURATION } from "fishing_system/configuration/config_handler";
 import { Fisher } from "fishing_system/entities/fisher";
-import { RangeInternal } from "types/index";
-import { ExecuteAtGivenTick, Logger, sleep, StateController, Timer } from "utils/index";
-import { onHookedItem } from "./on_hook_item";
+import { Logger, StateController, Timer } from "utils/index";
 
 import {overrideEverything} from "overrides/index";
 import { MinecraftBlockTypes } from "vanilla-types/index";
 import { FishingHook } from "fishing_system/entities/hook";
-import server_configuration from "fishing_system/configuration/server_configuration";
 overrideEverything();
 
 const HOOK_SUBMERGE_OFFSET: number = 0.2;
@@ -39,10 +36,8 @@ export async function onHookLanded(player: Player): Promise<void> {
         let onHookStablized: boolean = false;
         try {
           const currentFishingHook: FishingHook = fisher.fishingHook;
-          if (!currentFishingHook?.isValid()) throw new Error("Fishing hook not found / undefined");
-          if(!fisher.fishingRod.isEquipped) throw new Error("Fishing rod is not equipped while fishing");
-          if(fisher.caughtByHook) throw new Error("A Fish is already caught");
-  
+          if (!currentFishingHook || !currentFishingHook?.isValid()) throw new Error("Fishing hook not found / undefined");
+          if(fisher.caughtByHook || fisher.caughtByHook?.isValid()) throw new Error("A Fish is already caught");
           const { x, y, z } = currentFishingHook.getVelocity();
           if (isHookStabilized(x, y, z) && isBobberPositionValid(currentFishingHook)) {
             fisher.fishingHook.stablizedLocation = currentFishingHook.location;
@@ -61,28 +56,16 @@ export async function onHookLanded(player: Player): Promise<void> {
     });
   }
   if(!isInWater) return;
-  // This is the current progress or percentage of whenever the
-  // the fish is already done with tugging the fishing hook.
-
   const expirationTimer = new Timer(SERVER_CONFIGURATION.expirationTimer * TicksPerSecond);
-
-  // let isDeeplySubmerged: boolean = false;
-  // let isHookSubmerged: boolean = false;
-  
-  const FishingStateIndicator = fisher.fishingOutputMap();;
+  const FishingStateIndicator = fisher.fishingOutputManager();;
   const hookSubmergeState = new StateController(fisher.fishingHook.isSubmerged);
   const hookTreasureFoundState = new StateController(fisher.fishingHook.isDeeplySubmerged);
-  
   const initialHookPosition = fisher.fishingHook.stablizedLocation;
-  let luckOfTheSeaLevel = fisher.fishingRod.getLuckOfSea()?.level ?? 0;
-  let lureLevel = fisher.fishingRod.getLure()?.level ?? 0;
 
   let tuggingEvent: number = system.runInterval( () => {
     try { 
       const hookEntity = fisher.fishingHook;
       const caughtFish = fisher.caughtByHook;
-
-      if(!fisher.fishingRod.isEquipped || !fisher.fishingRod?.isValid()) throw new Error("Fishing rod is not equipped while fishing");
       if(!hookEntity || !hookEntity?.isValid()) throw new Error("Fishing hook not found / undefined");
       if(caughtFish || caughtFish?.isValid()) throw new Error("A Fish is already caught");
 
