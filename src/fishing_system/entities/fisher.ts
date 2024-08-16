@@ -5,6 +5,8 @@ import {
     Vector3, 
     system, 
     EntityEquippableComponent,
+    EntityItemComponent,
+    EasingType,
 } from "@minecraft/server";
 
 import {MinecraftEntityTypes} from "vanilla-types/index";
@@ -100,7 +102,7 @@ class Fisher {
 
         const reeledEntityOnAir = new StateController(false); // state controller for when reeled entity goes into air after being in water then spawn particle
 
-        let reelingEventInterval: number = system.runInterval( () => {
+        let reelingEventInterval: number = system.runInterval( async () => {
             Logger.info("REELING INTERVAL RUNNING. ID=", reelingEventInterval);
             try {
                 if(fishHealth?.currentValue <= 0) throw new Error("Caught fish died while in mid air");
@@ -109,12 +111,18 @@ class Fisher {
                 
                 currentReelingProcess += FishingTimeInterval;
                 const point: Vector3 = Vec3.quadracticBezier(startPoint, controlPoint, endPoint, currentReelingProcess);
+                
                 let isReeling: boolean = currentEntityCaughtByHook.tryTeleport( { x: point.x, y: point.y, z: point.z}, { facingLocation: endPoint, keepVelocity: false, checkForBlocks: true } );
                 reeledEntityOnAir.setValue(!currentEntityCaughtByHook.isInWater && !currentEntityCaughtByHook.isOnGround);
                 if(reeledEntityOnAir.hasChanged() && reeledEntityOnAir.getCurrentValue()) {
-                    // await system.waitTicks(2);
-                    this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
-                    console.warn("ON AIR");
+                    if(currentEntityCaughtByHook.hasComponent(EntityItemComponent.componentId)){
+                        this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
+                        console.warn("ON AIR");
+                    } else {
+                        await system.waitTicks(3);
+                        this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
+                        console.warn("ON AIR");
+                    }
                 }
                 if (!isReeling) throw new Error("Fish has collided to a block or was interrupted mid air");
             } catch (e) {

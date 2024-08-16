@@ -1,4 +1,4 @@
-import { EntityHealthComponent, system, EntityEquippableComponent, } from "@minecraft/server";
+import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemComponent, } from "@minecraft/server";
 import { MinecraftEntityTypes } from "vanilla-types/index";
 import { ParticleState } from "types/index";
 import { Random } from "utils/Random/random";
@@ -66,7 +66,7 @@ class Fisher {
         const magnitude = endPoint.distance(startPoint);
         const controlPoint = new Vec3((startPoint.x + endPoint.x) / 2, startPoint.y + (magnitude * 1.65), (startPoint.z + endPoint.z) / 2);
         const reeledEntityOnAir = new StateController(false);
-        let reelingEventInterval = system.runInterval(() => {
+        let reelingEventInterval = system.runInterval(async () => {
             Logger.info("REELING INTERVAL RUNNING. ID=", reelingEventInterval);
             try {
                 if (fishHealth?.currentValue <= 0)
@@ -80,8 +80,15 @@ class Fisher {
                 let isReeling = currentEntityCaughtByHook.tryTeleport({ x: point.x, y: point.y, z: point.z }, { facingLocation: endPoint, keepVelocity: false, checkForBlocks: true });
                 reeledEntityOnAir.setValue(!currentEntityCaughtByHook.isInWater && !currentEntityCaughtByHook.isOnGround);
                 if (reeledEntityOnAir.hasChanged() && reeledEntityOnAir.getCurrentValue()) {
-                    this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
-                    console.warn("ON AIR");
+                    if (currentEntityCaughtByHook.hasComponent(EntityItemComponent.componentId)) {
+                        this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
+                        console.warn("ON AIR");
+                    }
+                    else {
+                        await system.waitTicks(3);
+                        this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
+                        console.warn("ON AIR");
+                    }
                 }
                 if (!isReeling)
                     throw new Error("Fish has collided to a block or was interrupted mid air");

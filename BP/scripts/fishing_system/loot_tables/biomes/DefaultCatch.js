@@ -5,7 +5,7 @@ export class DefaultCatch {
             "pools": [
                 {
                     "rolls": 1,
-                    "weight": 100 + ((85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5)),
+                    "weight": ((85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5)),
                     "entries": [
                         {
                             "item": MinecraftItemTypes.Cod,
@@ -31,7 +31,7 @@ export class DefaultCatch {
                 },
                 {
                     "rolls": 1,
-                    "weight": 0 * ((10 - (modifier.LoTSModifier * 1.95)) + (modifier.deepnessModifier / 2)),
+                    "weight": ((10 - (modifier.LoTSModifier * 1.95)) + (modifier.deepnessModifier / 2)),
                     "entries": [
                         {
                             "item": MinecraftItemTypes.LeatherBoots,
@@ -90,7 +90,7 @@ export class DefaultCatch {
                 },
                 {
                     "rolls": 1,
-                    "weight": 0 * ((5 + (modifier.LoTSModifier * 2.1)) + modifier.deepnessModifier),
+                    "weight": ((5 + (modifier.LoTSModifier * 2.1)) + modifier.deepnessModifier),
                     "entries": [
                         {
                             "item": MinecraftItemTypes.NautilusShell,
