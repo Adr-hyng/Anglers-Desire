@@ -6,6 +6,9 @@ export class TextResult {
         this.executed = false;
         this.id = generateUUID16();
     }
+    reset() {
+        return Promise.resolve();
+    }
     run() {
         if (this.executed || !this.fisher.source)
             return;

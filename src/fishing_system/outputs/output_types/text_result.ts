@@ -9,6 +9,10 @@ export class TextResult implements IFishingOutput {
 
   constructor(private message: string, private fisher: Fisher) { this.id = generateUUID16() }
 
+  reset(): Promise<void> {
+    return Promise.resolve();
+  }
+
   run() {
     if (this.executed || !this.fisher.source) return;
     var _rawMessage: RawMessage = {

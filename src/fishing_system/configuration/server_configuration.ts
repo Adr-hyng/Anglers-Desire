@@ -2,11 +2,11 @@ export default {
   /**
    * Enables debug messages to content logs.
    */
-  debug: false,
+  debug: true,
   /**
    * Number of seconds before cancelling the fishing system.
    */
-  expirationTimer: 600,
+  expirationTimer: 300,
 };
 
 // version (do not change)

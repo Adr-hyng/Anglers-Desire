@@ -1,6 +1,6 @@
 {
   "expirationTimer": {
     "description": "Number of seconds before cancelling the fishing system.",
-    "default": 600
+    "default": 300
   }
 }
