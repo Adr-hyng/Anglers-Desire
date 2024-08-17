@@ -28,7 +28,6 @@ const command: ICommandBase = {
         const requiredParams: string[] = (`[${Object.values(REQUIRED_PARAMETER).join('|')}]`).slice(1, -1).split('|').map(command => command.trim()); 
         const selectedReqParam: string = args[0].toLowerCase();
         if(!requiredParams.includes(selectedReqParam)) return player.sendMessage("§cInvalid Usage Format." + command.usage());
-        if(!player.StableIsOp()) return;
         switch(selectedReqParam) {
             case REQUIRED_PARAMETER.GET:
                 const fishingRod = new ItemStack(MinecraftItemTypes.FishingRod, 1);
@@ -38,9 +37,23 @@ const command: ICommandBase = {
                 (player.getComponent(EntityComponentTypes.Inventory) as EntityInventoryComponent).container.addItem(fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
-                if(!player.StableIsOp()) break;
                 system.run( () => {
-                    
+                    player.dimension.spawnLoot({
+                        "pools": [
+                            {
+                                "rolls": 1,
+                                "entries": [
+                                    {
+                                        "item": MinecraftItemTypes.EnchantedBook,
+                                        "weight": 100,
+                                        "setEnchantWithLevels": {
+                                            "level": 30
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }, player.location);
                 });
                 break;
             default:

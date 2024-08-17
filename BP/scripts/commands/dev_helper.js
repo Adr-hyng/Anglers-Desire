@@ -26,8 +26,6 @@ const command = {
         const selectedReqParam = args[0].toLowerCase();
         if (!requiredParams.includes(selectedReqParam))
             return player.sendMessage("§cInvalid Usage Format." + command.usage());
-        if (!player.StableIsOp())
-            return;
         switch (selectedReqParam) {
             case REQUIRED_PARAMETER.GET:
                 const fishingRod = new ItemStack(MinecraftItemTypes.FishingRod, 1);
@@ -37,9 +35,23 @@ const command = {
                 player.getComponent(EntityComponentTypes.Inventory).container.addItem(fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
-                if (!player.StableIsOp())
-                    break;
                 system.run(() => {
+                    player.dimension.spawnLoot({
+                        "pools": [
+                            {
+                                "rolls": 1,
+                                "entries": [
+                                    {
+                                        "item": MinecraftItemTypes.EnchantedBook,
+                                        "weight": 100,
+                                        "setEnchantWithLevels": {
+                                            "level": 30
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }, player.location);
                 });
                 break;
             default:

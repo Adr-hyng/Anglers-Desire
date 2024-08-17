@@ -2,10 +2,15 @@ import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemCom
 import { MinecraftEntityTypes } from "vanilla-types/index";
 import { Random } from "utils/Random/random";
 import { Logger, StateController, VectorContainer, } from "utils/index";
-import { SERVER_CONFIGURATION, LootTable, FishingOutputBuilder } from "fishing_system/index";
+import { LootTable, FishingOutputBuilder } from "fishing_system/index";
 import { clientConfiguration } from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
 import { FishingHook } from "./hook";
+const CatchingLocalPosition = {
+    "BACK": 2,
+    "DEFAULT": 1,
+    "FRONT": 0
+};
 const ReelingCompleteProcess = 0.96;
 const FishingTimeInterval = 0.03;
 class Fisher {
@@ -61,7 +66,7 @@ class Fisher {
         const viewVector = currentPlayer.getViewDirection();
         const { x, y, z } = currentPlayer.location;
         const { x: viewX, z: viewZ } = new Vec3(viewVector.x, viewVector.y, viewVector.z).normalize();
-        const endPoint = new Vec3(x - SERVER_CONFIGURATION.backDestinationOffset * viewX, y, z - SERVER_CONFIGURATION.backDestinationOffset * viewZ);
+        const endPoint = new Vec3(x - CatchingLocalPosition.DEFAULT * viewX, y, z - CatchingLocalPosition.DEFAULT * viewZ);
         const magnitude = endPoint.distance(startPoint);
         const controlPoint = new Vec3((startPoint.x + endPoint.x) / 2, startPoint.y + (magnitude * 1.65), (startPoint.z + endPoint.z) / 2);
         const reeledEntityOnAir = new StateController(false);

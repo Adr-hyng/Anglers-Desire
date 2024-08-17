@@ -31,8 +31,6 @@ const command = {
                     player.sendMessage(`§4No configuration record found in database.§r`);
                     return;
                 }
-                if (!player.StableIsOp())
-                    return;
                 let collections = "";
                 let i = 1;
                 for (const key of db.keys()) {

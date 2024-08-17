@@ -29,6 +29,11 @@ export type FishingStateTypes = {
     Caught: IFishingOutput;
     Escaped: IFishingOutput;
 }
+const CatchingLocalPosition = {
+    "BACK": 2,
+    "DEFAULT": 1,
+    "FRONT": 0
+};
 
 const ReelingCompleteProcess: number = 0.96;
 const FishingTimeInterval: number = 0.03; 
@@ -94,7 +99,7 @@ class Fisher {
         const {x, y, z}: Vector3 = currentPlayer.location;
         const {x: viewX, z: viewZ}: Vec3 = new Vec3(viewVector.x, viewVector.y, viewVector.z).normalize();
         
-        const endPoint: Vec3 = new Vec3(x - SERVER_CONFIGURATION.backDestinationOffset * viewX, y, z - SERVER_CONFIGURATION.backDestinationOffset * viewZ); // 2nd point
+        const endPoint: Vec3 = new Vec3(x - CatchingLocalPosition.DEFAULT * viewX, y, z - CatchingLocalPosition.DEFAULT * viewZ); // 2nd point
         const magnitude: number = endPoint.distance(startPoint);
         const controlPoint = new Vec3( 
             (startPoint.x + endPoint.x) / 2,

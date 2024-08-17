@@ -101,12 +101,10 @@ export class Enchantability {
   ];}
 
   static get EnchantmentBook(): EnchantmentType[] {
-    //   return EnchantmentRangeHandler.getAll().filter((e)=> !([EnchantmentRangeHandler.SwiftSneak.id, EnchantmentRangeHandler.SoulSpeed.id, EnchantmentRangeHandler.WindBurst.id].includes(e.id)));
-      return EnchantmentRangeHandler.getAll();
+      return EnchantmentRangeHandler.getAll().filter((e)=> !([EnchantmentRangeHandler.SwiftSneak.id, EnchantmentRangeHandler.SoulSpeed.id, EnchantmentRangeHandler.WindBurst.id].includes(e.id))).map(en => en);
+    //   return EnchantmentRangeHandler.getAll();
   }
 }
-
-// minecraft:mace, and minecraft:enchanted_book
 
 export type MinecraftEnchantabilityTypesUnion = keyof typeof Enchantability;
 export type EquipmentMaterialType = Exclude<keyof typeof Enchantability, "prototype" | "get">;

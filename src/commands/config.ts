@@ -44,9 +44,7 @@ const command: ICommandBase = {
                 const selectedOptParam: string = args[1]?.toLowerCase();
                 let shouldResetClient: boolean = OPTIONAL_PARAMETER.CLIENT === selectedOptParam;
                 if(!optionalParams.includes(selectedOptParam)) shouldResetClient = true; 
-                player.sendMessage(`${shouldResetClient ? "Client" : (player.StableIsOp()) ? "Server": "Server"} Settings successfully reset.`);
                 if(shouldResetClient) player.Configuration.reset("CLIENT");
-                else if(!shouldResetClient && player.StableIsOp()) player.Configuration.reset("SERVER");
             }
         } 
     }
