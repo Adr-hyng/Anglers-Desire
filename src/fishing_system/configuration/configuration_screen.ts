@@ -90,7 +90,16 @@ export class __Configuration {
         result.formValues.forEach((newValue, formIndex) => {
           const key = Object.keys(fisher.clientConfiguration)[formIndex];
           const builder = fisher.clientConfiguration[key] as FormBuilder<any>;
-          builder.defaultValue = newValue;
+          switch (typeof newValue) {
+            case "boolean": 
+              builder.defaultValue = newValue;
+              break;
+            case "number":
+              builder.defaultValue = builder.values[newValue];
+              break;
+            default:
+              break;
+          }
           fisher.clientConfiguration[key] = builder;
         });
         if (db.isValid()) db.set(this.CLIENT_CONFIGURATION_DB, fisher.clientConfiguration);

@@ -31,9 +31,9 @@ export class ParticleResult {
     }
     run(newPosition) {
         try {
-            if (!this.fisher.source)
+            if (!this.fisher.source || !this.fisher.source?.isValid())
                 throw new Error("No player found");
-            if (!this.fisher.fishingHook.stablizedLocation && !newPosition)
+            if (!(this.fisher.fishingHook.stablizedLocation || this.fisher.fishingHook?.isValid()) && !newPosition)
                 throw new Error("No vector position passed");
             const initialPosition = (this.fisher.fishingHook.stablizedLocation) ? this.fisher.fishingHook.stablizedLocation : newPosition;
             let { x, y, z } = initialPosition;

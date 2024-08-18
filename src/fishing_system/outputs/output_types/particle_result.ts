@@ -39,8 +39,8 @@ export class ParticleResult implements IFishingOutput {
 	}
 	run(newPosition?: Vector3) {
     try {
-      if(!this.fisher.source) throw new Error("No player found");
-      if(!this.fisher.fishingHook.stablizedLocation && !newPosition) throw new Error("No vector position passed");
+      if(!this.fisher.source || !this.fisher.source?.isValid()) throw new Error("No player found");
+      if(!(this.fisher.fishingHook.stablizedLocation || this.fisher.fishingHook?.isValid()) && !newPosition) throw new Error("No vector position passed");
       const initialPosition = (this.fisher.fishingHook.stablizedLocation) ? this.fisher.fishingHook.stablizedLocation : newPosition;
       let { x, y, z } = initialPosition;
       if (this.fisher.caughtByHook) {

@@ -2,6 +2,9 @@ import { EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, ItemC
 import { CommandHandler } from "commands/command_handler";
 import { MinecraftItemTypes, MinecraftEnchantmentTypes } from "vanilla-types/index";
 import { ICommandBase} from "./ICommandBase";
+import { Logger } from "utils/index";
+import { clientConfiguration } from "fishing_system/configuration/client_configuration";
+import { fetchFisher } from "constant";
 
 // Automate this, the values should be the description.
 enum REQUIRED_PARAMETER {
@@ -38,22 +41,16 @@ const command: ICommandBase = {
                 break;
             case REQUIRED_PARAMETER.TEST:
                 system.run( () => {
-                    player.dimension.spawnLoot({
-                        "pools": [
-                            {
-                                "rolls": 1,
-                                "entries": [
-                                    {
-                                        "item": MinecraftItemTypes.EnchantedBook,
-                                        "weight": 100,
-                                        "setEnchantWithLevels": {
-                                            "level": 30
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    }, player.location);
+                    
+                    Logger.debug("BEFORE");
+                    Object.keys((fetchFisher(player).clientConfiguration)).forEach((key, index) => {
+                        Logger.debug(key, JSON.stringify(fetchFisher(player).clientConfiguration[key].defaultValue));
+                    });
+                    // fetchFisher(player).clientConfiguration.Caught.defaultValue
+                    Logger.debug("AFTER");
+                    Object.keys((fetchFisher(player).clientConfiguration)).forEach((key, index) => {
+                        Logger.debug(key, JSON.stringify(fetchFisher(player).clientConfiguration[key].defaultValue));
+                    });
                 });
                 break;
             default:

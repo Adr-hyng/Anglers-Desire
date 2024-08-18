@@ -1,6 +1,8 @@
 import { EnchantmentTypes, EntityComponentTypes, ItemComponentTypes, ItemStack, system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { MinecraftItemTypes, MinecraftEnchantmentTypes } from "vanilla-types/index";
+import { Logger } from "utils/index";
+import { fetchFisher } from "constant";
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
     REQUIRED_PARAMETER["GET"] = "get";
@@ -36,22 +38,14 @@ const command = {
                 break;
             case REQUIRED_PARAMETER.TEST:
                 system.run(() => {
-                    player.dimension.spawnLoot({
-                        "pools": [
-                            {
-                                "rolls": 1,
-                                "entries": [
-                                    {
-                                        "item": MinecraftItemTypes.EnchantedBook,
-                                        "weight": 100,
-                                        "setEnchantWithLevels": {
-                                            "level": 30
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    }, player.location);
+                    Logger.debug("BEFORE");
+                    Object.keys((fetchFisher(player).clientConfiguration)).forEach((key, index) => {
+                        Logger.debug(key, JSON.stringify(fetchFisher(player).clientConfiguration[key].defaultValue));
+                    });
+                    Logger.debug("AFTER");
+                    Object.keys((fetchFisher(player).clientConfiguration)).forEach((key, index) => {
+                        Logger.debug(key, JSON.stringify(fetchFisher(player).clientConfiguration[key].defaultValue));
+                    });
                 });
                 break;
             default:
