@@ -15,11 +15,37 @@ world.afterEvents.playerSpawn.subscribe((e) => {
   SendMessageTo(e.player, "yn.fishing_got_reel.on_load_message");
 });
 
+
+// PC (Configuration Opening) - Left Click
+world.afterEvents.entityHitBlock.subscribe(async (e)=> {
+  const player = <Player> e.damagingEntity;
+  const fisher = fetchFisher(player);
+  if(!fisher.fishingRod.isEquipped) return;
+  if(e.damagingEntity?.isValid() && !(e.damagingEntity instanceof Player)) return;
+  if(!player.isSneaking) return;
+  const {
+    default: CommandObject
+  } = await import(`./commands/config.js`);
+  CommandObject.execute(player, ['show']);
+});
+
+// Mobile / Console (Configuration Opening) - Tap
+world.beforeEvents.itemUseOn.subscribe(async (e)=> {
+  const player = <Player> e.source;
+  const fisher = fetchFisher(player);
+  if(!fisher.fishingRod.isEquipped) return;
+  if(e.source?.isValid() && !(e.source instanceof Player)) return;
+  if(!player.isSneaking) return;
+  const {
+    default: CommandObject
+  } = await import(`./commands/config.js`);
+  CommandObject.execute(player as Player, ['show']);
+});
+
 world.beforeEvents.itemUse.subscribe((event) => {
   const player: Player = event.source as Player;
   let fisher: Fisher = fetchFisher(player);
   if(!fisher.fishingRod.isEquipped) return;
-  
   system.run(() => {
     system.run(() => world.afterEvents.entitySpawn.unsubscribe(tt));
     const tt = world.afterEvents.entitySpawn.subscribe( (spawnEvent) => {

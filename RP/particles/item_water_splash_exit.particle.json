@@ -2,7 +2,7 @@
 	"format_version": "1.10.0",
 	"particle_effect": {
 		"description": {
-			"identifier": "yn:water_splash_exit",
+			"identifier": "yn:item_water_splash_exit",
 			"basic_render_parameters": {
 				"material": "particles_alpha",
 				"texture": "textures/particle/water_splash"
@@ -13,7 +13,7 @@
 				"type": "linear",
 				"input": "v.particle_age",
 				"horizontal_range": "variable.max_lifetime",
-				"nodes": [50, -22.36, -30, -30, -30, -30, -30, -30, 0]
+				"nodes": [50, -25.5, -30, -30, -30, -30, -30, -30, 0]
 			},
 			"variable.scale_droplet": {
 				"type": "bezier",
@@ -27,7 +27,7 @@
 				"particle_effect": {
 					"effect": "sp:ripple_main",
 					"type": "emitter",
-					"pre_effect_expression": "v.rand_size = 1.5;\nvariable.y_offset = 0;"
+					"pre_effect_expression": "v.rand_size = 1;\nvariable.y_offset = 0;"
 				}
 			},
 			"splash_foam": {
@@ -49,13 +49,13 @@
 		},
 		"components": {
 			"minecraft:emitter_initialization": {
-				"creation_expression": "variable.splash_spread = 5;variable.splash_radius = 3;variable.min_splashes = 30;variable.max_splashes = 50;variable.on_end = 0;variable.max_lifetime = 2;"
+				"creation_expression": "variable.splash_spread = 3;variable.splash_radius = 2;variable.min_splashes = 10;variable.max_splashes = 15;variable.on_end = 0;variable.max_lifetime = 2;"
 			},
 			"minecraft:emitter_rate_instant": {
 				"num_particles": "math.random(variable.min_splashes, variable.max_splashes)"
 			},
 			"minecraft:emitter_lifetime_once": {
-				"active_time": 1
+				"active_time": 3
 			},
 			"minecraft:emitter_shape_point": {
 				"offset": [0, 0.2, 0],

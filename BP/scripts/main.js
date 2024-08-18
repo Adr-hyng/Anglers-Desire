@@ -13,6 +13,30 @@ world.afterEvents.playerSpawn.subscribe((e) => {
         return;
     SendMessageTo(e.player, "yn.fishing_got_reel.on_load_message");
 });
+world.afterEvents.entityHitBlock.subscribe(async (e) => {
+    const player = e.damagingEntity;
+    const fisher = fetchFisher(player);
+    if (!fisher.fishingRod.isEquipped)
+        return;
+    if (e.damagingEntity?.isValid() && !(e.damagingEntity instanceof Player))
+        return;
+    if (!player.isSneaking)
+        return;
+    const { default: CommandObject } = await import(`./commands/config.js`);
+    CommandObject.execute(player, ['show']);
+});
+world.beforeEvents.itemUseOn.subscribe(async (e) => {
+    const player = e.source;
+    const fisher = fetchFisher(player);
+    if (!fisher.fishingRod.isEquipped)
+        return;
+    if (e.source?.isValid() && !(e.source instanceof Player))
+        return;
+    if (!player.isSneaking)
+        return;
+    const { default: CommandObject } = await import(`./commands/config.js`);
+    CommandObject.execute(player, ['show']);
+});
 world.beforeEvents.itemUse.subscribe((event) => {
     const player = event.source;
     let fisher = fetchFisher(player);

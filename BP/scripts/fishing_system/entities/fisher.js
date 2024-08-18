@@ -94,11 +94,11 @@ class Fisher {
                 reeledEntityOnAir.setValue(!currentEntityCaughtByHook.isInWater && !currentEntityCaughtByHook.isOnGround);
                 if (reeledEntityOnAir.hasChanged() && reeledEntityOnAir.getCurrentValue()) {
                     if (currentEntityCaughtByHook.hasComponent(EntityItemComponent.componentId)) {
-                        this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
+                        this.source.dimension.spawnParticle("yn:item_water_splash_exit", this.fishingHook.stablizedLocation);
                     }
                     else {
                         await system.waitTicks(3);
-                        this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
+                        this.source.dimension.spawnParticle("yn:entity_water_splash_exit", this.fishingHook.stablizedLocation);
                     }
                     this.source.playSound('entity.generic.splash');
                 }

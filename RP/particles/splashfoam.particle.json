@@ -51,6 +51,7 @@
 				}
 			},
 			"minecraft:particle_motion_collision": {
+				"collision_radius": 0,
 				"expire_on_contact": true
 			},
 			"minecraft:particle_appearance_lighting": {}
