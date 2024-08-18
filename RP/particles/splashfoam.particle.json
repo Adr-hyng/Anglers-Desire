@@ -1,0 +1,59 @@
+{
+	"format_version": "1.10.0",
+	"particle_effect": {
+		"description": {
+			"identifier": "sp:splashfoam",
+			"basic_render_parameters": {
+				"material": "particles_alpha",
+				"texture": "textures/particle/particles"
+			}
+		},
+		"events": {
+			"ripple": {
+				"particle_effect": {
+					"effect": "sp:ripple",
+					"type": "emitter"
+				}
+			}
+		},
+		"components": {
+			"minecraft:emitter_rate_instant": {
+				"num_particles": "variable.max_count"
+			},
+			"minecraft:emitter_lifetime_looping": {
+				"active_time": 1
+			},
+			"minecraft:emitter_shape_disc": {
+				"offset": [0, "math.random(v.min_y_offset, v.max_y_offset)", 0],
+				"radius": "v.width",
+				"plane_normal": "y",
+				"direction": ["(v.particle_random_1-0.5)/2", "0.75+v.particle_random_3*0.5", "(v.particle_random_2-0.5)/2"]
+			},
+			"minecraft:particle_lifetime_expression": {
+				"max_lifetime": 3
+			},
+			"minecraft:particle_expire_if_in_blocks": ["minecraft:water"],
+			"minecraft:particle_lifetime_events": {
+				"expiration_event": "ripple"
+			},
+			"minecraft:particle_initial_speed": "math.random(v.min_lifetime, v.max_lifetime)",
+			"minecraft:particle_motion_dynamic": {
+				"linear_acceleration": ["math.random(-1, 1)", "v.gravity", "math.random(-1, 1)"]
+			},
+			"minecraft:particle_appearance_billboard": {
+				"size": ["0.5/16", "0.5/16"],
+				"facing_camera_mode": "rotate_xyz",
+				"uv": {
+					"texture_width": 128,
+					"texture_height": 128,
+					"uv": [4, 4],
+					"uv_size": [1, 1]
+				}
+			},
+			"minecraft:particle_motion_collision": {
+				"expire_on_contact": true
+			},
+			"minecraft:particle_appearance_lighting": {}
+		}
+	}
+}
