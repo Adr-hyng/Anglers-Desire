@@ -41,13 +41,12 @@ const command: ICommandBase = {
                 break;
             case REQUIRED_PARAMETER.TEST:
                 system.run( () => {
-                    
-                    Logger.debug("BEFORE");
-                    Object.keys((fetchFisher(player).clientConfiguration)).forEach((key, index) => {
-                        Logger.debug(key, JSON.stringify(fetchFisher(player).clientConfiguration[key].defaultValue));
+                    Logger.debug("ORIGINAL");
+                    Object.keys((clientConfiguration)).forEach((key, index) => {
+                        Logger.debug(key, clientConfiguration[key].defaultValue);
                     });
                     // fetchFisher(player).clientConfiguration.Caught.defaultValue
-                    Logger.debug("AFTER");
+                    Logger.debug("PLAYER");
                     Object.keys((fetchFisher(player).clientConfiguration)).forEach((key, index) => {
                         Logger.debug(key, JSON.stringify(fetchFisher(player).clientConfiguration[key].defaultValue));
                     });

@@ -29,3 +29,18 @@ export const clientConfiguration = {
   "Caught": new FormBuilder("Caught Output Option").createDropdown(["ICON", "TEXT", "BOTH", "OFF"], "ICON"),
   "Escaped": new FormBuilder("Escaped Output Option").createDropdown(["ICON", "TEXT", "BOTH", "OFF"], "ICON"),
 }
+
+export function cloneClientConfiguration() {
+  let clonedConfig = {} as typeof clientConfiguration;
+  for (const [key, _formBuilder] of Object.entries(clientConfiguration)) {
+    const formBuilder = <FormBuilder<any>>_formBuilder;
+    const newFormBuilder = new FormBuilder<any>(formBuilder.name);
+    if (formBuilder.values) {
+      newFormBuilder.createDropdown(formBuilder.values, formBuilder.defaultValue as typeof ParticleStateOptions[number]);
+    } else {
+      newFormBuilder.createToggle(formBuilder.defaultValue as boolean);
+    }
+    clonedConfig[key] = newFormBuilder;
+  }
+  return clonedConfig;
+}

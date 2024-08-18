@@ -2,10 +2,11 @@ import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemCom
 import { MinecraftEntityTypes } from "vanilla-types/index";
 import { Random } from "utils/Random/random";
 import { Logger, StateController, VectorContainer, } from "utils/index";
-import { LootTable, FishingOutputBuilder } from "fishing_system/index";
-import { clientConfiguration } from "../configuration/client_configuration";
+import { LootTable, FishingOutputBuilder, ConfigurationCollections_DB } from "fishing_system/index";
+import { cloneClientConfiguration } from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
 import { FishingHook } from "./hook";
+import { db } from "constant";
 const CatchingLocalPosition = {
     "BACK": 2,
     "DEFAULT": 1,
@@ -18,13 +19,19 @@ class Fisher {
         this._source = null;
         this.particleSpawner = null;
         this.particleVectorLocations = null;
-        this.clientConfiguration = clientConfiguration;
         this.fishingHook = null;
         this.caughtByHook = null;
         this.currentBiomeLootTable = Object.getOwnPropertyNames(LootTable).filter(prop => !['name', 'prototype', 'length', 'fishingModifier'].includes(prop));
         this.currentBiome = 0;
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
+        this.clientConfiguration = cloneClientConfiguration();
+        const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT"));
+        if (configuration) {
+            Object.entries(configuration).forEach(([key, value]) => {
+                this.clientConfiguration[key] = (value);
+            });
+        }
         this._fishingOutputManager = {
             "Caught": FishingOutputBuilder.create(this.clientConfiguration.Caught, this),
             "Escaped": FishingOutputBuilder.create(this.clientConfiguration.Escaped, this),
@@ -34,9 +41,11 @@ class Fisher {
         return this.source.getComponent(EntityEquippableComponent.componentId);
     }
     get source() {
+        if (!this._source?.isValid())
+            throw new Error("No player found in fisher instance");
         return this._source;
     }
-    fishingOutputManager() {
+    get fishingOutputManager() {
         return this._fishingOutputManager;
     }
     async gainExperience() {

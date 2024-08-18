@@ -3,9 +3,9 @@ import { spawnedLogMap, fishers } from "constant";
 import { Fisher } from "fishing_system/entities/fisher";
 import { onHookLanded } from "./on_wait_hook_stablized";
 
-export function onFishingHookCreated(player: Player, entitySpawned: Entity, fisher: Fisher): void {
+export function onFishingHookCreated(entitySpawned: Entity, fisher: Fisher): void {
   if (entitySpawned.typeId !== "minecraft:fishing_hook") return;
-
+  const player = fisher.source;
   const oldLog = spawnedLogMap.get(player.id) as number;
   spawnedLogMap.set(player.id, Date.now());
   if ((oldLog + 150) >= Date.now()) return;

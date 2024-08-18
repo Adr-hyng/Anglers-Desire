@@ -36,7 +36,7 @@ const command = {
                 for (const key of db.keys()) {
                     const t = key.split("|");
                     const player = world.getEntity(t[1]);
-                    collections += `${i++}. ${player.nameTag}: ${t[2]}\n`;
+                    collections += `${i++}. ${player.nameTag}: ${JSON.stringify(t)}\n`;
                 }
                 player.sendMessage((`
                 Database ID: §e${ADDON_NAME}§r
@@ -45,6 +45,7 @@ const command = {
             }
             else {
                 player.sendMessage(`§aThe database has been reset.§r`);
+                player.Configuration.reset("CLIENT");
                 db.clear();
                 if (!db.isDisposed)
                     db.dispose();

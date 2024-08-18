@@ -1,18 +1,19 @@
 import { FishingOutputHandler } from "types/index";
 import { Fisher } from "fishing_system/entities/fisher";
 import { TextResult, BothResult, DisabledResult, ParticleResult } from "./output_types/index";
+import { FormBuilder } from "fishing_system/configuration/client_configuration";
 import { IFishingOutput } from "./IFishingOutput";
-import { clientConfiguration, FormBuilder } from "fishing_system/configuration/client_configuration";
 
 export class FishingOutputBuilder {
-  private static executedTextEvents: Set<IFishingOutput> = new Set(); // Internal accessible only within the same file
+  private static executedTextEvents: Set<IFishingOutput> = new Set();
   private static executedUIEvents: Set<IFishingOutput> = new Set();
 
   static create(
     config: FormBuilder<any>,
-    fisher?: Fisher
+    fisher: Fisher
   ): IFishingOutput {
-    const keyName = Object.keys(clientConfiguration).find(key => clientConfiguration[key] === config);
+    const keyName = Object.keys(fisher.clientConfiguration).find(key => fisher.clientConfiguration[key] === config);
+    console.warn(this.executedTextEvents.size, this.executedUIEvents.size, keyName);
     if(!this.isInParticleManager(keyName)) throw new Error("No Particle Key exist / found");
     switch (config.defaultValue) {
       case 'TEXT':

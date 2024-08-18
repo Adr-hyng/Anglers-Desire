@@ -4,7 +4,6 @@ import { generateUUID16 } from "utils/utilities";
 import { IFishingOutput } from "../IFishingOutput";
 
 export class TextResult implements IFishingOutput {
-  private executed = false;
   public id: string;
 
   constructor(private message: string, private fisher: Fisher) { this.id = generateUUID16() }
@@ -14,7 +13,7 @@ export class TextResult implements IFishingOutput {
   }
 
   run() {
-    if (this.executed || !this.fisher.source) return;
+    if (!this.fisher.source) return;
     var _rawMessage: RawMessage = {
       rawtext: [
         {
@@ -26,9 +25,5 @@ export class TextResult implements IFishingOutput {
       ],
     };
     this.fisher.source.sendMessage(_rawMessage); // I don't know why this errors this: Object did not have a native handle.
-    this.markExecuted();
-  }
-  markExecuted() {
-    this.executed = true;
   }
 }

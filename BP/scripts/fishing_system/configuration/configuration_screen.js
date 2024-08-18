@@ -1,10 +1,12 @@
 import { ActionFormData, FormCancelationReason, ModalFormData } from "@minecraft/server-ui";
-import { getServerConfiguration, resetServerConfiguration, setServerConfiguration } from "./configuration_handler";
+import { ConfigurationCollections_DB, getServerConfiguration, resetServerConfiguration, setServerConfiguration } from "./configuration_handler";
 import { ADDON_NAME, db, fishers, fetchFisher } from "constant";
-const ConfigurationCollections_DB = (player, configType = "CLIENT") => `${ADDON_NAME}|${player.id}|${configType}`;
+import { cloneClientConfiguration } from "./client_configuration";
+import { FishingOutputBuilder } from "fishing_system/outputs/output_builder";
 export class __Configuration {
     constructor(player) {
         this.player = player;
+        this.source = fetchFisher(player);
         this.CLIENT_CONFIGURATION_DB = ConfigurationCollections_DB(this.player, "CLIENT");
         this.SERVER_CONFIGURATION_DB = ConfigurationCollections_DB(this.player, "SERVER");
     }
@@ -33,10 +35,16 @@ export class __Configuration {
             else {
                 fishers.delete(this.player.id);
                 db.delete(this.CLIENT_CONFIGURATION_DB);
+                this.source.clientConfiguration = cloneClientConfiguration();
+                db.set(this.CLIENT_CONFIGURATION_DB, this.source.clientConfiguration);
+                fishers.set(this.player.id, this.source);
+                Object.keys(this.source.fishingOutputManager).forEach((key) => {
+                    this.source.fishingOutputManager[key] = FishingOutputBuilder.create(this.source.clientConfiguration[key], this.source);
+                });
             }
         }
         else
-            throw new Error("Database not found. Please check through !db_show, and !db_clear");
+            throw new Error("Database not found");
     }
     showMainScreen() {
         const form = new ActionFormData()
@@ -92,6 +100,7 @@ export class __Configuration {
                             break;
                         case "number":
                             builder.defaultValue = builder.values[newValue];
+                            fisher.fishingOutputManager[key] = FishingOutputBuilder.create(builder, fisher);
                             break;
                         default:
                             break;
@@ -101,6 +110,7 @@ export class __Configuration {
                 if (db.isValid())
                     db.set(this.CLIENT_CONFIGURATION_DB, fisher.clientConfiguration);
             }
+            fishers.set(this.player.id, fisher);
             this.showMainScreen();
         });
     }

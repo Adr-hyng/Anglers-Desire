@@ -1,5 +1,5 @@
 import { TicksPerSecond, system, BlockTypes } from "@minecraft/server";
-import { fishingCallingLogMap, fetchFisher } from "constant";
+import { fishingCallingLogMap, fetchFisher, fishers } from "constant";
 import { SERVER_CONFIGURATION } from "fishing_system/configuration/configuration_handler";
 import { Logger, StateController, Timer } from "utils/index";
 import { overrideEverything } from "overrides/index";
@@ -53,8 +53,7 @@ export async function onHookLanded(player) {
     if (!isInWater)
         return;
     const expirationTimer = new Timer(SERVER_CONFIGURATION.expirationTimer * TicksPerSecond);
-    const FishingStateIndicator = fisher.fishingOutputManager();
-    ;
+    const FishingStateIndicator = fisher.fishingOutputManager;
     const hookSubmergeState = new StateController(fisher.fishingHook.isSubmerged);
     const hookTreasureFoundState = new StateController(fisher.fishingHook.isDeeplySubmerged);
     const initialHookPosition = fisher.fishingHook.stablizedLocation;
@@ -82,6 +81,7 @@ export async function onHookLanded(player) {
         catch (e) {
             Logger.error(e, e.stack);
             system.clearRun(tuggingEvent);
+            fishers.set(player.id, fisher);
             FishingStateIndicator.Escaped.reset().then((_) => { });
             return;
         }

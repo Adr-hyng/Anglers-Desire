@@ -21,7 +21,7 @@ world.beforeEvents.itemUse.subscribe((event) => {
   system.run(() => {
     system.run(() => world.afterEvents.entitySpawn.unsubscribe(tt));
     const tt = world.afterEvents.entitySpawn.subscribe( (spawnEvent) => {
-      if(fisher && spawnEvent.entity) onFishingHookCreated(player, spawnEvent.entity, fisher);
+      if(fisher && spawnEvent.entity) onFishingHookCreated(spawnEvent.entity, fisher);
     });
   });
   system.runTimeout(() => {
@@ -30,7 +30,7 @@ world.beforeEvents.itemUse.subscribe((event) => {
       const removedEntity = removedEvent.typeId;
       if(removedEntity !== "minecraft:fishing_hook") return;
       if(fisher.particleVectorLocations.getVectors().length > 5) {
-        fisher.fishingOutputManager().Caught.reset().then((_) => {
+        fisher.fishingOutputManager.Caught.reset().then((_) => {
           fisher.particleVectorLocations.clear();
         });
       }

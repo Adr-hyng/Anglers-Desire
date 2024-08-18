@@ -6,7 +6,6 @@ export class BothResult {
         this.message = message;
         this.particleState = particleState;
         this.fisher = fisher;
-        this.executed = false;
         this.id = generateUUID16();
     }
     async reset() {
@@ -32,20 +31,17 @@ export class BothResult {
     run() {
         if (!this.fisher.source)
             return;
-        if (!this.executed) {
-            var _rawMessage = {
-                rawtext: [
-                    {
-                        text: this.fisher.source.nameTag + ": ",
-                    },
-                    {
-                        translate: this.message,
-                    },
-                ],
-            };
-            this.fisher.source.sendMessage(_rawMessage);
-            this.markExecuted();
-        }
+        var _rawMessage = {
+            rawtext: [
+                {
+                    text: this.fisher.source.nameTag + ": ",
+                },
+                {
+                    translate: this.message,
+                },
+            ],
+        };
+        this.fisher.source.sendMessage(_rawMessage);
         const initialHookPosition = this.fisher.fishingHook.stablizedLocation;
         let { x, y, z } = initialHookPosition;
         if (this.fisher.caughtByHook) {
@@ -61,8 +57,5 @@ export class BothResult {
                 this.fisher.particleVectorLocations.set({ x, y, z });
             });
         });
-    }
-    markExecuted() {
-        this.executed = true;
     }
 }

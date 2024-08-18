@@ -1,12 +1,10 @@
 import { RawMessage, system } from "@minecraft/server";
 import { Fisher } from "fishing_system/entities/fisher";
-import { FishingOutputHandler } from "fishing_system/outputs/output_handler";
 import { Logger } from "utils/logger";
 import { generateUUID16 } from "utils/utilities";
 import { IFishingOutput } from "../IFishingOutput";
 
 export class BothResult implements IFishingOutput {
-  private executed = false;
   public id: string;
   constructor(private message: string, private particleState: string, private fisher: Fisher) { this.id = generateUUID16() }
   async reset(): Promise<void> {
@@ -31,20 +29,17 @@ export class BothResult implements IFishingOutput {
   run() {
     if (!this.fisher.source) return;
 
-    if (!this.executed) {
-      var _rawMessage: RawMessage = {
-        rawtext: [
-          {
-            text: this.fisher.source.nameTag + ": ",
-          },
-          {
-            translate: this.message,
-          },
-        ],
-      };
-      this.fisher.source.sendMessage(_rawMessage);
-      this.markExecuted();
-    }
+    var _rawMessage: RawMessage = {
+      rawtext: [
+        {
+          text: this.fisher.source.nameTag + ": ",
+        },
+        {
+          translate: this.message,
+        },
+      ],
+    };
+    this.fisher.source.sendMessage(_rawMessage);
     const initialHookPosition = this.fisher.fishingHook.stablizedLocation;
     let { x, y, z } = initialHookPosition;
     if (this.fisher.caughtByHook) {
@@ -60,8 +55,5 @@ export class BothResult implements IFishingOutput {
         this.fisher.particleVectorLocations.set({x, y, z});
       });
     });
-  }
-  markExecuted() {
-    this.executed = true;
   }
 }

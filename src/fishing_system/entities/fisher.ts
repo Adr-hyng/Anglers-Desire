@@ -19,11 +19,12 @@ import {
     StateController,
     VectorContainer,
 } from "utils/index";
-import { SERVER_CONFIGURATION, LootTable, FishingOutputBuilder } from "fishing_system/index";
-import { clientConfiguration } from "../configuration/client_configuration";
+import { LootTable, FishingOutputBuilder, ConfigurationCollections_DB } from "fishing_system/index";
+import { clientConfiguration, cloneClientConfiguration, FormBuilder } from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
 import { FishingHook } from "./hook";
 import { IFishingOutput } from "fishing_system/outputs/IFishingOutput";
+import { db } from "constant";
 
 export type FishingStateTypes = {
     Caught: IFishingOutput;
@@ -42,7 +43,7 @@ class Fisher {
     private _fishingOutputManager: FishingStateTypes;
     particleSpawner: Entity = null;
     particleVectorLocations: VectorContainer = null;
-    clientConfiguration: typeof clientConfiguration = clientConfiguration;
+    clientConfiguration: typeof clientConfiguration;
     
     fishingHook: FishingHook = null;
     caughtByHook: Entity = null;
@@ -53,6 +54,14 @@ class Fisher {
     constructor(player: Player) {
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
+        this.clientConfiguration = cloneClientConfiguration();
+        const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT")); // unserialized data, need to be serialized
+        // Copy only the values, if there's a configuration already.
+        if(configuration) {
+            Object.entries(configuration).forEach(([key, value]) => {
+                this.clientConfiguration[key] = <FormBuilder<any>>(value);
+            });
+        } 
         this._fishingOutputManager = {
             "Caught": FishingOutputBuilder.create(this.clientConfiguration.Caught, this),
             "Escaped": FishingOutputBuilder.create(this.clientConfiguration.Escaped, this),
@@ -64,10 +73,11 @@ class Fisher {
     }
     
     public get source(): Player | null {
+        if(!this._source?.isValid()) throw new Error("No player found in fisher instance");
         return this._source;
     }
     
-    public fishingOutputManager(): FishingStateTypes {
+    public get fishingOutputManager(): FishingStateTypes {
         return this._fishingOutputManager;
     }
 

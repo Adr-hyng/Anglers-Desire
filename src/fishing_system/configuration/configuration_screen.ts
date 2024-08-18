@@ -1,18 +1,19 @@
 import { Player } from "@minecraft/server";
 import { ActionFormData, ActionFormResponse, FormCancelationReason, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
-import { getServerConfiguration, resetServerConfiguration, SERVER_CONFIGURATION, setServerConfiguration } from "./configuration_handler";
+import { ConfigurationCollections_DB, ConfigurationTypes, getServerConfiguration, resetServerConfiguration, setServerConfiguration } from "./configuration_handler";
 import {ADDON_NAME, db, fishers, fetchFisher} from "constant";
-import { FormBuilder } from "./client_configuration";
-
-export type ConfigurationTypes = "SERVER" | "CLIENT";
-const ConfigurationCollections_DB = (player: Player, configType: ConfigurationTypes = "CLIENT") => `${ADDON_NAME}|${player.id}|${configType}`;
+import { cloneClientConfiguration, FormBuilder } from "./client_configuration";
+import { FishingOutputBuilder } from "fishing_system/outputs/output_builder";
+import { Fisher } from "fishing_system/entities/fisher";
 
 export class __Configuration {
   private player: Player;
+  private source: Fisher;
   private SERVER_CONFIGURATION_DB: string;
   private CLIENT_CONFIGURATION_DB: string;
   constructor(player: Player) {
     this.player = player;
+    this.source = fetchFisher(player);
     this.CLIENT_CONFIGURATION_DB = ConfigurationCollections_DB(this.player, "CLIENT");
     this.SERVER_CONFIGURATION_DB = ConfigurationCollections_DB(this.player, "SERVER");
   }
@@ -38,9 +39,18 @@ export class __Configuration {
       } else {
         fishers.delete(this.player.id);
         db.delete(this.CLIENT_CONFIGURATION_DB);
+
+        this.source.clientConfiguration = cloneClientConfiguration();
+        db.set(this.CLIENT_CONFIGURATION_DB, this.source.clientConfiguration);
+        fishers.set(this.player.id, this.source);
+
+        // Update the 
+        Object.keys(this.source.fishingOutputManager).forEach((key) => {
+          this.source.fishingOutputManager[key] = FishingOutputBuilder.create(this.source.clientConfiguration[key], this.source);
+        });
       }
     }
-    else throw new Error("Database not found. Please check through !db_show, and !db_clear");
+    else throw new Error("Database not found");
   }
 
   showMainScreen() {
@@ -96,6 +106,7 @@ export class __Configuration {
               break;
             case "number":
               builder.defaultValue = builder.values[newValue];
+              fisher.fishingOutputManager[key] = FishingOutputBuilder.create(builder, fisher);
               break;
             default:
               break;
@@ -104,7 +115,7 @@ export class __Configuration {
         });
         if (db.isValid()) db.set(this.CLIENT_CONFIGURATION_DB, fisher.clientConfiguration);
       }
-
+      fishers.set(this.player.id, fisher);
       this.showMainScreen();
     });
   }
