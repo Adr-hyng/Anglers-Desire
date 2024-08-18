@@ -1,5 +1,5 @@
 import { system } from "@minecraft/server";
-import { fishers } from "constant";
+import { localFishersCache } from "constant";
 import { LootTable } from "fishing_system/loot_tables/loot_tables";
 import { Logger } from "utils/index";
 import { overrideEverything } from "overrides/index";
@@ -16,7 +16,7 @@ export function onHookedItem(fisher) {
             const drops = player.dimension.spawnLoot(LootTable[fisher.currentBiomeLootTable[fisher.currentBiome]](enchantmentLevel, isDeeplySubmerged), hookLandedVector);
             fisher.setEntityCaughtByHook(drops[0]);
             fisher.reelHook();
-            fishers.set(player.id, fisher);
+            localFishersCache.set(player.id, fisher);
         }
         catch (e) {
             Logger.error(e.stack);

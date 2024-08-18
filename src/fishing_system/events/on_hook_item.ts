@@ -1,5 +1,5 @@
 import { Entity, MolangVariableMap, system } from "@minecraft/server";
-import { fishers } from "constant";
+import { localFishersCache } from "constant";
 import { Fisher } from "fishing_system/entities/fisher";
 import { LootTable } from "fishing_system/loot_tables/loot_tables";
 import { Logger, Random } from "utils/index";
@@ -17,7 +17,7 @@ export function onHookedItem(fisher: Fisher) {
       const drops: Entity[] = player.dimension.spawnLoot(LootTable[fisher.currentBiomeLootTable[fisher.currentBiome]](enchantmentLevel, isDeeplySubmerged), hookLandedVector);
       fisher.setEntityCaughtByHook(drops[0]);
       fisher.reelHook();
-      fishers.set(player.id, fisher);
+      localFishersCache.set(player.id, fisher);
     } catch (e) { 
       Logger.error(e.stack);
     };

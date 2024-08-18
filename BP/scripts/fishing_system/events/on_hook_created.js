@@ -1,4 +1,4 @@
-import { spawnedLogMap, fishers } from "constant";
+import { spawnedLogMap, localFishersCache } from "constant";
 import { onHookLanded } from "./on_wait_hook_stablized";
 export function onFishingHookCreated(entitySpawned, fisher) {
     if (entitySpawned.typeId !== "minecraft:fishing_hook")
@@ -8,9 +8,9 @@ export function onFishingHookCreated(entitySpawned, fisher) {
     spawnedLogMap.set(player.id, Date.now());
     if ((oldLog + 150) >= Date.now())
         return;
-    fishers.set(player.id, fisher.reset());
+    localFishersCache.set(player.id, fisher.reset());
     fisher.setFishingHook(entitySpawned);
     fisher.currentBiome = fisher.fishingHook.getProperty("yn:current_biome_bit");
-    fishers.set(player.id, fisher);
+    localFishersCache.set(player.id, fisher);
     onHookLanded(player);
 }

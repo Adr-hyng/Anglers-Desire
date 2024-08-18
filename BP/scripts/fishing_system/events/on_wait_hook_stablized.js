@@ -1,5 +1,5 @@
 import { TicksPerSecond, system, BlockTypes } from "@minecraft/server";
-import { fishingCallingLogMap, fetchFisher, fishers } from "constant";
+import { fishingCallingLogMap, fetchFisher, localFishersCache } from "constant";
 import { SERVER_CONFIGURATION } from "fishing_system/configuration/configuration_handler";
 import { Logger, StateController, Timer } from "utils/index";
 import { overrideEverything } from "overrides/index";
@@ -81,7 +81,7 @@ export async function onHookLanded(player) {
         catch (e) {
             Logger.error(e, e.stack);
             system.clearRun(tuggingEvent);
-            fishers.set(player.id, fisher);
+            localFishersCache.set(player.id, fisher);
             FishingStateIndicator.Escaped.reset().then((_) => { });
             return;
         }
@@ -90,7 +90,8 @@ export async function onHookLanded(player) {
         if (hookSubmergeState.hasChanged()) {
             if (hookSubmergeState.getCurrentValue()) {
                 FishingStateIndicator.Caught.run();
-                player.playSound('note.chime');
+                if (fisher.clientConfiguration.OnSubmergeSE.defaultValue)
+                    player.playSound('note.chime');
             }
             else {
                 FishingStateIndicator.Escaped.run();
@@ -98,7 +99,8 @@ export async function onHookLanded(player) {
         }
         if (hookTreasureFoundState.hasChanged()) {
             if (hookTreasureFoundState.getCurrentValue()) {
-                player.playSound('random.orb');
+                if (fisher.clientConfiguration.OnTreasureSE.defaultValue)
+                    player.playSound('random.orb');
             }
         }
     }

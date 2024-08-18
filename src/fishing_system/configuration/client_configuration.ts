@@ -23,7 +23,6 @@ export class FormBuilder<T extends boolean | typeof ParticleStateOptions[number]
 }
 
 export const clientConfiguration = {
-  "OnInitializeMessage": new FormBuilder("Enable Addon Init Message").createToggle(true),
   "OnSubmergeSE": new FormBuilder("Enable Submerged Sound").createToggle(true),
   "OnTreasureSE": new FormBuilder("Enable Treasure Sound").createToggle(true),
   "Caught": new FormBuilder("Caught Output Option").createDropdown(["ICON", "TEXT", "BOTH", "OFF"], "ICON"),

@@ -4,15 +4,15 @@ export const ADDON_NAMESPACE = "yn";
 export const ADDON_NAME = "FISHING_GOT_REEL";
 export const ADDON_IDENTIFIER = `${ADDON_NAMESPACE}:fishreel`;
 export const db = new JsonDatabase(ADDON_NAME);
-export const fishers = new Map();
+export const localFishersCache = new Map();
 export const spawnedLogMap = new Map();
 export const fishingCallingLogMap = new Map();
 export function fetchFisher(player) {
-    const existingFisher = fishers.get(player.id);
+    const existingFisher = localFishersCache.get(player.id);
     if (existingFisher) {
         return existingFisher;
     }
     const newFisher = new Fisher(player);
-    fishers.set(player.id, newFisher);
+    localFishersCache.set(player.id, newFisher);
     return newFisher;
 }

@@ -2,5 +2,9 @@
   "expirationTimer": {
     "description": "Number of seconds before cancelling the fishing system.",
     "default": 300
+  },
+  "ShowMessageUponJoin": {
+    "description": "Shows the script initialization message log upon player joining, default is true.",
+    "default": true
   }
 }

@@ -1,5 +1,5 @@
 import { FishingOutputHandler } from "types/index";
-import { Fisher } from "fishing_system/entities/fisher";
+import { Fisher, FishingStateTypes } from "fishing_system/entities/fisher";
 import { TextResult, BothResult, DisabledResult, ParticleResult } from "./output_types/index";
 import { FormBuilder } from "fishing_system/configuration/client_configuration";
 import { IFishingOutput } from "./IFishingOutput";
@@ -8,6 +8,8 @@ export class FishingOutputBuilder {
   private static executedTextEvents: Set<IFishingOutput> = new Set();
   private static executedUIEvents: Set<IFishingOutput> = new Set();
 
+  // This creates or updates
+  // This is use in initialized, upon client configuration updates, and upon reset.
   static create(
     config: FormBuilder<any>,
     fisher: Fisher

@@ -1,9 +1,6 @@
 import { EnchantmentTypes, EntityComponentTypes, ItemComponentTypes, ItemStack, system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { MinecraftItemTypes, MinecraftEnchantmentTypes } from "vanilla-types/index";
-import { Logger } from "utils/index";
-import { clientConfiguration } from "fishing_system/configuration/client_configuration";
-import { fetchFisher } from "constant";
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
     REQUIRED_PARAMETER["GET"] = "get";
@@ -39,14 +36,6 @@ const command = {
                 break;
             case REQUIRED_PARAMETER.TEST:
                 system.run(() => {
-                    Logger.debug("ORIGINAL");
-                    Object.keys((clientConfiguration)).forEach((key, index) => {
-                        Logger.debug(key, clientConfiguration[key].defaultValue);
-                    });
-                    Logger.debug("PLAYER");
-                    Object.keys((fetchFisher(player).clientConfiguration)).forEach((key, index) => {
-                        Logger.debug(key, JSON.stringify(fetchFisher(player).clientConfiguration[key].defaultValue));
-                    });
                 });
                 break;
             default:

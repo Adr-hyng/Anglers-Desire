@@ -1,7 +1,7 @@
 import { Player } from "@minecraft/server";
 import { ActionFormData, ActionFormResponse, FormCancelationReason, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
 import { ConfigurationCollections_DB, ConfigurationTypes, getServerConfiguration, resetServerConfiguration, setServerConfiguration } from "./configuration_handler";
-import {ADDON_NAME, db, fishers, fetchFisher} from "constant";
+import {ADDON_NAME, db, localFishersCache, fetchFisher} from "constant";
 import { cloneClientConfiguration, FormBuilder } from "./client_configuration";
 import { FishingOutputBuilder } from "fishing_system/outputs/output_builder";
 import { Fisher } from "fishing_system/entities/fisher";
@@ -37,14 +37,13 @@ export class __Configuration {
         resetServerConfiguration();
         db.set(this.SERVER_CONFIGURATION_DB, getServerConfiguration());
       } else {
-        fishers.delete(this.player.id);
+        localFishersCache.delete(this.player.id);
         db.delete(this.CLIENT_CONFIGURATION_DB);
 
         this.source.clientConfiguration = cloneClientConfiguration();
         db.set(this.CLIENT_CONFIGURATION_DB, this.source.clientConfiguration);
-        fishers.set(this.player.id, this.source);
+        localFishersCache.set(this.player.id, this.source);
 
-        // Update the 
         Object.keys(this.source.fishingOutputManager).forEach((key) => {
           this.source.fishingOutputManager[key] = FishingOutputBuilder.create(this.source.clientConfiguration[key], this.source);
         });
@@ -115,7 +114,7 @@ export class __Configuration {
         });
         if (db.isValid()) db.set(this.CLIENT_CONFIGURATION_DB, fisher.clientConfiguration);
       }
-      fishers.set(this.player.id, fisher);
+      localFishersCache.set(this.player.id, fisher);
       this.showMainScreen();
     });
   }

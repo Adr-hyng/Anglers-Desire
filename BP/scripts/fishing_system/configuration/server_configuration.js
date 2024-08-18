@@ -1,13 +1,6 @@
 export default {
-  /**
-   * Enables debug messages to content logs.
-   */
-  debug: true,
-  /**
-   * Number of seconds before cancelling the fishing system.
-   */
-  expirationTimer: 300,
+    debug: true,
+    expirationTimer: 300,
+    ShowMessageUponJoin: true,
 };
-
-// version (do not change)
 export const VERSION = "1.0.0";
