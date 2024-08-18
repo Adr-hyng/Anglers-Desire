@@ -1,6 +1,7 @@
 import { system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { overrideEverything } from "overrides/index";
+import { SendMessageTo } from "utils/index";
 overrideEverything();
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
@@ -32,9 +33,8 @@ const command = {
             const selectedReqParam = args[0].toLowerCase();
             const isShow = REQUIRED_PARAMETER.SHOW === selectedReqParam;
             if (!requiredParams.includes(selectedReqParam))
-                return player.sendMessage("§cInvalid Usage Format." + command.usage());
+                return SendMessageTo(player, "§cInvalid Usage Format." + command.usage());
             if (isShow) {
-                player.sendMessage(`Configuration: Please close chat screen immediately to open configuration.`);
                 system.run(() => player.Configuration.showMainScreen());
             }
             else {

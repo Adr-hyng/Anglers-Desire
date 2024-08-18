@@ -1,4 +1,4 @@
-import { Player, Entity } from "@minecraft/server";
+import { Entity } from "@minecraft/server";
 import { spawnedLogMap, localFishersCache } from "constant";
 import { Fisher } from "fishing_system/entities/fisher";
 import { onHookLanded } from "./on_wait_hook_stablized";

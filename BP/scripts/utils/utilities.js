@@ -17,3 +17,7 @@ export function generateUUID16() {
 export function ExecuteAtGivenTick(tick) {
     return (system.currentTick % tick) === 0;
 }
+export function SendMessageTo(target, langMsg) {
+    const formattedRawMessage = (`tellraw ${target.name} {"rawtext":[{"translate":"${langMsg}"}]}`);
+    target.runCommandAsync(formattedRawMessage);
+}

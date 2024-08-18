@@ -1,10 +1,11 @@
 import { Player } from "@minecraft/server";
-import { ActionFormData, ActionFormResponse, FormCancelationReason, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
+import { FormCancelationReason, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
 import { ConfigurationCollections_DB, ConfigurationTypes, getServerConfiguration, resetServerConfiguration, setServerConfiguration } from "./configuration_handler";
 import {ADDON_NAME, db, localFishersCache, fetchFisher} from "constant";
 import { cloneClientConfiguration, FormBuilder } from "./client_configuration";
 import { FishingOutputBuilder } from "fishing_system/outputs/output_builder";
 import { Fisher } from "fishing_system/entities/fisher";
+import { SendMessageTo } from "utils/index";
 
 export class __Configuration {
   private player: Player;
@@ -15,20 +16,6 @@ export class __Configuration {
     this.player = player;
     this.source = fetchFisher(player);
     this.CLIENT_CONFIGURATION_DB = ConfigurationCollections_DB(this.player, "CLIENT");
-    this.SERVER_CONFIGURATION_DB = ConfigurationCollections_DB(this.player, "SERVER");
-  }
-
-  private __load(): void {
-    if(db.isValid()) {
-      if(db.has(this.SERVER_CONFIGURATION_DB)) setServerConfiguration(db.get(this.SERVER_CONFIGURATION_DB));
-      else db.set(this.SERVER_CONFIGURATION_DB, getServerConfiguration());
-    }
-    else throw new Error("Database not found. Please check through !db_show, and !db_clear");
-  }
-
-  private __save(): void {
-    if(db.isValid()) db.set(this.SERVER_CONFIGURATION_DB, getServerConfiguration());
-    else throw new Error("Database not found. Please check through !db_show, and !db_clear");
   }
 
   reset(configurationType: ConfigurationTypes) {
@@ -37,35 +24,23 @@ export class __Configuration {
         resetServerConfiguration();
         db.set(this.SERVER_CONFIGURATION_DB, getServerConfiguration());
       } else {
-        localFishersCache.delete(this.player.id);
-        db.delete(this.CLIENT_CONFIGURATION_DB);
-
         this.source.clientConfiguration = cloneClientConfiguration();
         db.set(this.CLIENT_CONFIGURATION_DB, this.source.clientConfiguration);
         localFishersCache.set(this.player.id, this.source);
-
         Object.keys(this.source.fishingOutputManager).forEach((key) => {
           this.source.fishingOutputManager[key] = FishingOutputBuilder.create(this.source.clientConfiguration[key], this.source);
         });
+        SendMessageTo(this.player, `Client Configuration has been reset.`);
       }
     }
     else throw new Error("Database not found");
   }
 
   showMainScreen() {
-    const form = new ActionFormData()
-    .title(ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase()))
-    .button("CLIENT SIDE");
-    form.button("MORE INFO");
-    form.show(this.player).then( (response: ActionFormResponse) => {
-      if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) return;
-      if(response.selection === 0) this.showClientScreen();
-      if(response.selection === 1) this.showMoreInfoScreen();
-    });
-  }
-  private showClientScreen() {
+    const parsedAddonTitle = ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+
     const fisher = fetchFisher(this.player); 
-    const form: ModalFormData = new ModalFormData().title("CLIENT SETTINGS");
+    const form: ModalFormData = new ModalFormData().title(`${parsedAddonTitle} Configuration`);
     
     // Fetch client configuration from the database if valid, else set it.
     if (db.isValid()) {
@@ -115,10 +90,8 @@ export class __Configuration {
         if (db.isValid()) db.set(this.CLIENT_CONFIGURATION_DB, fisher.clientConfiguration);
       }
       localFishersCache.set(this.player.id, fisher);
-      this.showMainScreen();
     });
   }
-  private showMoreInfoScreen() {}
 }
 
 

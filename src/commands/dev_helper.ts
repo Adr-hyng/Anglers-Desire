@@ -1,10 +1,8 @@
-import { EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, ItemComponentTypes, ItemDurabilityComponent, ItemEnchantableComponent, ItemStack, system } from "@minecraft/server";
+import { EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, ItemComponentTypes, ItemEnchantableComponent, ItemStack, system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { MinecraftItemTypes, MinecraftEnchantmentTypes } from "vanilla-types/index";
 import { ICommandBase} from "./ICommandBase";
-import { Logger } from "utils/index";
-import { clientConfiguration } from "fishing_system/configuration/client_configuration";
-import { fetchFisher } from "constant";
+import { SendMessageTo } from "utils/utilities";
 
 // Automate this, the values should be the description.
 enum REQUIRED_PARAMETER {
@@ -30,7 +28,7 @@ const command: ICommandBase = {
         if (!(args && args.length)) return;
         const requiredParams: string[] = (`[${Object.values(REQUIRED_PARAMETER).join('|')}]`).slice(1, -1).split('|').map(command => command.trim()); 
         const selectedReqParam: string = args[0].toLowerCase();
-        if(!requiredParams.includes(selectedReqParam)) return player.sendMessage("§cInvalid Usage Format." + command.usage());
+        if(!requiredParams.includes(selectedReqParam)) return SendMessageTo(player, "§cInvalid Usage Format." + command.usage());
         switch(selectedReqParam) {
             case REQUIRED_PARAMETER.GET:
                 const fishingRod = new ItemStack(MinecraftItemTypes.FishingRod, 1);
@@ -49,13 +47,3 @@ const command: ICommandBase = {
     }
 };
 export default command
-
-function giveitem(player, itemid, amount, loreModifier, durability) {
-    const inv = player.getComponent("inventory").container;
-    const item = new ItemStack(itemid, amount);
-    const durabilityy = item.getComponent("durability") as ItemDurabilityComponent;
-    durabilityy.damage = durability;
-    const enchantable = item.getComponent("enchantable") as ItemEnchantableComponent;
-    enchantable.addEnchantments(loreModifier); // Changed this
-    inv.addItem(item);
-}

@@ -2,13 +2,14 @@ import { Player } from '@minecraft/server';
 import { CommandHandler} from './command_handler';
 import { ICommandBase} from "./ICommandBase";
 import { ADDON_NAME } from 'constant';
+import { SendMessageTo } from 'utils/utilities';
 
 const importCommand = async (player: Player, commandName: string): Promise<ICommandBase> => {
     try {
         const importedCommandModule = await import(`./${commandName}.js`);
         return importedCommandModule.default;
     } catch (error) {
-        player.sendMessage(`§cError while fetching ${commandName} command: ${error.message}`);
+        SendMessageTo(player, `§cError while fetching ${commandName} command: ${error.message}`);
         return null;
     }
 };
@@ -39,15 +40,13 @@ const command: ICommandBase = {
                 const importedCommand = await importCommand(player, commandName);
                 if (importedCommand) helpMessage += `§e${CommandHandler.prefix}${commandName}§r${importedCommand.format.length ? " " + importedCommand.format : ""} - ${importedCommand.description}\n`;
             }
-            player.sendMessage(helpMessage);
+            SendMessageTo(player, helpMessage);
         } else {
             const specifiedCommand = args[0].toLowerCase();
-            if(!CommandHandler.commands.includes(specifiedCommand)) return player.sendMessage(`§cInvalid command specified: ${specifiedCommand}`);
+            if(!CommandHandler.commands.includes(specifiedCommand)) return SendMessageTo(player, `§cInvalid command specified: ${specifiedCommand}`);
             if (CommandHandler.commands.includes(specifiedCommand)) {
                 const importedCommand = await importCommand(player, specifiedCommand);
-                if (importedCommand) {
-                    player.sendMessage(`\n§e${CommandHandler.prefix}${specifiedCommand}: \n${importedCommand.description}§r ${importedCommand.usage()}`);
-                }
+                if (importedCommand) SendMessageTo(player, `\n§e${CommandHandler.prefix}${specifiedCommand}: \n${importedCommand.description}§r ${importedCommand.usage()}`);
             }
         }
     }

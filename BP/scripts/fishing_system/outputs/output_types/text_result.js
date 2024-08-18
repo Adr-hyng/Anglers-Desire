@@ -1,4 +1,4 @@
-import { generateUUID16 } from "utils/utilities";
+import { generateUUID16, SendMessageTo } from "utils/utilities";
 export class TextResult {
     constructor(message, fisher) {
         this.message = message;
@@ -11,16 +11,6 @@ export class TextResult {
     run() {
         if (!this.fisher.source)
             return;
-        var _rawMessage = {
-            rawtext: [
-                {
-                    text: this.fisher.source.nameTag + ": ",
-                },
-                {
-                    translate: this.message,
-                },
-            ],
-        };
-        this.fisher.source.sendMessage(_rawMessage);
+        SendMessageTo(this.fisher.source, `${this.fisher.source.name}: ${this.message}`);
     }
 }

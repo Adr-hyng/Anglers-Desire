@@ -1,6 +1,7 @@
 import { world } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { db, ADDON_NAME } from "constant";
+import { SendMessageTo } from "utils/index";
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
     REQUIRED_PARAMETER["SHOW"] = "show";
@@ -25,12 +26,10 @@ const command = {
             const selectedReqParam = args[0].toLowerCase();
             const isShow = REQUIRED_PARAMETER.SHOW === selectedReqParam;
             if (!requiredParams.includes(selectedReqParam))
-                return player.sendMessage("§cInvalid Usage Format." + command.usage());
+                return SendMessageTo(player, "§cInvalid Usage Format." + command.usage());
             if (isShow) {
-                if (db.size === 0) {
-                    player.sendMessage(`§4No configuration record found in database.§r`);
-                    return;
-                }
+                if (db.size === 0)
+                    return SendMessageTo(player, `§4No configuration record found in database.§r`);
                 let collections = "";
                 let i = 1;
                 for (const key of db.keys()) {
@@ -38,13 +37,13 @@ const command = {
                     const player = world.getEntity(t[1]);
                     collections += `${i++}. ${player.nameTag}: ${JSON.stringify(t)}\n`;
                 }
-                player.sendMessage((`
+                SendMessageTo(player, (`
                 Database ID: §e${ADDON_NAME}§r
                 ${collections}
                 `).replaceAll("                ", ""));
             }
             else {
-                player.sendMessage(`§aThe database has been reset.§r`);
+                SendMessageTo(player, `§aThe database has been reset.§r`);
                 player.Configuration.reset("CLIENT");
                 db.clear();
                 if (!db.isDisposed)

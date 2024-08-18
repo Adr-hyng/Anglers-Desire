@@ -1,30 +1,14 @@
-import { ActionFormData, FormCancelationReason, ModalFormData } from "@minecraft/server-ui";
-import { ConfigurationCollections_DB, getServerConfiguration, resetServerConfiguration, setServerConfiguration } from "./configuration_handler";
+import { FormCancelationReason, ModalFormData } from "@minecraft/server-ui";
+import { ConfigurationCollections_DB, getServerConfiguration, resetServerConfiguration } from "./configuration_handler";
 import { ADDON_NAME, db, localFishersCache, fetchFisher } from "constant";
 import { cloneClientConfiguration } from "./client_configuration";
 import { FishingOutputBuilder } from "fishing_system/outputs/output_builder";
+import { SendMessageTo } from "utils/index";
 export class __Configuration {
     constructor(player) {
         this.player = player;
         this.source = fetchFisher(player);
         this.CLIENT_CONFIGURATION_DB = ConfigurationCollections_DB(this.player, "CLIENT");
-        this.SERVER_CONFIGURATION_DB = ConfigurationCollections_DB(this.player, "SERVER");
-    }
-    __load() {
-        if (db.isValid()) {
-            if (db.has(this.SERVER_CONFIGURATION_DB))
-                setServerConfiguration(db.get(this.SERVER_CONFIGURATION_DB));
-            else
-                db.set(this.SERVER_CONFIGURATION_DB, getServerConfiguration());
-        }
-        else
-            throw new Error("Database not found. Please check through !db_show, and !db_clear");
-    }
-    __save() {
-        if (db.isValid())
-            db.set(this.SERVER_CONFIGURATION_DB, getServerConfiguration());
-        else
-            throw new Error("Database not found. Please check through !db_show, and !db_clear");
     }
     reset(configurationType) {
         if (db.isValid()) {
@@ -33,36 +17,22 @@ export class __Configuration {
                 db.set(this.SERVER_CONFIGURATION_DB, getServerConfiguration());
             }
             else {
-                localFishersCache.delete(this.player.id);
-                db.delete(this.CLIENT_CONFIGURATION_DB);
                 this.source.clientConfiguration = cloneClientConfiguration();
                 db.set(this.CLIENT_CONFIGURATION_DB, this.source.clientConfiguration);
                 localFishersCache.set(this.player.id, this.source);
                 Object.keys(this.source.fishingOutputManager).forEach((key) => {
                     this.source.fishingOutputManager[key] = FishingOutputBuilder.create(this.source.clientConfiguration[key], this.source);
                 });
+                SendMessageTo(this.player, `Client Configuration has been reset.`);
             }
         }
         else
             throw new Error("Database not found");
     }
     showMainScreen() {
-        const form = new ActionFormData()
-            .title(ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase()))
-            .button("CLIENT SIDE");
-        form.button("MORE INFO");
-        form.show(this.player).then((response) => {
-            if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
-                return;
-            if (response.selection === 0)
-                this.showClientScreen();
-            if (response.selection === 1)
-                this.showMoreInfoScreen();
-        });
-    }
-    showClientScreen() {
+        const parsedAddonTitle = ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
         const fisher = fetchFisher(this.player);
-        const form = new ModalFormData().title("CLIENT SETTINGS");
+        const form = new ModalFormData().title(`${parsedAddonTitle} Configuration`);
         if (db.isValid()) {
             if (db.has(this.CLIENT_CONFIGURATION_DB)) {
                 fisher.clientConfiguration = db.get(this.CLIENT_CONFIGURATION_DB);
@@ -111,8 +81,6 @@ export class __Configuration {
                     db.set(this.CLIENT_CONFIGURATION_DB, fisher.clientConfiguration);
             }
             localFishersCache.set(this.player.id, fisher);
-            this.showMainScreen();
         });
     }
-    showMoreInfoScreen() { }
 }

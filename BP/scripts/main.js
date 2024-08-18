@@ -4,14 +4,14 @@ import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { overrideEverything } from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
 import server_configuration from "fishing_system/configuration/server_configuration";
-import { Logger } from "utils/index";
+import { Logger, SendMessageTo } from "utils/index";
 overrideEverything();
 world.afterEvents.playerSpawn.subscribe((e) => {
     if (!e.initialSpawn)
         return;
     if (!server_configuration.ShowMessageUponJoin)
         return;
-    e.player.runCommandAsync(`tellraw ${e.player.name} {"rawtext":[{"translate":"yn.fishing_got_reel.on_load_message"}]}`);
+    SendMessageTo(e.player, "yn.fishing_got_reel.on_load_message");
 });
 world.beforeEvents.itemUse.subscribe((event) => {
     const player = event.source;
@@ -60,7 +60,7 @@ system.afterEvents.scriptEventReceive.subscribe((event) => {
         }
         catch (err) {
             if (err instanceof ReferenceError) {
-                player.sendMessage(`§cInvalid Command ${cmd}\nCheck If The Command Actually Exists. Use /scriptevent ${ADDON_IDENTIFIER} help`);
+                SendMessageTo(player, `§cInvalid Command ${cmd}\nCheck If The Command Actually Exists. Use /scriptevent ${ADDON_IDENTIFIER} help`);
             }
             else {
                 Logger.error(err, err.stack);

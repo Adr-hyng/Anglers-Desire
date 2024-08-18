@@ -3,7 +3,6 @@ import { TextResult, BothResult, DisabledResult, ParticleResult } from "./output
 export class FishingOutputBuilder {
     static create(config, fisher) {
         const keyName = Object.keys(fisher.clientConfiguration).find(key => fisher.clientConfiguration[key] === config);
-        console.warn(this.executedTextEvents.size, this.executedUIEvents.size, keyName);
         if (!this.isInParticleManager(keyName))
             throw new Error("No Particle Key exist / found");
         switch (config.defaultValue) {

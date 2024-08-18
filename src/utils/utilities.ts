@@ -1,4 +1,4 @@
-import { system } from "@minecraft/server";
+import { Player, system } from "@minecraft/server";
 import { SERVER_CONFIGURATION } from "fishing_system/configuration/configuration_handler";
 
 /**
@@ -37,4 +37,9 @@ export function generateUUID16(): string {
  */
 export function ExecuteAtGivenTick(tick: number) {
   return (system.currentTick % tick) === 0;
+}
+
+export function SendMessageTo(target: Player, langMsg: string) {
+  const formattedRawMessage = (`tellraw ${target.name} {"rawtext":[{"translate":"${langMsg}"}]}`);
+  target.runCommandAsync(formattedRawMessage);
 }

@@ -15,7 +15,6 @@ export class FishingOutputBuilder {
     fisher: Fisher
   ): IFishingOutput {
     const keyName = Object.keys(fisher.clientConfiguration).find(key => fisher.clientConfiguration[key] === config);
-    console.warn(this.executedTextEvents.size, this.executedUIEvents.size, keyName);
     if(!this.isInParticleManager(keyName)) throw new Error("No Particle Key exist / found");
     switch (config.defaultValue) {
       case 'TEXT':
