@@ -100,6 +100,7 @@ class Fisher {
                         await system.waitTicks(3);
                         this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
                     }
+                    this.source.playSound('entity.generic.splash');
                 }
                 if (!isReeling)
                     throw new Error("Fish has collided to a block or was interrupted mid air");
