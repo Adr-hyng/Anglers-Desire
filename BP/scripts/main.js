@@ -6,36 +6,25 @@ import { onHookedItem } from "fishing_system/events/on_hook_item";
 import server_configuration from "fishing_system/configuration/server_configuration";
 import { Logger, SendMessageTo } from "utils/index";
 overrideEverything();
+world.beforeEvents.worldInitialize.subscribe((e) => {
+    e.blockComponentRegistry.registerCustomComponent('yn:on_interact_with_fisher_table', {
+        async onPlayerInteract(arg) {
+            const player = arg.player;
+            if (!player?.isValid())
+                return;
+            if (arg.block.typeId !== 'yn:fishers_table')
+                return;
+            const { default: CommandObject } = await import(`./commands/config.js`);
+            CommandObject.execute(player, ['show']);
+        }
+    });
+});
 world.afterEvents.playerSpawn.subscribe((e) => {
     if (!e.initialSpawn)
         return;
     if (!server_configuration.ShowMessageUponJoin)
         return;
     SendMessageTo(e.player, "yn.fishing_got_reel.on_load_message");
-});
-world.afterEvents.entityHitBlock.subscribe(async (e) => {
-    const player = e.damagingEntity;
-    const fisher = fetchFisher(player);
-    if (!fisher.fishingRod.isEquipped)
-        return;
-    if (e.damagingEntity?.isValid() && !(e.damagingEntity instanceof Player))
-        return;
-    if (!player.isSneaking)
-        return;
-    const { default: CommandObject } = await import(`./commands/config.js`);
-    CommandObject.execute(player, ['show']);
-});
-world.beforeEvents.itemUseOn.subscribe(async (e) => {
-    const player = e.source;
-    const fisher = fetchFisher(player);
-    if (!fisher.fishingRod.isEquipped)
-        return;
-    if (e.source?.isValid() && !(e.source instanceof Player))
-        return;
-    if (!player.isSneaking)
-        return;
-    const { default: CommandObject } = await import(`./commands/config.js`);
-    CommandObject.execute(player, ['show']);
 });
 world.beforeEvents.itemUse.subscribe((event) => {
     const player = event.source;

@@ -9,37 +9,24 @@ import server_configuration from "fishing_system/configuration/server_configurat
 import { Logger, SendMessageTo } from "utils/index";
 overrideEverything();
 
+world.beforeEvents.worldInitialize.subscribe((e) => {
+  e.blockComponentRegistry.registerCustomComponent('yn:on_interact_with_fisher_table', {
+    async onPlayerInteract(arg){
+      const player = <Player> arg.player;
+      if(!player?.isValid()) return;
+      if(arg.block.typeId !== 'yn:fishers_table') return;
+      const {
+        default: CommandObject
+      } = await import(`./commands/config.js`);
+      CommandObject.execute(player as Player, ['show']);
+    }
+  });
+})
+
 world.afterEvents.playerSpawn.subscribe((e) => {
   if(!e.initialSpawn) return;
   if(!server_configuration.ShowMessageUponJoin) return; 
   SendMessageTo(e.player, "yn.fishing_got_reel.on_load_message");
-});
-
-
-// PC (Configuration Opening) - Left Click
-world.afterEvents.entityHitBlock.subscribe(async (e)=> {
-  const player = <Player> e.damagingEntity;
-  const fisher = fetchFisher(player);
-  if(!fisher.fishingRod.isEquipped) return;
-  if(e.damagingEntity?.isValid() && !(e.damagingEntity instanceof Player)) return;
-  if(!player.isSneaking) return;
-  const {
-    default: CommandObject
-  } = await import(`./commands/config.js`);
-  CommandObject.execute(player, ['show']);
-});
-
-// Mobile / Console (Configuration Opening) - Tap
-world.beforeEvents.itemUseOn.subscribe(async (e)=> {
-  const player = <Player> e.source;
-  const fisher = fetchFisher(player);
-  if(!fisher.fishingRod.isEquipped) return;
-  if(e.source?.isValid() && !(e.source instanceof Player)) return;
-  if(!player.isSneaking) return;
-  const {
-    default: CommandObject
-  } = await import(`./commands/config.js`);
-  CommandObject.execute(player as Player, ['show']);
 });
 
 world.beforeEvents.itemUse.subscribe((event) => {

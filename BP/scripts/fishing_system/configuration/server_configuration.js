@@ -1,5 +1,5 @@
 export default {
-    debug: false,
+    debug: true,
     expirationTimer: 300,
     ShowMessageUponJoin: true,
 };

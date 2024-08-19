@@ -2,7 +2,7 @@ export default {
   /**
    * Enables debug messages to content logs.
    */
-  debug: false,
+  debug: true,
   /**
    * Number of seconds before cancelling the fishing system.
    */

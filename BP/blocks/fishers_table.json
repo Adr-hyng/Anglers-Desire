@@ -1,0 +1,30 @@
+{
+	"format_version": "1.20.30",
+	"minecraft:block": {
+		"description": {
+			"identifier": "yn:fishers_table",
+			"menu_category": {
+				"category": "items"
+			}
+		},
+		"components": {
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 2
+			},
+      "minecraft:custom_components": [
+        "yn:on_interact_with_fisher_table"
+      ],
+			"tag:wood": {},
+      "minecraft:light_dampening": 0,
+      "minecraft:light_emission": 4,
+
+			"minecraft:geometry": "geometry.fishers_table",
+			"minecraft:material_instances": {
+        "*": {
+          "texture": "fishers_table",
+          "render_method": "alpha_test"
+        }
+      }
+		}
+	}
+}
