@@ -1,9 +1,8 @@
 import { FishingOutputHandler } from "types/index";
 import { TextResult, BothResult, DisabledResult, ParticleResult } from "./output_types/index";
-import { clientConfiguration } from "fishing_system/configuration/client_configuration";
 export class FishingOutputBuilder {
     static create(config, fisher) {
-        const keyName = Object.keys(clientConfiguration).find(key => clientConfiguration[key] === config);
+        const keyName = Object.keys(fisher.clientConfiguration).find(key => fisher.clientConfiguration[key] === config);
         if (!this.isInParticleManager(keyName))
             throw new Error("No Particle Key exist / found");
         switch (config.defaultValue) {

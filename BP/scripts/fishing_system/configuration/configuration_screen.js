@@ -1,23 +1,25 @@
-import { FormCancelationReason, ModalFormData } from "@minecraft/server-ui";
-import { ConfigurationCollections_DB, getServerConfiguration, resetServerConfiguration } from "./configuration_handler";
+import { ActionFormData, FormCancelationReason, ModalFormData } from "@minecraft/server-ui";
+import { cloneConfiguration, ConfigurationCollections_DB } from "./configuration_handler";
 import { ADDON_NAME, db, localFishersCache, fetchFisher } from "constant";
-import { cloneClientConfiguration } from "./client_configuration";
+import { clientConfiguration } from "./client_configuration";
 import { FishingOutputBuilder } from "fishing_system/outputs/output_builder";
 import { SendMessageTo } from "utils/index";
+import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
 export class __Configuration {
     constructor(player) {
         this.player = player;
         this.source = fetchFisher(player);
         this.CLIENT_CONFIGURATION_DB = ConfigurationCollections_DB(this.player, "CLIENT");
+        this.SERVER_CONFIGURATION_DB = ConfigurationCollections_DB(this.player, "SERVER");
     }
     reset(configurationType) {
         if (db.isValid()) {
             if (configurationType === "SERVER") {
                 resetServerConfiguration();
-                db.set(this.SERVER_CONFIGURATION_DB, getServerConfiguration());
+                db.set(this.SERVER_CONFIGURATION_DB, serverConfigurationCopy);
             }
             else {
-                this.source.clientConfiguration = cloneClientConfiguration();
+                this.source.clientConfiguration = cloneConfiguration(clientConfiguration);
                 db.set(this.CLIENT_CONFIGURATION_DB, this.source.clientConfiguration);
                 localFishersCache.set(this.player.id, this.source);
                 Object.keys(this.source.fishingOutputManager).forEach((key) => {
@@ -36,27 +38,75 @@ export class __Configuration {
             throw new Error("Database not found");
     }
     showMainScreen() {
+        const form = new ActionFormData()
+            .title("Fisher's Table")
+            .button("Open Configuration")
+            .button("Upgrade Fishing Rod")
+            .button("Open Book");
+        form.show(this.player).then((response) => {
+            if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
+                return;
+            switch (response.selection) {
+                case 0:
+                    this.showConfigurationScreen();
+                    break;
+                case 1:
+                    this.showServerScreen();
+                    break;
+                default:
+                    break;
+            }
+            return;
+        });
+    }
+    showConfigurationScreen() {
         const parsedAddonTitle = ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-        const fisher = fetchFisher(this.player);
-        const form = new ModalFormData().title(`${parsedAddonTitle} Configuration`);
+        const form = new ActionFormData()
+            .title(parsedAddonTitle + " Configuration")
+            .button("Client")
+            .button("Server")
+            .button("Help");
+        form.show(this.player).then((response) => {
+            if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
+                return;
+            switch (response.selection) {
+                case 0:
+                    this.showClientScreen();
+                    break;
+                case 1:
+                    this.showServerScreen();
+                    break;
+                default:
+                    break;
+            }
+            return;
+        });
+    }
+    showServerScreen() {
+        const form = new ModalFormData().title("Server-side Configuration");
         if (db.isValid()) {
-            if (db.has(this.CLIENT_CONFIGURATION_DB)) {
-                fisher.clientConfiguration = db.get(this.CLIENT_CONFIGURATION_DB);
+            if (db.has(this.SERVER_CONFIGURATION_DB)) {
+                setServerConfiguration(db.get(this.SERVER_CONFIGURATION_DB));
             }
             else {
-                db.set(this.CLIENT_CONFIGURATION_DB, fisher.clientConfiguration);
+                db.set(this.SERVER_CONFIGURATION_DB, serverConfigurationCopy);
             }
         }
         const cachedConfigurationValues = [];
-        Object.values(fisher.clientConfiguration).forEach((builder, index) => {
-            if (typeof builder.defaultValue !== "boolean") {
+        Object.values(serverConfigurationCopy).forEach((builder, index) => {
+            const isArrayEmpty = builder.values.length > 0;
+            if (typeof builder.defaultValue === "string" && isArrayEmpty) {
                 const currentValue = builder.values.indexOf(builder.defaultValue);
                 cachedConfigurationValues[index] = currentValue !== -1 ? currentValue : parseInt(builder.defaultValue);
                 form.dropdown(builder.name, builder.values, cachedConfigurationValues[index]);
             }
-            else {
+            else if (typeof builder.defaultValue === "boolean") {
                 cachedConfigurationValues[index] = builder.defaultValue;
                 form.toggle(builder.name, cachedConfigurationValues[index]);
+            }
+            else if (typeof builder.defaultValue === "string" && !isArrayEmpty) {
+                cachedConfigurationValues[index] = builder.defaultValue;
+                form.textField(builder.name, cachedConfigurationValues[index], builder.defaultValue);
             }
         });
         form.show(this.player).then((result) => {
@@ -68,25 +118,86 @@ export class __Configuration {
             }
             if (hadChanges) {
                 result.formValues.forEach((newValue, formIndex) => {
-                    const key = Object.keys(fisher.clientConfiguration)[formIndex];
-                    const builder = fisher.clientConfiguration[key];
+                    const key = Object.keys(serverConfigurationCopy)[formIndex];
+                    const builder = serverConfigurationCopy[key];
                     switch (typeof newValue) {
                         case "boolean":
                             builder.defaultValue = newValue;
                             break;
                         case "number":
                             builder.defaultValue = builder.values[newValue];
-                            fisher.fishingOutputManager[key] = FishingOutputBuilder.create(builder, fisher);
+                            break;
+                        case "string":
+                            builder.defaultValue = newValue;
                             break;
                         default:
                             break;
                     }
-                    fisher.clientConfiguration[key] = builder;
+                    serverConfigurationCopy[key] = builder;
+                });
+                setServerConfiguration(serverConfigurationCopy);
+                if (db.isValid())
+                    db.set(this.SERVER_CONFIGURATION_DB, serverConfigurationCopy);
+            }
+            return this.showMainScreen();
+        });
+    }
+    showClientScreen() {
+        const form = new ModalFormData().title("Client-side Configuration");
+        if (db.isValid()) {
+            if (db.has(this.CLIENT_CONFIGURATION_DB)) {
+                this.source.clientConfiguration = db.get(this.CLIENT_CONFIGURATION_DB);
+            }
+            else {
+                db.set(this.CLIENT_CONFIGURATION_DB, this.source.clientConfiguration);
+            }
+        }
+        const cachedConfigurationValues = [];
+        Object.values(this.source.clientConfiguration).forEach((builder, index) => {
+            const isArrayEmpty = builder.values.length > 0;
+            if (typeof builder.defaultValue === "string" && isArrayEmpty) {
+                const currentValue = builder.values.indexOf(builder.defaultValue);
+                cachedConfigurationValues[index] = currentValue !== -1 ? currentValue : parseInt(builder.defaultValue);
+                form.dropdown(builder.name, builder.values, cachedConfigurationValues[index]);
+            }
+            else if (typeof builder.defaultValue === "boolean") {
+                cachedConfigurationValues[index] = builder.defaultValue;
+                form.toggle(builder.name, cachedConfigurationValues[index]);
+            }
+            else if (typeof builder.defaultValue === "string" && !isArrayEmpty) {
+                cachedConfigurationValues[index] = builder.defaultValue;
+                form.textField(builder.name, cachedConfigurationValues[index]);
+            }
+        });
+        form.show(this.player).then((result) => {
+            if (!result.formValues)
+                return;
+            const hadChanges = !cachedConfigurationValues.every((element, index) => element === result.formValues[index]);
+            if (result.canceled || result.cancelationReason === FormCancelationReason.UserClosed || result.cancelationReason === FormCancelationReason.UserBusy) {
+                return;
+            }
+            if (hadChanges) {
+                result.formValues.forEach((newValue, formIndex) => {
+                    const key = Object.keys(this.source.clientConfiguration)[formIndex];
+                    const builder = this.source.clientConfiguration[key];
+                    switch (typeof newValue) {
+                        case "boolean":
+                            builder.defaultValue = newValue;
+                            break;
+                        case "number":
+                            builder.defaultValue = builder.values[newValue];
+                            this.source.fishingOutputManager[key] = FishingOutputBuilder.create(builder, this.source);
+                            break;
+                        default:
+                            break;
+                    }
+                    this.source.clientConfiguration[key] = builder;
                 });
                 if (db.isValid())
-                    db.set(this.CLIENT_CONFIGURATION_DB, fisher.clientConfiguration);
+                    db.set(this.CLIENT_CONFIGURATION_DB, this.source.clientConfiguration);
             }
-            localFishersCache.set(this.player.id, fisher);
+            return this.showMainScreen();
+            localFishersCache.set(this.player.id, this.source);
         });
     }
 }

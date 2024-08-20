@@ -1,76 +1,28 @@
-export default {
+import { FormBuilder } from "utils/form_builder";
+import { cloneConfiguration } from "./configuration_handler";
+
+export const serverConfiguration = {
   /**
    * Enables debug messages to content logs.
    */
-  debug: true,
-  /**
-   * The amount of ticks in seconds that a fish will stay interested in a bait.
-   */
-  minInterestTimer: 10,
-  /**
-   * The amount of ticks in seconds that a fish will stay interested in a bait.
-   */
-  maxInterestTimer: 30,
-  /**
-   * The amount of time in seconds for finding a fish i.g 10 seconds
-   */
-  minFindingTimer: 10,
-  /**
-   * The amount of time in seconds for finding a fish.
-   */
-  maxFindingTimer: 30,
-  /**
-   * The amount of time in seconds for reeling in a fish before it flees.
-   */
-  minReelTimer: 2,
-  /**
-   * The amount of time in seconds for reeling in a fish before it flees.
-   */
-  maxReelTimer: 4,
-  /**
-   * Any Included family of entities that you can reel and get attracted to the fishing hook.
-   */
-  includedFamily: [],
-  /**
-   * Any Excluded family to ignore when fishing.
-   */
-  excludedFamily: [],
-  /**
-   * The value of 2 means the back of the player's looking direction.
-   * Increase if you want the fish to be far away when reeled in.
-   * Decrease if you want the fish to be in front of you.
-   * Note: Preferably, the value should be 1 or 2.
-   */
-  backDestinationOffset: 1,
-  /**
-   * Number of radius of the fishing hook can attract fishes.
-   */
-  minRadius: 2,
-  /**
-   * Number of radius of the fishing hook can attract fishes.
-   */
-  maxRadius: 4,
-  /**
-   * Enable the watchdog terminate log. Makes sending the WatchDog Error either Message in-game or Creator's Log.
-   */
-  enableWatchDogTerminateLog: false,
+  debug: new FormBuilder("Debug Mode").createToggle(true),
   /**
    * Number of seconds before cancelling the fishing system.
    */
-  expirationTimer: 600,
+  expirationTimer: new FormBuilder("Expiration Timer").createTextField("300"),
   /**
-   * Random Depth chances for better fishes at the bottom of the sea. Total of 100%.
-   * +2 blocks below = 45% Chance
-   * +4 blocks below = 30% Chance
-   * +7 blocks below = 15% Chance
-   * +15 blocks below = 10% Chance
+   * Shows the script initialization message log upon player joining, default is true.
    */
-  depthMultiplierRoll: {'5': 0.45, '8': 0.3, '11': 0.15, '15': 0.1},
+  ShowMessageUponJoin: new FormBuilder("Show Message On Join").createToggle(true),
   /**
-   * Success rate you will guarantee to reel or catch any included mob in the water.
+   * The locator for when will be caught entity be placed or reeled
    */
-  successRate: 60,
+  CatchingPlacement: new FormBuilder("Fishing Placement Offset").createDropdown(['BACK', 'CURRENT', 'FRONT'], "BACK"),
 };
+
+export let serverConfigurationCopy = cloneConfiguration(serverConfiguration);
+export let setServerConfiguration = (newServerConfig: typeof serverConfiguration) => serverConfigurationCopy = newServerConfig;
+export let resetServerConfiguration = () => serverConfigurationCopy = cloneConfiguration(serverConfiguration);
 
 // version (do not change)
 export const VERSION = "1.0.0";

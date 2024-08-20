@@ -119,6 +119,6 @@ export class Enchantability {
         ];
     }
     static get EnchantmentBook() {
-        return EnchantmentRangeHandler.getAll();
+        return EnchantmentRangeHandler.getAll().filter((e) => !([EnchantmentRangeHandler.SwiftSneak.id, EnchantmentRangeHandler.SoulSpeed.id, EnchantmentRangeHandler.WindBurst.id].includes(e.id))).map(en => en);
     }
 }

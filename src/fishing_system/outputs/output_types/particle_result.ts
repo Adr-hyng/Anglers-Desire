@@ -1,10 +1,8 @@
 import { system, Vector3 } from "@minecraft/server";
 import { Fisher } from "fishing_system/entities/fisher";
-import { FishingOutputHandler } from "fishing_system/outputs/output_handler";
 import { Logger } from "utils/logger";
 import { generateUUID16 } from "utils/utilities";
 import { IFishingOutput } from "../IFishingOutput";
-import server_configuration from "fishing_system/configuration/server_configuration";
 
 export class ParticleResult implements IFishingOutput {
   public id: string;

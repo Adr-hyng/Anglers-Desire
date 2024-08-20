@@ -1,8 +1,4 @@
 import { system } from "@minecraft/server";
-import { SERVER_CONFIGURATION } from "fishing_system/configuration/configuration_handler";
-export function getValidFamily() {
-    return [...SERVER_CONFIGURATION.includedFamily, "fish"].filter(fam => !SERVER_CONFIGURATION.excludedFamily.includes(fam));
-}
 export function sleep(ticks) {
     return new Promise((resolve) => {
         system.runTimeout(resolve, ticks);
@@ -20,4 +16,8 @@ export function generateUUID16() {
 }
 export function ExecuteAtGivenTick(tick) {
     return (system.currentTick % tick) === 0;
+}
+export function SendMessageTo(executor, rawMessage) {
+    const formattedRawMessage = JSON.stringify(rawMessage);
+    executor.runCommandAsync(`tellraw ${executor.name} ` + formattedRawMessage);
 }

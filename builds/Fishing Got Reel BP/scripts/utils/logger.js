@@ -1,5 +1,5 @@
 import { system } from "@minecraft/server";
-import { SERVER_CONFIGURATION } from "fishing_system/index";
+import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
 export var LogLevel;
 (function (LogLevel) {
     LogLevel["DEBUG"] = "DEBUG";
@@ -14,7 +14,7 @@ export class Logger {
         const levels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.ERROR];
         const currentLevelIndex = levels.indexOf(Logger.level);
         const logLevelIndex = levels.indexOf(level);
-        if (logLevelIndex >= currentLevelIndex && SERVER_CONFIGURATION.debug) {
+        if (logLevelIndex >= currentLevelIndex && serverConfigurationCopy.debug.defaultValue) {
             const timestamp = system.currentTick;
             const formattedMessage = `[${timestamp}] [${level}] - ${message}`;
             switch (level) {
@@ -31,16 +31,16 @@ export class Logger {
         }
     }
     static debug(...message) {
-        if (SERVER_CONFIGURATION.debug)
+        if (serverConfigurationCopy.debug.defaultValue)
             Logger.log(LogLevel.DEBUG, message);
     }
     static info(...message) {
-        if (SERVER_CONFIGURATION.debug)
+        if (serverConfigurationCopy.debug.defaultValue)
             Logger.log(LogLevel.INFO, message);
     }
     static error(...message) {
-        if (SERVER_CONFIGURATION.debug)
+        if (serverConfigurationCopy.debug.defaultValue)
             Logger.log(LogLevel.ERROR, message);
     }
 }
-Logger.level = SERVER_CONFIGURATION.debug ? LogLevel.DEBUG : LogLevel.INFO;
+Logger.level = serverConfigurationCopy.debug.defaultValue ? LogLevel.DEBUG : LogLevel.INFO;

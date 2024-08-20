@@ -1,8 +1,8 @@
 import { FishingOutputHandler } from "types/index";
-import { Fisher, FishingStateTypes } from "fishing_system/entities/fisher";
+import { Fisher} from "fishing_system/entities/fisher";
 import { TextResult, BothResult, DisabledResult, ParticleResult } from "./output_types/index";
-import { FormBuilder } from "fishing_system/configuration/client_configuration";
 import { IFishingOutput } from "./IFishingOutput";
+import { FormBuilder } from "utils/form_builder";
 
 export class FishingOutputBuilder {
   private static executedTextEvents: Set<IFishingOutput> = new Set();

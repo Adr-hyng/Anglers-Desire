@@ -11,7 +11,7 @@
           "type": "int",
           "client_sync": true,
           "range": [0, 2],
-          "default": 1
+          "default": 0
         }
       }
     },
@@ -63,11 +63,6 @@
       }
     },
     "events": {
-      "minecraft:entity_spawned": {
-        "set_property": {
-          "yn:particle_state": 1
-        }
-      },
       "show_fish_caught_particle": {
         "set_property": {
           "yn:particle_state": 1

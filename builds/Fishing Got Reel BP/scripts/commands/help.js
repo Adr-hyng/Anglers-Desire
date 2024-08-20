@@ -1,12 +1,20 @@
 import { CommandHandler } from './command_handler';
 import { ADDON_NAME } from 'constant';
+import { SendMessageTo } from 'utils/utilities';
 const importCommand = async (player, commandName) => {
     try {
         const importedCommandModule = await import(`./${commandName}.js`);
         return importedCommandModule.default;
     }
     catch (error) {
-        player.sendMessage(`§cError while fetching ${commandName} command: ${error.message}`);
+        SendMessageTo(player, {
+            rawtext: [
+                {
+                    translate: "yn:fishing_got_reel.on_caught_command_404",
+                    with: [commandName, error.message]
+                }
+            ]
+        });
         return null;
     }
 };
@@ -36,16 +44,35 @@ const command = {
                 if (importedCommand)
                     helpMessage += `§e${CommandHandler.prefix}${commandName}§r${importedCommand.format.length ? " " + importedCommand.format : ""} - ${importedCommand.description}\n`;
             }
-            player.sendMessage(helpMessage);
+            SendMessageTo(player, {
+                rawtext: [
+                    {
+                        text: helpMessage
+                    }
+                ]
+            });
         }
         else {
             const specifiedCommand = args[0].toLowerCase();
             if (!CommandHandler.commands.includes(specifiedCommand))
-                return player.sendMessage(`§cInvalid command specified: ${specifiedCommand}`);
+                return SendMessageTo(player, {
+                    rawtext: [
+                        {
+                            translate: "yn:fishing_got_reel.on_caught_invalid_command",
+                            with: [command.usage()]
+                        },
+                    ]
+                });
             if (CommandHandler.commands.includes(specifiedCommand)) {
                 const importedCommand = await importCommand(player, specifiedCommand);
                 if (importedCommand) {
-                    player.sendMessage(`\n§e${CommandHandler.prefix}${specifiedCommand}: \n${importedCommand.description}§r ${importedCommand.usage()}`);
+                    SendMessageTo(player, {
+                        rawtext: [
+                            {
+                                text: `\n§e${CommandHandler.prefix}${specifiedCommand}: \n${importedCommand.description}§r ${importedCommand.usage()}`
+                            }
+                        ]
+                    });
                 }
             }
         }

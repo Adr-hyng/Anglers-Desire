@@ -1,6 +1,7 @@
 import { system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { overrideEverything } from "overrides/index";
+import { SendMessageTo } from "utils/index";
 overrideEverything();
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
@@ -32,9 +33,15 @@ const command = {
             const selectedReqParam = args[0].toLowerCase();
             const isShow = REQUIRED_PARAMETER.SHOW === selectedReqParam;
             if (!requiredParams.includes(selectedReqParam))
-                return player.sendMessage("§cInvalid Usage Format." + command.usage());
+                return SendMessageTo(player, {
+                    rawtext: [
+                        {
+                            translate: "yn:fishing_got_reel.on_caught_invalid_command",
+                            with: [command.usage()]
+                        },
+                    ]
+                });
             if (isShow) {
-                player.sendMessage(`Configuration: Please close chat screen immediately to open configuration.`);
                 system.run(() => player.Configuration.showMainScreen());
             }
             else {
@@ -43,11 +50,8 @@ const command = {
                 let shouldResetClient = OPTIONAL_PARAMETER.CLIENT === selectedOptParam;
                 if (!optionalParams.includes(selectedOptParam))
                     shouldResetClient = true;
-                player.sendMessage(`${shouldResetClient ? "Client" : (player.StableIsOp()) ? "Server" : "Server"} Settings successfully reset.`);
                 if (shouldResetClient)
                     player.Configuration.reset("CLIENT");
-                else if (!shouldResetClient && player.StableIsOp())
-                    player.Configuration.reset("SERVER");
             }
         }
     }

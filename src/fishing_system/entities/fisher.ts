@@ -19,22 +19,25 @@ import {
     StateController,
     VectorContainer,
 } from "utils/index";
-import { LootTable, FishingOutputBuilder, ConfigurationCollections_DB } from "fishing_system/index";
-import { clientConfiguration, cloneClientConfiguration, FormBuilder } from "../configuration/client_configuration";
+import { LootTable, FishingOutputBuilder, ConfigurationCollections_DB, cloneConfiguration } from "fishing_system/index";
+import { clientConfiguration} from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
 import { FishingHook } from "./hook";
 import { IFishingOutput } from "fishing_system/outputs/IFishingOutput";
 import { db } from "constant";
+import { FormBuilder } from "utils/form_builder";
+import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
 
 export type FishingStateTypes = {
     Caught: IFishingOutput;
     Escaped: IFishingOutput;
 }
-const CatchingLocalPosition = {
-    "BACK": 2,
-    "DEFAULT": 1,
-    "FRONT": 0
-};
+
+const CatchingLocalPosition = new Map([
+    [serverConfigurationCopy.CatchingPlacement.values[0], 2], // Back
+    [serverConfigurationCopy.CatchingPlacement.values[1], 1], // Default 
+    [serverConfigurationCopy.CatchingPlacement.values[2], 0], // Front
+]);
 
 const ReelingCompleteProcess: number = 0.96;
 const FishingTimeInterval: number = 0.03; 
@@ -54,7 +57,7 @@ class Fisher {
     constructor(player: Player) {
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
-        this.clientConfiguration = cloneClientConfiguration();
+        this.clientConfiguration = cloneConfiguration(clientConfiguration);
         const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT")); // unserialized data, need to be serialized
         // Copy only the values, if there's a configuration already.
         if(configuration) {
@@ -108,8 +111,10 @@ class Fisher {
         const viewVector: Vector3 = currentPlayer.getViewDirection();
         const {x, y, z}: Vector3 = currentPlayer.location;
         const {x: viewX, z: viewZ}: Vec3 = new Vec3(viewVector.x, viewVector.y, viewVector.z).normalize();
+
+        const CatchingPosition = CatchingLocalPosition.get(<string> serverConfigurationCopy.CatchingPlacement.defaultValue) ?? 1;
         
-        const endPoint: Vec3 = new Vec3(x - CatchingLocalPosition.DEFAULT * viewX, y, z - CatchingLocalPosition.DEFAULT * viewZ); // 2nd point
+        const endPoint: Vec3 = new Vec3(x - CatchingPosition * viewX, y, z - CatchingPosition * viewZ); // 2nd point
         const magnitude: number = endPoint.distance(startPoint);
         const controlPoint = new Vec3( 
             (startPoint.x + endPoint.x) / 2,

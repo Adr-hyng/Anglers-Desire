@@ -3,11 +3,34 @@ import { ADDON_IDENTIFIER, fetchFisher } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { overrideEverything } from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
+import { Logger, SendMessageTo } from "utils/index";
+import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
 overrideEverything();
+world.beforeEvents.worldInitialize.subscribe((e) => {
+    e.blockComponentRegistry.registerCustomComponent('yn:on_interact_with_fisher_table', {
+        async onPlayerInteract(arg) {
+            const player = arg.player;
+            if (!player?.isValid())
+                return;
+            if (arg.block.typeId !== 'yn:fishers_table')
+                return;
+            const { default: CommandObject } = await import(`./commands/config.js`);
+            CommandObject.execute(player, ['show']);
+        }
+    });
+});
 world.afterEvents.playerSpawn.subscribe((e) => {
     if (!e.initialSpawn)
         return;
-    e.player.runCommandAsync(`tellraw ${e.player.name} {"rawtext":[{"translate":"yn.fishing_got_reel.on_load_message"}]}`);
+    if (!serverConfigurationCopy.ShowMessageUponJoin.defaultValue)
+        return;
+    SendMessageTo(e.player, {
+        rawtext: [
+            {
+                translate: "yn.fishing_got_reel.on_load_message"
+            }
+        ]
+    });
 });
 world.beforeEvents.itemUse.subscribe((event) => {
     const player = event.source;
@@ -18,7 +41,7 @@ world.beforeEvents.itemUse.subscribe((event) => {
         system.run(() => world.afterEvents.entitySpawn.unsubscribe(tt));
         const tt = world.afterEvents.entitySpawn.subscribe((spawnEvent) => {
             if (fisher && spawnEvent.entity)
-                onFishingHookCreated(player, spawnEvent.entity, fisher);
+                onFishingHookCreated(spawnEvent.entity, fisher);
         });
     });
     system.runTimeout(() => {
@@ -28,7 +51,7 @@ world.beforeEvents.itemUse.subscribe((event) => {
             if (removedEntity !== "minecraft:fishing_hook")
                 return;
             if (fisher.particleVectorLocations.getVectors().length > 5) {
-                fisher.fishingOutputManager().Caught.reset().then((_) => {
+                fisher.fishingOutputManager.Caught.reset().then((_) => {
                     fisher.particleVectorLocations.clear();
                 });
             }
@@ -56,10 +79,21 @@ system.afterEvents.scriptEventReceive.subscribe((event) => {
         }
         catch (err) {
             if (err instanceof ReferenceError) {
-                player.sendMessage(`§cInvalid Command ${cmd}\nCheck If The Command Actually Exists. Use /scriptevent ${ADDON_IDENTIFIER} help`);
+                SendMessageTo(player, {
+                    rawtext: [
+                        {
+                            translate: "yn:fishing_got_reel.on_caught_main_command_not_found",
+                            with: [
+                                cmd,
+                                "\n",
+                                ADDON_IDENTIFIER
+                            ]
+                        }
+                    ]
+                });
             }
             else {
-                console.error(err);
+                Logger.error(err, err.stack);
             }
         }
     });

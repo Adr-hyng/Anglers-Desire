@@ -3,8 +3,8 @@ import { ADDON_IDENTIFIER, fetchFisher } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { overrideEverything } from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
-import server_configuration from "fishing_system/configuration/server_configuration";
 import { Logger, SendMessageTo } from "utils/index";
+import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
 overrideEverything();
 world.beforeEvents.worldInitialize.subscribe((e) => {
     e.blockComponentRegistry.registerCustomComponent('yn:on_interact_with_fisher_table', {
@@ -22,7 +22,7 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
 world.afterEvents.playerSpawn.subscribe((e) => {
     if (!e.initialSpawn)
         return;
-    if (!server_configuration.ShowMessageUponJoin)
+    if (!serverConfigurationCopy.ShowMessageUponJoin.defaultValue)
         return;
     SendMessageTo(e.player, {
         rawtext: [

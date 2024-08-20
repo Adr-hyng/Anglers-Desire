@@ -2,10 +2,17 @@ import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemCom
 import { MinecraftEntityTypes } from "vanilla-types/index";
 import { Random } from "utils/Random/random";
 import { Logger, StateController, VectorContainer, } from "utils/index";
-import { SERVER_CONFIGURATION, LootTable, FishingOutputBuilder } from "fishing_system/index";
+import { LootTable, FishingOutputBuilder, ConfigurationCollections_DB, cloneConfiguration } from "fishing_system/index";
 import { clientConfiguration } from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
 import { FishingHook } from "./hook";
+import { db } from "constant";
+import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
+const CatchingLocalPosition = new Map([
+    [serverConfigurationCopy.CatchingPlacement.values[0], 2],
+    [serverConfigurationCopy.CatchingPlacement.values[1], 1],
+    [serverConfigurationCopy.CatchingPlacement.values[2], 0],
+]);
 const ReelingCompleteProcess = 0.96;
 const FishingTimeInterval = 0.03;
 class Fisher {
@@ -13,13 +20,19 @@ class Fisher {
         this._source = null;
         this.particleSpawner = null;
         this.particleVectorLocations = null;
-        this.clientConfiguration = clientConfiguration;
         this.fishingHook = null;
         this.caughtByHook = null;
         this.currentBiomeLootTable = Object.getOwnPropertyNames(LootTable).filter(prop => !['name', 'prototype', 'length', 'fishingModifier'].includes(prop));
         this.currentBiome = 0;
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
+        this.clientConfiguration = cloneConfiguration(clientConfiguration);
+        const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT"));
+        if (configuration) {
+            Object.entries(configuration).forEach(([key, value]) => {
+                this.clientConfiguration[key] = (value);
+            });
+        }
         this._fishingOutputManager = {
             "Caught": FishingOutputBuilder.create(this.clientConfiguration.Caught, this),
             "Escaped": FishingOutputBuilder.create(this.clientConfiguration.Escaped, this),
@@ -29,9 +42,11 @@ class Fisher {
         return this.source.getComponent(EntityEquippableComponent.componentId);
     }
     get source() {
+        if (!this._source?.isValid())
+            throw new Error("No player found in fisher instance");
         return this._source;
     }
-    fishingOutputManager() {
+    get fishingOutputManager() {
         return this._fishingOutputManager;
     }
     async gainExperience() {
@@ -61,7 +76,8 @@ class Fisher {
         const viewVector = currentPlayer.getViewDirection();
         const { x, y, z } = currentPlayer.location;
         const { x: viewX, z: viewZ } = new Vec3(viewVector.x, viewVector.y, viewVector.z).normalize();
-        const endPoint = new Vec3(x - SERVER_CONFIGURATION.backDestinationOffset * viewX, y, z - SERVER_CONFIGURATION.backDestinationOffset * viewZ);
+        const CatchingPosition = CatchingLocalPosition.get(serverConfigurationCopy.CatchingPlacement.defaultValue) ?? 1;
+        const endPoint = new Vec3(x - CatchingPosition * viewX, y, z - CatchingPosition * viewZ);
         const magnitude = endPoint.distance(startPoint);
         const controlPoint = new Vec3((startPoint.x + endPoint.x) / 2, startPoint.y + (magnitude * 1.65), (startPoint.z + endPoint.z) / 2);
         const reeledEntityOnAir = new StateController(false);
@@ -80,12 +96,13 @@ class Fisher {
                 reeledEntityOnAir.setValue(!currentEntityCaughtByHook.isInWater && !currentEntityCaughtByHook.isOnGround);
                 if (reeledEntityOnAir.hasChanged() && reeledEntityOnAir.getCurrentValue()) {
                     if (currentEntityCaughtByHook.hasComponent(EntityItemComponent.componentId)) {
-                        this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
+                        this.source.dimension.spawnParticle("yn:item_water_splash_exit", this.fishingHook.stablizedLocation);
                     }
                     else {
                         await system.waitTicks(3);
-                        this.source.dimension.spawnParticle("yn:water_splash_exit", this.fishingHook.stablizedLocation);
+                        this.source.dimension.spawnParticle("yn:entity_water_splash_exit", this.fishingHook.stablizedLocation);
                     }
+                    this.source.playSound('entity.generic.splash');
                 }
                 if (!isReeling)
                     throw new Error("Fish has collided to a block or was interrupted mid air");

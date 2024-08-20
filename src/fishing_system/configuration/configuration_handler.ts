@@ -1,14 +1,26 @@
 import { ADDON_NAME } from "constant";
-import Configuration from "./server_configuration";
 import { Player } from "@minecraft/server";
-
-export let SERVER_CONFIGURATION = {
-  ...Configuration
-};
-const originalServerConfiguration = JSON.parse(JSON.stringify(Configuration));
-export const resetServerConfiguration = () => SERVER_CONFIGURATION = originalServerConfiguration;
-export const getServerConfiguration = () => SERVER_CONFIGURATION;
-export const setServerConfiguration = (newConfig: typeof Configuration) => SERVER_CONFIGURATION = newConfig;
+import { FormBuilder } from "utils/form_builder";
 
 export type ConfigurationTypes = "SERVER" | "CLIENT";
 export const ConfigurationCollections_DB = (player: Player, configType: ConfigurationTypes = "CLIENT") => `${ADDON_NAME}|${player.id}|${configType}`;
+
+export function cloneConfiguration<T extends Record<string, FormBuilder<any>>>(config: T): T {
+  let clonedConfig = {} as T;
+  for (const [key, _formBuilder] of Object.entries(config)) {
+    const formBuilder = <FormBuilder<any>>_formBuilder;
+    const isArrayEmpty = formBuilder.values.length > 0;
+    const newFormBuilder = new FormBuilder<any>(formBuilder.name);
+    if (typeof formBuilder.defaultValue === "string" && isArrayEmpty) {
+      newFormBuilder.createDropdown(formBuilder.values, formBuilder.defaultValue);
+    }
+    else if (typeof formBuilder.defaultValue === "string" && !isArrayEmpty) {
+      newFormBuilder.createTextField(formBuilder.defaultValue);
+    } 
+    else if (typeof formBuilder.defaultValue === "boolean") {
+      newFormBuilder.createToggle(formBuilder.defaultValue as boolean);
+    }
+    clonedConfig[key as keyof T] = newFormBuilder as T[keyof T];
+  }
+  return clonedConfig;
+}

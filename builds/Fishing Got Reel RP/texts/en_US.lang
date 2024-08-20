@@ -1,7 +1,18 @@
 ## Texts
 yn.fishing_got_reel.on_load_message=§a§lFishing Got Reel Addon§r §ahas been loaded successfully. Created by Adr-hyng.
-yn.fishing_got_reel.on_caught_message=There's something caught by the hook...
-yn.fishing_got_reel.on_drop_hook=It got away...
+yn.fishing_got_reel.on_caught_message=%s: There's something caught by the hook...
+yn.fishing_got_reel.on_drop_hook=%s: It got away...
 yn.fishing_got_reel.on_afk_detected=Afk Detected. Cancelled the fishing system.
 
+## Send Command Message 
+yn:fishing_got_reel.on_caught_invalid_command=§cInvalid Usage Format. %1
+yn:fishing_got_reel.on_database_empty=§4No configuration record found in database.§r
+yn:fishing_got_reel.on_database_reset=§aThe database has been reset.§r
+yn:fishing_got_reel.show_database=Database ID: §e%1§r%2%3
+### yn:fishing_got_reel.show_help_message= -> Not Implemented
+yn:fishing_got_reel.on_caught_command_404=§cError while fetching %1 command: %2
+yn:fishing_got_reel.on_caught_main_command_not_found=§cInvalid Command: §l%1§r%2§cCheck If The Command Actually Exists. Use /scriptevent %3 help
+yn:fishing_got_reel.on_client_reset=§aClient Configuration has been reset.§r
+
 entity.yn:particle_spawner.name=Particle Builder
+tile.yn:fishers_table.name=Fisher's Table

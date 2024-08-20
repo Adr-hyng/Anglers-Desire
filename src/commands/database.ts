@@ -72,6 +72,7 @@ const command: ICommandBase = {
                     ]
                 });
                 player.Configuration.reset("CLIENT");
+                player.Configuration.reset("SERVER");
                 db.clear();
                 if(!db.isDisposed) db.dispose();
             }

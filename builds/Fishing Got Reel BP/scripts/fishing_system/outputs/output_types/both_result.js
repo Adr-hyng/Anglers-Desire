@@ -1,12 +1,11 @@
 import { system } from "@minecraft/server";
 import { Logger } from "utils/logger";
-import { generateUUID16 } from "utils/utilities";
+import { generateUUID16, SendMessageTo } from "utils/utilities";
 export class BothResult {
     constructor(message, particleState, fisher) {
         this.message = message;
         this.particleState = particleState;
         this.fisher = fisher;
-        this.executed = false;
         this.id = generateUUID16();
     }
     async reset() {
@@ -29,40 +28,40 @@ export class BothResult {
             });
         });
     }
-    run() {
+    run(newPosition) {
         if (!this.fisher.source)
             return;
-        if (!this.executed) {
-            var _rawMessage = {
-                rawtext: [
-                    {
-                        text: this.fisher.source.nameTag + ": ",
-                    },
-                    {
-                        translate: this.message,
-                    },
-                ],
-            };
-            this.fisher.source.sendMessage(_rawMessage);
-            this.markExecuted();
-        }
-        const initialHookPosition = this.fisher.fishingHook.stablizedLocation;
-        let { x, y, z } = initialHookPosition;
-        if (this.fisher.caughtByHook) {
-            const { x: newX, z: newZ } = this.fisher.caughtByHook.location;
-            x = newX;
-            z = newZ;
-        }
-        y = y + 1.5;
-        this.reset().then(() => {
-            system.run(() => {
-                this.fisher.particleSpawner = this.fisher.source.dimension.spawnEntity("yn:particle_spawner", { x, y, z });
-                this.fisher.particleSpawner.triggerEvent(this.particleState);
-                this.fisher.particleVectorLocations.set({ x, y, z });
-            });
+        SendMessageTo(this.fisher.source, {
+            rawtext: [
+                {
+                    translate: this.message,
+                    with: [this.fisher.source.name]
+                }
+            ]
         });
-    }
-    markExecuted() {
-        this.executed = true;
+        try {
+            if (!this.fisher.source || !this.fisher.source?.isValid())
+                throw new Error("No player found");
+            if (!(this.fisher.fishingHook.stablizedLocation || this.fisher.fishingHook?.isValid()) && !newPosition)
+                throw new Error("No vector position passed");
+            const initialPosition = (this.fisher.fishingHook.stablizedLocation) ? this.fisher.fishingHook.stablizedLocation : newPosition;
+            let { x, y, z } = initialPosition;
+            if (this.fisher.caughtByHook) {
+                const { x: newX, z: newZ } = this.fisher.caughtByHook?.location;
+                x = newX;
+                z = newZ;
+            }
+            y = y + 1.5;
+            this.reset().then(() => {
+                system.run(() => {
+                    this.fisher.particleSpawner = this.fisher.source.dimension.spawnEntity("yn:particle_spawner", { x, y, z });
+                    this.fisher.particleSpawner.triggerEvent(this.particleState);
+                    this.fisher.particleVectorLocations.set({ x, y, z });
+                });
+            });
+        }
+        catch (e) {
+            Logger.error(e, e.stack);
+        }
     }
 }

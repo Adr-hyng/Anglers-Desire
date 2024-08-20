@@ -16,6 +16,7 @@ args = parser.parse_args()
 settings = {
     "debug": {
         "description": "Enables debug messages to content logs.",
+        "name": "Debug Mode",
         "default": args.target == 'debug'
     }
 }
@@ -34,26 +35,34 @@ def generateScript(isServer):
     result = ''
     if isServer:
         result += 'import { variables } from "@minecraft/server-admin";\n\n'
-    
-    result += 'export default {\n'
+    result += 'import { FormBuilder } from "utils/form_builder";\n'
+    result += 'import { cloneConfiguration } from "./configuration_handler";\n\n'
+    result += 'export const serverConfiguration = {\n'
     for name, data in settings.items():
         if isServer:
             result += f'  {name}: variables.get("{name}"),\n'
         else:
             value = data["default"]
+            form_name = data["name"]
 
-            if type(value) is str:
-                value = f'"{value}"'
+            if type(value) is str or type(value) is int:
+                value = f'new FormBuilder("{form_name}").createTextField("{value}")'
             elif type(value) is bool:
-                value = "true" if value else "false"
+                value = f'new FormBuilder("{form_name}").createToggle(true)' if value else f'new FormBuilder("{form_name}").createToggle(false)'
+            elif type(value) is list:
+                list_representation = repr(value)
+                value = f'new FormBuilder("{form_name}").createDropdown({list_representation}, "{value[0]}")'
             
             result += '  /**\n'
             for line in data['description'].splitlines():
                 result += f'   * {line}\n'
             result += '   */\n'
             result += f'  {name}: {value},\n'
-    result += '};\n\n'
+    result += '} as const;\n\n'
 
+    result += 'export let serverConfigurationCopy = cloneConfiguration(serverConfiguration);\n'
+    result += 'export let setServerConfiguration = (newServerConfig: typeof serverConfiguration) => serverConfigurationCopy = newServerConfig;\n'
+    result += 'export let resetServerConfiguration = () => serverConfigurationCopy = cloneConfiguration(serverConfiguration);\n\n'
     result += '\n'.join([
         '// version (do not change)',
         f'export const VERSION = "{version_str}";'

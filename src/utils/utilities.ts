@@ -1,5 +1,4 @@
 import { Player, RawMessage, system } from "@minecraft/server";
-import { SERVER_CONFIGURATION } from "fishing_system/configuration/configuration_handler";
 
 /**
  * sleep
@@ -40,7 +39,6 @@ export function ExecuteAtGivenTick(tick: number) {
 }
 
 export function SendMessageTo(executor: Player, rawMessage: RawMessage) {
-  // const formattedRawMessage = (`tellraw ${executor.name} {"rawtext":[{"translate":"${langMsg}"}]}`);
   const formattedRawMessage = JSON.stringify(rawMessage);
   executor.runCommandAsync(`tellraw ${executor.name} ` + formattedRawMessage);
 }
