@@ -11,6 +11,13 @@ export class TextResult {
     run() {
         if (!this.fisher.source)
             return;
-        SendMessageTo(this.fisher.source, `${this.fisher.source.name}: ${this.message}`);
+        SendMessageTo(this.fisher.source, {
+            rawtext: [
+                {
+                    translate: this.message,
+                    with: [this.fisher.source.name]
+                }
+            ]
+        });
     }
 }

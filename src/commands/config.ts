@@ -34,7 +34,16 @@ const command: ICommandBase = {
             const requiredParams: string[] = (`[${Object.values(REQUIRED_PARAMETER).join('|')}]`).slice(1, -1).split('|').map(command => command.trim()); 
             const selectedReqParam: string = args[0].toLowerCase();
             const isShow: boolean = REQUIRED_PARAMETER.SHOW === selectedReqParam;
-            if(!requiredParams.includes(selectedReqParam)) return SendMessageTo(player, "§cInvalid Usage Format." + command.usage());
+            if(!requiredParams.includes(selectedReqParam)) return SendMessageTo(
+                player, {
+                    rawtext: [
+                    {
+                        translate: "yn:fishing_got_reel.on_caught_invalid_command",
+                        with: [command.usage()]   
+                    },
+                    ]
+                }
+            );
             if(isShow) {
                 system.run(() => player.Configuration.showMainScreen());
             } 

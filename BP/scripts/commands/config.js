@@ -33,7 +33,14 @@ const command = {
             const selectedReqParam = args[0].toLowerCase();
             const isShow = REQUIRED_PARAMETER.SHOW === selectedReqParam;
             if (!requiredParams.includes(selectedReqParam))
-                return SendMessageTo(player, "§cInvalid Usage Format." + command.usage());
+                return SendMessageTo(player, {
+                    rawtext: [
+                        {
+                            translate: "yn:fishing_got_reel.on_caught_invalid_command",
+                            with: [command.usage()]
+                        },
+                    ]
+                });
             if (isShow) {
                 system.run(() => player.Configuration.showMainScreen());
             }

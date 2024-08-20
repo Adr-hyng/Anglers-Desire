@@ -26,10 +26,23 @@ const command = {
             const selectedReqParam = args[0].toLowerCase();
             const isShow = REQUIRED_PARAMETER.SHOW === selectedReqParam;
             if (!requiredParams.includes(selectedReqParam))
-                return SendMessageTo(player, "§cInvalid Usage Format." + command.usage());
+                return SendMessageTo(player, {
+                    rawtext: [
+                        {
+                            translate: "yn:fishing_got_reel.on_caught_invalid_command",
+                            with: [command.usage()]
+                        },
+                    ]
+                });
             if (isShow) {
                 if (db.size === 0)
-                    return SendMessageTo(player, `§4No configuration record found in database.§r`);
+                    return SendMessageTo(player, {
+                        rawtext: [
+                            {
+                                translate: "yn:fishing_got_reel.on_database_empty"
+                            },
+                        ]
+                    });
                 let collections = "";
                 let i = 1;
                 for (const key of db.keys()) {
@@ -37,13 +50,23 @@ const command = {
                     const player = world.getEntity(t[1]);
                     collections += `${i++}. ${player.nameTag}: ${JSON.stringify(t)}\n`;
                 }
-                SendMessageTo(player, (`
-                Database ID: §e${ADDON_NAME}§r
-                ${collections}
-                `).replaceAll("                ", ""));
+                SendMessageTo(player, {
+                    rawtext: [
+                        {
+                            translate: "yn:fishing_got_reel.show_database",
+                            with: [ADDON_NAME, "\n", collections]
+                        },
+                    ]
+                });
             }
             else {
-                SendMessageTo(player, `§aThe database has been reset.§r`);
+                SendMessageTo(player, {
+                    rawtext: [
+                        {
+                            translate: "yn:fishing_got_reel.on_database_reset"
+                        },
+                    ]
+                });
                 player.Configuration.reset("CLIENT");
                 db.clear();
                 if (!db.isDisposed)

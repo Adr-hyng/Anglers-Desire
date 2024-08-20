@@ -26,7 +26,13 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
 world.afterEvents.playerSpawn.subscribe((e) => {
   if(!e.initialSpawn) return;
   if(!server_configuration.ShowMessageUponJoin) return; 
-  SendMessageTo(e.player, "yn.fishing_got_reel.on_load_message");
+  SendMessageTo(e.player, {
+    rawtext: [
+      {
+        translate: "yn.fishing_got_reel.on_load_message"
+      }
+    ]
+  });
 });
 
 world.beforeEvents.itemUse.subscribe((event) => {
@@ -71,7 +77,18 @@ system.afterEvents.scriptEventReceive.subscribe((event: ScriptEventCommandMessag
         CommandObject.execute(player, args);
     } catch (err) {
       if (err instanceof ReferenceError) {
-        SendMessageTo(player, `§cInvalid Command ${cmd}\nCheck If The Command Actually Exists. Use /scriptevent ${ADDON_IDENTIFIER} help`);
+        SendMessageTo(player, {
+          rawtext: [
+            {
+              translate: "yn:fishing_got_reel.on_caught_main_command_not_found",
+              with: [
+                cmd,
+                "\n",
+                ADDON_IDENTIFIER
+              ]
+            }
+          ]
+        });
       } else {
         Logger.error(err, err.stack);
       }

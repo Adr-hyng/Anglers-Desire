@@ -27,9 +27,26 @@ const command: ICommandBase = {
             const requiredParams: string[] = (`[${Object.values(REQUIRED_PARAMETER).join('|')}]`).slice(1, -1).split('|').map(command => command.trim()); 
             const selectedReqParam: string = args[0].toLowerCase();
             const isShow: boolean = REQUIRED_PARAMETER.SHOW === selectedReqParam;
-            if(!requiredParams.includes(selectedReqParam)) return SendMessageTo(player, "§cInvalid Usage Format." + command.usage());
+            if(!requiredParams.includes(selectedReqParam)) return SendMessageTo(
+                player, {
+                    rawtext: [
+                    {
+                        translate: "yn:fishing_got_reel.on_caught_invalid_command",
+                        with: [command.usage()]   
+                    },
+                    ]
+                }
+            );
             if(isShow) {
-                if(db.size === 0) return SendMessageTo(player, `§4No configuration record found in database.§r`);
+                if(db.size === 0) return SendMessageTo(
+                    player, {
+                        rawtext: [
+                        {
+                            translate: "yn:fishing_got_reel.on_database_empty"
+                        },
+                        ]
+                    }
+                );
                 let collections: string = "";
                 let i = 1;
                 for(const key of db.keys()) {
@@ -37,12 +54,23 @@ const command: ICommandBase = {
                     const player: Player = world.getEntity(t[1]) as Player;
                     collections += `${i++}. ${player.nameTag}: ${JSON.stringify(t)}\n`;
                 }
-                SendMessageTo(player, (`
-                Database ID: §e${ADDON_NAME}§r
-                ${collections}
-                `).replaceAll("                ", ""));
+                // I think this going to be buggy, and early version used replaceAll with all whitespaces
+                SendMessageTo(player, {
+                    rawtext: [
+                        {
+                            translate: "yn:fishing_got_reel.show_database",
+                            with: [ADDON_NAME, "\n", collections]   
+                        },
+                    ]
+                });
             } else {
-                SendMessageTo(player, `§aThe database has been reset.§r`);
+                SendMessageTo(player, {
+                    rawtext: [
+                    {
+                        translate: "yn:fishing_got_reel.on_database_reset"
+                    },
+                    ]
+                });
                 player.Configuration.reset("CLIENT");
                 db.clear();
                 if(!db.isDisposed) db.dispose();

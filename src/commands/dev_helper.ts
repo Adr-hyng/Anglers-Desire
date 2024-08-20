@@ -1,8 +1,8 @@
-import { EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, ItemComponentTypes, ItemEnchantableComponent, ItemStack, system } from "@minecraft/server";
+import { EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, ItemComponentTypes, ItemEnchantableComponent, ItemStack, RawMessage, system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { MinecraftItemTypes, MinecraftEnchantmentTypes } from "vanilla-types/index";
 import { ICommandBase} from "./ICommandBase";
-import { SendMessageTo } from "utils/utilities";
+import { SendMessageTo} from "utils/utilities";
 
 // Automate this, the values should be the description.
 enum REQUIRED_PARAMETER {
@@ -28,7 +28,16 @@ const command: ICommandBase = {
         if (!(args && args.length)) return;
         const requiredParams: string[] = (`[${Object.values(REQUIRED_PARAMETER).join('|')}]`).slice(1, -1).split('|').map(command => command.trim()); 
         const selectedReqParam: string = args[0].toLowerCase();
-        if(!requiredParams.includes(selectedReqParam)) return SendMessageTo(player, "§cInvalid Usage Format." + command.usage());
+        if(!requiredParams.includes(selectedReqParam)) return SendMessageTo(
+            player, {
+                rawtext: [
+                {
+                    translate: "yn:fishing_got_reel.on_caught_invalid_command",
+                    with: [command.usage()]   
+                },
+                ]
+            }
+        );
         switch(selectedReqParam) {
             case REQUIRED_PARAMETER.GET:
                 const fishingRod = new ItemStack(MinecraftItemTypes.FishingRod, 1);

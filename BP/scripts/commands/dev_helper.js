@@ -26,7 +26,14 @@ const command = {
         const requiredParams = (`[${Object.values(REQUIRED_PARAMETER).join('|')}]`).slice(1, -1).split('|').map(command => command.trim());
         const selectedReqParam = args[0].toLowerCase();
         if (!requiredParams.includes(selectedReqParam))
-            return SendMessageTo(player, "§cInvalid Usage Format." + command.usage());
+            return SendMessageTo(player, {
+                rawtext: [
+                    {
+                        translate: "yn:fishing_got_reel.on_caught_invalid_command",
+                        with: [command.usage()]
+                    },
+                ]
+            });
         switch (selectedReqParam) {
             case REQUIRED_PARAMETER.GET:
                 const fishingRod = new ItemStack(MinecraftItemTypes.FishingRod, 1);

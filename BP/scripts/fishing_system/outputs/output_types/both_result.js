@@ -31,7 +31,14 @@ export class BothResult {
     run(newPosition) {
         if (!this.fisher.source)
             return;
-        SendMessageTo(this.fisher.source, `${this.fisher.source.name}: ${this.message}`);
+        SendMessageTo(this.fisher.source, {
+            rawtext: [
+                {
+                    translate: this.message,
+                    with: [this.fisher.source.name]
+                }
+            ]
+        });
         try {
             if (!this.fisher.source || !this.fisher.source?.isValid())
                 throw new Error("No player found");

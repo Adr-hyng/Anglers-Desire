@@ -9,7 +9,14 @@ const importCommand = async (player: Player, commandName: string): Promise<IComm
         const importedCommandModule = await import(`./${commandName}.js`);
         return importedCommandModule.default;
     } catch (error) {
-        SendMessageTo(player, `§cError while fetching ${commandName} command: ${error.message}`);
+        SendMessageTo(player, {
+            rawtext: [
+                {
+                    translate: "yn:fishing_got_reel.on_caught_command_404",
+                    with: [ commandName, error.message]
+                }
+            ]
+        });
         return null;
     }
 };
@@ -40,13 +47,36 @@ const command: ICommandBase = {
                 const importedCommand = await importCommand(player, commandName);
                 if (importedCommand) helpMessage += `§e${CommandHandler.prefix}${commandName}§r${importedCommand.format.length ? " " + importedCommand.format : ""} - ${importedCommand.description}\n`;
             }
-            SendMessageTo(player, helpMessage);
+            SendMessageTo(player, {
+                rawtext: [
+                    {
+                        text: helpMessage
+                    }
+                ]
+            });
         } else {
             const specifiedCommand = args[0].toLowerCase();
-            if(!CommandHandler.commands.includes(specifiedCommand)) return SendMessageTo(player, `§cInvalid command specified: ${specifiedCommand}`);
+            if(!CommandHandler.commands.includes(specifiedCommand)) return SendMessageTo(
+                player, {
+                    rawtext: [
+                    {
+                        translate: "yn:fishing_got_reel.on_caught_invalid_command",
+                        with: [command.usage()]   
+                    },
+                    ]
+                }
+            );
             if (CommandHandler.commands.includes(specifiedCommand)) {
                 const importedCommand = await importCommand(player, specifiedCommand);
-                if (importedCommand) SendMessageTo(player, `\n§e${CommandHandler.prefix}${specifiedCommand}: \n${importedCommand.description}§r ${importedCommand.usage()}`);
+                if (importedCommand) {
+                    SendMessageTo(player, {
+                        rawtext: [
+                            {
+                                text: `\n§e${CommandHandler.prefix}${specifiedCommand}: \n${importedCommand.description}§r ${importedCommand.usage()}`
+                            }
+                        ]
+                    });
+                }
             }
         }
     }

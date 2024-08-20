@@ -23,7 +23,13 @@ export class __Configuration {
                 Object.keys(this.source.fishingOutputManager).forEach((key) => {
                     this.source.fishingOutputManager[key] = FishingOutputBuilder.create(this.source.clientConfiguration[key], this.source);
                 });
-                SendMessageTo(this.player, `Client Configuration has been reset.`);
+                SendMessageTo(this.player, {
+                    rawtext: [
+                        {
+                            translate: "yn:fishing_got_reel.on_client_reset"
+                        }
+                    ]
+                });
             }
         }
         else
