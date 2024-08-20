@@ -2,6 +2,7 @@ import { Enchantment, ItemComponentTypes, ItemDurabilityComponent, ItemEnchantab
 import { EntityEquippableComponent, EquipmentSlot } from "@minecraft/server";
 import { MinecraftEnchantmentTypes, MinecraftItemTypes} from "vanilla-types/index";
 import { OverTakes } from "overrides/partial_overtakes";
+import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 
 declare module "@minecraft/server" {
   interface EntityEquippableComponent {
@@ -15,11 +16,18 @@ declare module "@minecraft/server" {
     */
     damageDurability(damageApplied: number): boolean;
     get isEquipped(): boolean;
+    get upgrade(): HookUpgrades;
   }
 }
 
+const fishingRodUpgradesMap = new WeakMap<Player, HookUpgrades>();
 
 OverTakes(EntityEquippableComponent.prototype, {
+  get upgrade() {
+    let rodUpgradeMap = fishingRodUpgradesMap.get(this);
+    if(!rodUpgradeMap) fishingRodUpgradesMap.set(this, rodUpgradeMap = new HookUpgrades(this));
+    return rodUpgradeMap;
+  },
   get isEquipped() {
     return (this.getEquipment(EquipmentSlot.Mainhand)?.typeId === MinecraftItemTypes.FishingRod);
   },

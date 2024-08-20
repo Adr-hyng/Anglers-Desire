@@ -1,8 +1,8 @@
-import { Entity, MolangVariableMap, system } from "@minecraft/server";
+import { Entity, system } from "@minecraft/server";
 import { localFishersCache } from "constant";
 import { Fisher } from "fishing_system/entities/fisher";
 import { LootTable } from "fishing_system/loot_tables/loot_tables";
-import { Logger, Random } from "utils/index";
+import { Logger } from "utils/index";
 import {overrideEverything} from "overrides/index";
 overrideEverything();
 

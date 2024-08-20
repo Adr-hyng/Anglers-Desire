@@ -6,6 +6,7 @@ import { UniformRange } from 'types/range_type';
 
 declare module "@minecraft/server" {
   interface EnchantmentType {
+    custom_id: string;
     weight: number;
     conflicts?: string[];
     range: UniformRange[];

@@ -2,5 +2,14 @@
   "resource_pack_name": "fishing_got_reel",
   "texture_name": "atlas.items",
   "texture_data": {
+    "flamekissed_hook": {
+      "textures": "textures/items/flamekissed_hook.png"
+    },
+    "thunderbite_hook": {
+      "textures": "textures/items/thunderbite_hook.png"
+    },
+    "treasure_calls_hook": {
+      "textures": "textures/items/treasure_calls_hook.png"
+    }
   }
 }

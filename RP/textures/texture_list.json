@@ -1,3 +1,6 @@
 [
-  "textures/blocks/workbench"
+  "textures/blocks/workbench",
+  "textures/items/flamekissed_hook",
+  "textures/items/thunderbite_hook",
+  "textures/items/treasure_calls_hook"
 ]
