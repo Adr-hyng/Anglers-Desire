@@ -1,0 +1,32 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "yn:fishers_table_from_tropical"
+    },
+    "tags": [ "crafting_table" ],
+    "pattern": [
+      "AB",
+      "##",
+      "##"
+    ],
+    "key": {
+      "A": {
+        "item": "minecraft:stick"
+      },
+      "B": {
+        "item": "minecraft:tropical_fish"
+      },
+      "#": {
+        "tag": "minecraft:planks"
+      }
+    },
+	  "unlock": [
+      {
+        "tag": "minecraft:is_fish"
+      }
+    ],
+    "result": { "item": "yn:fishers_table" },
+    "priority": -1
+  }
+}
