@@ -148,7 +148,7 @@ class Fisher {
                         await system.waitTicks(3);
                         
                         // Upgrade Effect - Use State Controller next time with custom made event system listener
-                        if(this.fishingRod.upgrade.has("Flamekissed")) currentEntityCaughtByHook.setOnFire(5, false);
+                        if(this.fishingRod.upgrade.has("Pyroclasm")) currentEntityCaughtByHook.setOnFire(5, false);
 
                         this.source.dimension.spawnParticle("yn:entity_water_splash_exit", this.fishingHook.stablizedLocation);
                     }

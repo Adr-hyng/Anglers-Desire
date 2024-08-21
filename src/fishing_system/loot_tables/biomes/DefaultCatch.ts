@@ -7,9 +7,9 @@ import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 
 export class DefaultCatch {
   static Loot (modifier: ModifierResult, upgrade: HookUpgrades): LootTableType {
-    const fishWeight = ((85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5)) * (upgrade.has("TreasureCalls") ? 0 : 1);
-    const junkWeight = ((10 - (modifier.LoTSModifier * 1.95)) + (modifier.deepnessModifier / 2)) + (upgrade.has("TreasureCalls") ? 50 : 0);
-    const treasureWeight = ((5 + (modifier.LoTSModifier * 2.1)) + modifier.deepnessModifier) + (upgrade.has("TreasureCalls") ? 15 : 0);
+    const fishWeight = ((85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5)) * (upgrade.has("Nautilus") ? 0 : 1);
+    const junkWeight = ((10 - (modifier.LoTSModifier * 1.95)) + (modifier.deepnessModifier / 2)) + (upgrade.has("Nautilus") ? 50 : 0);
+    const treasureWeight = ((5 + (modifier.LoTSModifier * 2.1)) + modifier.deepnessModifier) + (upgrade.has("Nautilus") ? 15 : 0);
     return {
       "pools": [
         {

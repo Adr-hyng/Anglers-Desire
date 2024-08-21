@@ -103,7 +103,7 @@ class Fisher {
                     }
                     else {
                         await system.waitTicks(3);
-                        if (this.fishingRod.upgrade.has("Flamekissed"))
+                        if (this.fishingRod.upgrade.has("Pyroclasm"))
                             currentEntityCaughtByHook.setOnFire(5, false);
                         this.source.dimension.spawnParticle("yn:entity_water_splash_exit", this.fishingHook.stablizedLocation);
                     }

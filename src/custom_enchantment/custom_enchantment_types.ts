@@ -5,9 +5,10 @@ export type CustomEnchantment = {
 }
 
 export class FishingCustomEnchantmentType {
-  static get Flamekissed(): CustomEnchantment { return {name: "Flame Kissed", level: 1, conflicts: ["Treasure Calls"]} as CustomEnchantment; }
-  static get Thunderbite(): CustomEnchantment { return {name: "Thunderbite", level: 1} as CustomEnchantment; }
-  static get TreasureCalls(): CustomEnchantment { return {name: "Treasure Calls", level: 1, conflicts: ["Flame Kissed"]} as CustomEnchantment; }
+  static get Nautilus(): CustomEnchantment { return {name: "Nautilus Hook", level: 1, conflicts: ["Pyroclasm Hook"]} as CustomEnchantment; }
+  static get LuminousSiren(): CustomEnchantment { return {name: "Luminous Siren Hook", level: 1} as CustomEnchantment; }
+  static get Pyroclasm(): CustomEnchantment { return {name: "Pyroclasm Hook", level: 1, conflicts: ["Nautilus Hook"]} as CustomEnchantment; }
+  static get Tempus(): CustomEnchantment { return {name: "Tempus Hook", level: 1} as CustomEnchantment; }
 }
 
 

@@ -1,7 +1,8 @@
 export class FishingCustomEnchantmentType {
-    static get Flamekissed() { return { name: "Flame Kissed", level: 1, conflicts: ["Treasure Calls"] }; }
-    static get Thunderbite() { return { name: "Thunderbite", level: 1 }; }
-    static get TreasureCalls() { return { name: "Treasure Calls", level: 1, conflicts: ["Flame Kissed"] }; }
+    static get Nautilus() { return { name: "Nautilus Hook", level: 1, conflicts: ["Pyroclasm Hook"] }; }
+    static get LuminousSiren() { return { name: "Luminous Siren Hook", level: 1 }; }
+    static get Pyroclasm() { return { name: "Pyroclasm Hook", level: 1, conflicts: ["Nautilus Hook"] }; }
+    static get Tempus() { return { name: "Tempus Hook", level: 1 }; }
 }
 export class CustomEnchantmentTypes {
     static get(customEnchantmentType) {
