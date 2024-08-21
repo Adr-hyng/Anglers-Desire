@@ -11,6 +11,6 @@ declare module "@minecraft/server" {
 
 OverTakes(ItemStack.prototype, {
   hasLore(loreId) {
-    return this.getLore().includes(loreId);
+    return this.getLore().some(lore => lore.startsWith(loreId));
   }
 });

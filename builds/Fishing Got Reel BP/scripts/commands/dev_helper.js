@@ -1,7 +1,11 @@
-import { EnchantmentTypes, EntityComponentTypes, ItemComponentTypes, ItemStack, system } from "@minecraft/server";
+import { EntityComponentTypes, EquipmentSlot, ItemComponentTypes, ItemStack } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
-import { MinecraftItemTypes, MinecraftEnchantmentTypes } from "vanilla-types/index";
+import { MinecraftItemTypes } from "vanilla-types/index";
 import { SendMessageTo } from "utils/utilities";
+import { overrideEverything } from "overrides/index";
+import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
+import { fetchFisher } from "constant";
+overrideEverything();
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
     REQUIRED_PARAMETER["GET"] = "get";
@@ -34,17 +38,21 @@ const command = {
                     },
                 ]
             });
+        let fishingRod;
         switch (selectedReqParam) {
             case REQUIRED_PARAMETER.GET:
-                const fishingRod = new ItemStack(MinecraftItemTypes.FishingRod, 1);
-                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Lure), level: 3 });
-                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.LuckOfTheSea), level: 3 });
-                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Mending), level: 1 });
-                player.getComponent(EntityComponentTypes.Inventory).container.addItem(fishingRod);
+                fishingRod = fetchFisher(player).fishingRod.getEquipment(EquipmentSlot.Mainhand);
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.TreasureCalls.name, level: 2 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.Thunderbite.name, level: 3 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.Flamekissed.name, level: 1 });
+                player.getComponent(EntityComponentTypes.Inventory).container.setItem(player.selectedSlotIndex, fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
-                system.run(() => {
-                });
+                fishingRod = new ItemStack(MinecraftItemTypes.FishingRod, 1);
+                const enchantable = fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod);
+                enchantable.addCustomEnchantment(FishingCustomEnchantmentType.Flamekissed);
+                enchantable.addCustomEnchantment(FishingCustomEnchantmentType.TreasureCalls);
+                player.getComponent(EntityComponentTypes.Inventory).container.addItem(fishingRod);
                 break;
             default:
                 break;

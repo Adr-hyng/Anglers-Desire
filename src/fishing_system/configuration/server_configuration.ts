@@ -18,7 +18,7 @@ export const serverConfiguration = {
    * The locator for when will be caught entity be placed or reeled
    */
   CatchingPlacement: new FormBuilder("Fishing Placement Offset").createDropdown(['BACK', 'CURRENT', 'FRONT'], "BACK"),
-} as const;
+};
 
 export let serverConfigurationCopy = cloneConfiguration(serverConfiguration);
 export let setServerConfiguration = (newServerConfig: typeof serverConfiguration) => serverConfigurationCopy = newServerConfig;

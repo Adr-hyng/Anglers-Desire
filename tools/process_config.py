@@ -58,7 +58,7 @@ def generateScript(isServer):
                 result += f'   * {line}\n'
             result += '   */\n'
             result += f'  {name}: {value},\n'
-    result += '} as const;\n\n'
+    result += '};\n\n'
 
     result += 'export let serverConfigurationCopy = cloneConfiguration(serverConfiguration);\n'
     result += 'export let setServerConfiguration = (newServerConfig: typeof serverConfiguration) => serverConfigurationCopy = newServerConfig;\n'

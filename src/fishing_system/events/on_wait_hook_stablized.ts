@@ -57,6 +57,8 @@ export async function onHookLanded(player: Player): Promise<void> {
   }
   if(!isInWater) return;
   const expirationTimer = new Timer(parseInt(serverConfigurationCopy.expirationTimer.defaultValue as string) * TicksPerSecond);
+  const delayTimer = new Timer(0.0 * TicksPerSecond); 
+
   const FishingStateIndicator = fisher.fishingOutputManager;
   const hookSubmergeState = new StateController(fisher.fishingHook.isSubmerged);
   const hookTreasureFoundState = new StateController(fisher.fishingHook.isDeeplySubmerged);
@@ -64,6 +66,16 @@ export async function onHookLanded(player: Player): Promise<void> {
 
   let tuggingEvent: number = system.runInterval( () => {
     try { 
+      // Optimized this to be maintainable
+      if(fisher.canBeReeled) {
+        if(!delayTimer.isDone()) {
+          delayTimer.update();
+        } else {
+          fisher.canBeReeled = false;
+          delayTimer.reset();
+          FishingStateIndicator.Escaped.run();
+        }
+      }
       const hookEntity = fisher.fishingHook;
       const caughtFish = fisher.caughtByHook;
       if(!hookEntity || !hookEntity?.isValid()) throw new Error("Fishing hook not found / undefined");
@@ -99,14 +111,14 @@ export async function onHookLanded(player: Player): Promise<void> {
         FishingStateIndicator.Caught.run();
         if(fisher.clientConfiguration.OnSubmergeSE.defaultValue) player.playSound('note.chime');
       } else { 
-        FishingStateIndicator.Escaped.run();
+        fisher.canBeReeled = true;
       }
     }
 
     if(hookTreasureFoundState.hasChanged()) {
       if(hookTreasureFoundState.getCurrentValue()) {
         if(fisher.clientConfiguration.OnTreasureSE.defaultValue) player.playSound('random.orb');
-      } 
+      }
     }
   }
 }

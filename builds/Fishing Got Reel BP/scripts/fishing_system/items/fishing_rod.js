@@ -2,18 +2,23 @@ import { ItemComponentTypes } from "@minecraft/server";
 import { EntityEquippableComponent, EquipmentSlot } from "@minecraft/server";
 import { MinecraftEnchantmentTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { OverTakes } from "overrides/partial_overtakes";
+import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 OverTakes(EntityEquippableComponent.prototype, {
+    get upgrade() {
+        return new HookUpgrades(this.equipment);
+    },
     get isEquipped() {
-        return (this.getEquipment(EquipmentSlot.Mainhand)?.typeId === MinecraftItemTypes.FishingRod);
+        this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
+        return (this.equipment?.typeId === MinecraftItemTypes.FishingRod);
     },
     getLuckOfSea() {
-        const itemStack = this.getEquipmentSlot(EquipmentSlot.Mainhand).getItem();
-        const enchantments = itemStack.getComponent(ItemComponentTypes.Enchantable);
+        this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
+        const enchantments = this.equipment.getComponent(ItemComponentTypes.Enchantable);
         return enchantments.hasEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) : undefined;
     },
     getLure() {
-        const itemStack = this.getEquipmentSlot(EquipmentSlot.Mainhand).getItem();
-        const enchantments = itemStack.getComponent(ItemComponentTypes.Enchantable);
+        this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
+        const enchantments = this.equipment.getComponent(ItemComponentTypes.Enchantable);
         return enchantments.hasEnchantment(MinecraftEnchantmentTypes.Lure) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.Lure) : undefined;
     },
     damageDurability(damageApplied) {

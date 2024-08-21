@@ -55,9 +55,8 @@ world.beforeEvents.itemUse.subscribe((event) => {
                     fisher.particleVectorLocations.clear();
                 });
             }
-            if (!fisher.fishingHook.isSubmerged)
-                return;
-            onHookedItem(fisher);
+            if (fisher.canBeReeled || fisher.fishingHook.isSubmerged)
+                onHookedItem(fisher);
         });
     }, 0);
 });

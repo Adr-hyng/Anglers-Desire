@@ -4,10 +4,10 @@ export class LootTable {
         const deepTreasureModifier = (isDeeplySubmerged ? 34.5 : 0);
         return { LoTSModifier: LoTSLevel, deepnessModifier: deepTreasureModifier };
     }
-    static FishingJunk(level, isDeeplySubmerged = false) {
-        return DefaultCatch.loot(this.fishingModifier(level, isDeeplySubmerged));
+    static FishingJunk(level, isDeeplySubmerged = false, upgrade) {
+        return DefaultCatch.Loot(this.fishingModifier(level, isDeeplySubmerged), upgrade);
     }
-    static FishingJungleJunk(level, isDeeplySubmerged = false) {
-        return JungleCatch.loot(this.fishingModifier(level, isDeeplySubmerged));
+    static FishingJungleJunk(level, isDeeplySubmerged = false, upgrade) {
+        return JungleCatch.Loot(this.fishingModifier(level, isDeeplySubmerged), upgrade);
     }
 }

@@ -17,5 +17,3 @@ export class HookUpgrades {
     .override(this.source).hasCustomEnchantment(FishingCustomEnchantmentType[customEnchant]);
   }
 }
-
-// fishingRod.upgrade.has(FishingCustomEnchantment.<...>)

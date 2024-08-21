@@ -5,7 +5,7 @@ import { OverTakes } from "./partial_overtakes";
 import { Logger, Random } from 'utils/index';
 import { RangeInternal, LootTableType, PollsTableType} from 'types/index';
 import { EquipmentMaterialType, ItemMaterialType } from 'enchantment_system/enchantability';
-import { MinecraftEntityTypes, MinecraftItemTypes } from 'vanilla-types/index';
+import { MinecraftItemTypes } from 'vanilla-types/index';
 
 /**
   loot: a variable similar to JSON loot_tables.

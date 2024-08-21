@@ -29,6 +29,23 @@ export function generateUUID16(): string {
   return uuid;
 }
 
+export function parseToRoman(num: number): string {
+  if (num < 1 || num > 10) throw new Error('Input must be between 1 and 10');
+  const romanNumerals: { [key: number]: string } = {
+      1: 'I',
+      2: 'II',
+      3: 'III',
+      4: 'IV',
+      5: 'V',
+      6: 'VI',
+      7: 'VII',
+      8: 'VIII',
+      9: 'IX',
+      10: 'X'
+  };
+  return romanNumerals[num];
+}
+
 /**
  * IDK What to call this, but returns boolean if for every X amount of ticks
  * @param tick Minecraft Ticks

@@ -38,12 +38,34 @@ export class __Configuration {
             throw new Error("Database not found");
     }
     showMainScreen() {
+        const form = new ActionFormData()
+            .title("Fisher's Table")
+            .button("Open Configuration")
+            .button("Upgrade Fishing Rod")
+            .button("Open Book");
+        form.show(this.player).then((response) => {
+            if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
+                return;
+            switch (response.selection) {
+                case 0:
+                    this.showConfigurationScreen();
+                    break;
+                case 1:
+                    this.showServerScreen();
+                    break;
+                default:
+                    break;
+            }
+            return;
+        });
+    }
+    showConfigurationScreen() {
         const parsedAddonTitle = ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
         const form = new ActionFormData()
             .title(parsedAddonTitle + " Configuration")
-            .button("CLIENT SIDE")
-            .button("SERVER SIDE")
-            .button("MORE INFO");
+            .button("Client")
+            .button("Server")
+            .button("Help");
         form.show(this.player).then((response) => {
             if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
                 return;
