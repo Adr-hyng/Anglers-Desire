@@ -6,6 +6,8 @@ overrideEverything();
 OverTakes(ItemEnchantableComponent.prototype, {
     override(sourceItem) {
         this.source = sourceItem;
+        if (!this.source)
+            throw "No Itemstack source found in custom enchantment component";
         return this;
     },
     addCustomEnchantment(enchantment) {

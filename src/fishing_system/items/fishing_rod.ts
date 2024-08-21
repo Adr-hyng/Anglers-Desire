@@ -6,6 +6,7 @@ import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 
 declare module "@minecraft/server" {
   interface EntityEquippableComponent {
+    equipment: ItemStack;
     getLuckOfSea(): Enchantment | undefined;
     getLure(): Enchantment | undefined;
     /**
@@ -24,12 +25,15 @@ const fishingRodUpgradesMap = new WeakMap<Player, HookUpgrades>();
 
 OverTakes(EntityEquippableComponent.prototype, {
   get upgrade() {
-    let rodUpgradeMap = fishingRodUpgradesMap.get(this);
-    if(!rodUpgradeMap) fishingRodUpgradesMap.set(this, rodUpgradeMap = new HookUpgrades(this));
+    const player = this.entity;
+    const itemStack = this.getEquipmentSlot(EquipmentSlot.Mainhand).getItem();
+    let rodUpgradeMap = fishingRodUpgradesMap.get(player);
+    if(!rodUpgradeMap) fishingRodUpgradesMap.set(player, rodUpgradeMap = new HookUpgrades(itemStack));
     return rodUpgradeMap;
   },
   get isEquipped() {
-    return (this.getEquipment(EquipmentSlot.Mainhand)?.typeId === MinecraftItemTypes.FishingRod);
+    this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
+    return (this.equipment?.typeId === MinecraftItemTypes.FishingRod);
   },
   getLuckOfSea(): Enchantment | undefined {
     const itemStack = this.getEquipmentSlot(EquipmentSlot.Mainhand).getItem();

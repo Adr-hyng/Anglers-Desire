@@ -1,17 +1,20 @@
 
 
 
-import { ItemEnchantableComponent } from "@minecraft/server";
+import { ItemEnchantableComponent, ItemStack } from "@minecraft/server";
 import { AvailableCustomEnchantments, FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
+import { overrideEverything } from "overrides/index";
+overrideEverything()
 
 export class HookUpgrades {
-  private _source: ItemEnchantableComponent;
-  constructor(source: ItemEnchantableComponent) {
-    this._source = source;
+  private source: ItemStack;
+  constructor(source: ItemStack) {
+    this.source = source;
   }
   // Checks if this itemEquipment has this custom upgrade
-  has(customUpgrade: AvailableCustomEnchantments): boolean {
-    return this._source.hasCustomEnchantment(FishingCustomEnchantmentType[customUpgrade]);
+  has(customEnchant: AvailableCustomEnchantments): boolean {
+    return (this.source.getComponent(ItemEnchantableComponent.componentId) as ItemEnchantableComponent)
+    .override(this.source).hasCustomEnchantment(FishingCustomEnchantmentType[customEnchant]);
   }
 }
 

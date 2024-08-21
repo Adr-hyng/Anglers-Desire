@@ -26,12 +26,13 @@ declare module "@minecraft/server" {
 OverTakes(ItemEnchantableComponent.prototype, {
   override(sourceItem: ItemStack) {
     this.source = sourceItem;
+    if(!this.source) throw "No Itemstack source found in custom enchantment component";
     return this;
   },
   addCustomEnchantment(enchantment: CustomEnchantment): void {
     if(!CustomEnchantmentTypes.get(enchantment)) throw "Custom Enchantment not implemented yet";
 
-    // Custom Enchantment not found in the selected item.
+    // Already have custom enchantment
     if(this.hasCustomEnchantment(enchantment)) return;
     const enchantmentInfo = `§r§7${enchantment.name} ${enchantment.level}`;
     this.source.setLore([...this.source.getLore(), enchantmentInfo]);

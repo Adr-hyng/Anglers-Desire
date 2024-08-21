@@ -27,6 +27,9 @@ import { IFishingOutput } from "fishing_system/outputs/IFishingOutput";
 import { db } from "constant";
 import { FormBuilder } from "utils/form_builder";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
+import { overrideEverything } from "overrides/index";
+
+overrideEverything();
 
 export type FishingStateTypes = {
     Caught: IFishingOutput;
@@ -138,11 +141,13 @@ class Fisher {
                 reeledEntityOnAir.setValue(!currentEntityCaughtByHook.isInWater && !currentEntityCaughtByHook.isOnGround);
                 if(reeledEntityOnAir.hasChanged() && reeledEntityOnAir.getCurrentValue()) {
                     if(currentEntityCaughtByHook.hasComponent(EntityItemComponent.componentId)){
-                        // Small Particle
                         this.source.dimension.spawnParticle("yn:item_water_splash_exit", this.fishingHook.stablizedLocation);
                     } else {
                         await system.waitTicks(3);
-                        // Default Particle
+                        
+                        // Upgrade Effect - Use State Controller next time with custom made event system listener
+                        if(this.fishingRod.upgrade.has("Flamekissed")) currentEntityCaughtByHook.setOnFire(5, false);
+
                         this.source.dimension.spawnParticle("yn:entity_water_splash_exit", this.fishingHook.stablizedLocation);
                     }
                     this.source.playSound('entity.generic.splash');

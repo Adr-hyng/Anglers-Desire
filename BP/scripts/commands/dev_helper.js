@@ -3,6 +3,7 @@ import { CommandHandler } from "commands/command_handler";
 import { MinecraftItemTypes, MinecraftEnchantmentTypes } from "vanilla-types/index";
 import { SendMessageTo } from "utils/utilities";
 import { overrideEverything } from "overrides/index";
+import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
 overrideEverything();
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
@@ -42,7 +43,7 @@ const command = {
                 fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Lure), level: 3 });
                 fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.LuckOfTheSea), level: 3 });
                 fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Mending), level: 1 });
-                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: "Flame kissed", level: 1 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Flamekissed);
                 player.getComponent(EntityComponentTypes.Inventory).container.addItem(fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:

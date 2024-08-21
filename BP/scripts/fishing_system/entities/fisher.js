@@ -8,6 +8,8 @@ import { Vec3 } from "utils/Vector/VectorUtils";
 import { FishingHook } from "./hook";
 import { db } from "constant";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
+import { overrideEverything } from "overrides/index";
+overrideEverything();
 const CatchingLocalPosition = new Map([
     [serverConfigurationCopy.CatchingPlacement.values[0], 2],
     [serverConfigurationCopy.CatchingPlacement.values[1], 1],
@@ -100,6 +102,8 @@ class Fisher {
                     }
                     else {
                         await system.waitTicks(3);
+                        if (this.fishingRod.upgrade.has("Flamekissed"))
+                            currentEntityCaughtByHook.setOnFire(5, false);
                         this.source.dimension.spawnParticle("yn:entity_water_splash_exit", this.fishingHook.stablizedLocation);
                     }
                     this.source.playSound('entity.generic.splash');
