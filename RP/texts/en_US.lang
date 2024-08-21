@@ -17,9 +17,10 @@ yn:fishing_got_reel.on_client_reset=§aClient Configuration has been reset.§r
 
 
 ## Items
-item.yn:fishing_got_reel:flamekissed_hook=Flamekissed Hook
-item.yn:fishing_got_reel:treasure_calls_hook=Treasure's Call Hook
-item.yn:fishing_got_reel:thunderbite_hook=Thunderbite Hook
+item.yn:fishing_got_reel:nautilus_hook=Nautilus Hook
+item.yn:fishing_got_reel:luminous_siren_hook=Luminous Siren Hook
+item.yn:fishing_got_reel:pyroclasm_hook=Pyroclasm Hook
+item.yn:fishing_got_reel:tempus_hook=Tempus Hook
 
 entity.yn:particle_spawner.name=Particle Builder
 tile.yn:fishers_table.name=Fisher's Table

@@ -1,6 +1,7 @@
 [
   "textures/blocks/workbench",
-  "textures/items/flamekissed_hook",
-  "textures/items/thunderbite_hook",
-  "textures/items/treasure_calls_hook"
+  "textures/items/nautilus_hook",
+  "textures/items/luminous_siren_hook",
+  "textures/items/pyroclasm_hook",
+  "textures/items/tempus_hook"
 ]

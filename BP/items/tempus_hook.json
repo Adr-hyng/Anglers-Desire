@@ -2,18 +2,18 @@
   "format_version": "1.20.50",
   "minecraft:item": {
     "description": {
-      "identifier": "yn:treasure_calls_hook",
+      "identifier": "yn:tempus_hook",
       "category": "Items"
     },
     "components": {
       "minecraft:max_stack_size": 1,
       "minecraft:hand_equipped": false,
       "minecraft:display_name": {
-        "value": "item.yn:fishing_got_reel:treasure_calls_hook"
+        "value": "item.yn:fishing_got_reel:tempus_hook"
       },
       "minecraft:allow_off_hand": true,
       "minecraft:icon": {
-        "texture": "treasure_calls_hook"
+        "texture": "tempus_hook"
       }
     }
   }
