@@ -13,7 +13,7 @@ export function onHookedItem(fisher) {
             const hookLandedVector = fisher.fishingHook.stablizedLocation;
             const isDeeplySubmerged = fisher.fishingHook.isDeeplySubmerged;
             const enchantmentLevel = fisher.fishingRod.getLuckOfSea()?.level ?? 0;
-            const drops = player.dimension.spawnLoot(LootTable[fisher.currentBiomeLootTable[fisher.currentBiome]](enchantmentLevel, isDeeplySubmerged), hookLandedVector);
+            const drops = player.dimension.spawnLoot(LootTable[fisher.currentBiomeLootTable[fisher.currentBiome]](enchantmentLevel, isDeeplySubmerged, fisher.fishingRod.upgrade), hookLandedVector);
             fisher.setEntityCaughtByHook(drops[0]);
             fisher.reelHook();
             localFishersCache.set(player.id, fisher);

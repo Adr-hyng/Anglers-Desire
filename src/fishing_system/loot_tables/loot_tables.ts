@@ -1,5 +1,6 @@
 import {RangeInternal, LootTableType } from "types/index";
 import { JungleCatch, DefaultCatch } from "./index";
+import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 
 
 export class LootTable {
@@ -7,11 +8,11 @@ export class LootTable {
     const deepTreasureModifier = (isDeeplySubmerged ? 34.5 : 0);
     return {LoTSModifier: LoTSLevel, deepnessModifier: deepTreasureModifier};
   }
-  static FishingJunk(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false): LootTableType {
-    return DefaultCatch.loot( this.fishingModifier(level, isDeeplySubmerged));
+  static FishingJunk(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableType {
+    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade);
   }
 
-  static FishingJungleJunk(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false): LootTableType {
-    return JungleCatch.loot( this.fishingModifier(level, isDeeplySubmerged));
+  static FishingJungleJunk(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableType {
+    return JungleCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade);
   }
 }

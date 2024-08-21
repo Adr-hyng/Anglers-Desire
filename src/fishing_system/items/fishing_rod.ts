@@ -21,28 +21,22 @@ declare module "@minecraft/server" {
   }
 }
 
-const fishingRodUpgradesMap = new WeakMap<Player, HookUpgrades>();
-
 OverTakes(EntityEquippableComponent.prototype, {
   get upgrade() {
-    const player = this.entity;
-    const itemStack = this.getEquipmentSlot(EquipmentSlot.Mainhand).getItem();
-    let rodUpgradeMap = fishingRodUpgradesMap.get(player);
-    if(!rodUpgradeMap) fishingRodUpgradesMap.set(player, rodUpgradeMap = new HookUpgrades(itemStack));
-    return rodUpgradeMap;
+    return new HookUpgrades(this.equipment);
   },
   get isEquipped() {
     this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
     return (this.equipment?.typeId === MinecraftItemTypes.FishingRod);
   },
   getLuckOfSea(): Enchantment | undefined {
-    const itemStack = this.getEquipmentSlot(EquipmentSlot.Mainhand).getItem();
-    const enchantments = (itemStack.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent);
+    this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
+    const enchantments = (this.equipment.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent);
     return enchantments.hasEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) : undefined;
   },
   getLure(): Enchantment | undefined {
-    const itemStack = this.getEquipmentSlot(EquipmentSlot.Mainhand).getItem();
-    const enchantments = (itemStack.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent);
+    this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
+    const enchantments = (this.equipment.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent);
     return enchantments.hasEnchantment(MinecraftEnchantmentTypes.Lure) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.Lure) : undefined;
   },
   damageDurability(damageApplied: number): boolean {

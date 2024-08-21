@@ -1,11 +1,15 @@
 import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
 export class JungleCatch {
-    static loot(modifier) {
+    static Loot(modifier, upgrade) {
+        const fishWeight = ((85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5)) * (upgrade.has("TreasureCalls") ? 0 : 1);
+        const junkWeight = ((10 - (modifier.LoTSModifier * 1.95)) + (modifier.deepnessModifier / 2)) + (upgrade.has("TreasureCalls") ? 50 : 0);
+        const treasureWeight = ((5 + (modifier.LoTSModifier * 2.1)) + modifier.deepnessModifier) + (upgrade.has("TreasureCalls") ? 15 : 0);
+        console.warn(fishWeight, junkWeight, treasureWeight);
         return {
             pools: [
                 {
                     "rolls": 1,
-                    "weight": (85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5),
+                    "weight": fishWeight,
                     "entries": [
                         {
                             "item": MinecraftItemTypes.Cod,
@@ -31,7 +35,7 @@ export class JungleCatch {
                 },
                 {
                     "rolls": 1,
-                    "weight": (10 - (modifier.LoTSModifier * 1.95)) + (modifier.deepnessModifier / 2),
+                    "weight": junkWeight,
                     "entries": [
                         {
                             "item": MinecraftItemTypes.LeatherBoots,
@@ -92,7 +96,7 @@ export class JungleCatch {
                 },
                 {
                     "rolls": 1,
-                    "weight": (5 + (modifier.LoTSModifier * 2.1)) + modifier.deepnessModifier,
+                    "weight": treasureWeight,
                     "entries": [
                         {
                             "item": MinecraftItemTypes.NautilusShell,
