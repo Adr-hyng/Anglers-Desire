@@ -7,6 +7,7 @@ import {overrideEverything} from "overrides/index";
 import { MinecraftBlockTypes } from "vanilla-types/index";
 import { FishingHook } from "fishing_system/entities/hook";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
+import { onHookedItem } from "./on_hook_item";
 overrideEverything();
 
 const HOOK_SUBMERGE_OFFSET: number = 0.2;
@@ -57,7 +58,8 @@ export async function onHookLanded(player: Player): Promise<void> {
   }
   if(!isInWater) return;
   const expirationTimer = new Timer(parseInt(serverConfigurationCopy.expirationTimer.defaultValue as string) * TicksPerSecond);
-  const delayTimer = new Timer(0.0 * TicksPerSecond); 
+  const delayValue = (fisher.fishingRod.upgrade.has("Tempus") ? 0.5 : 0.1);
+  const delayTimer = new Timer(delayValue * TicksPerSecond); 
 
   const FishingStateIndicator = fisher.fishingOutputManager;
   const hookSubmergeState = new StateController(fisher.fishingHook.isSubmerged);
@@ -71,9 +73,9 @@ export async function onHookLanded(player: Player): Promise<void> {
         if(!delayTimer.isDone()) {
           delayTimer.update();
         } else {
+          FishingStateIndicator.Escaped.run();
           fisher.canBeReeled = false;
           delayTimer.reset();
-          FishingStateIndicator.Escaped.run();
         }
       }
       const hookEntity = fisher.fishingHook;
@@ -97,8 +99,11 @@ export async function onHookLanded(player: Player): Promise<void> {
         throw new Error("AFK Fishing detected");
       }
     } catch (e){
+      if((fisher.canBeReeled || fisher.fishingHook.isSubmerged) && !fisher.caughtByHook?.isValid()) onHookedItem(fisher);
       Logger.error(e, e.stack);
       system.clearRun(tuggingEvent);
+      fisher.fishingHook.isSubmerged = false;
+      fisher.canBeReeled = false;
       localFishersCache.set(player.id, fisher);
       FishingStateIndicator.Escaped.reset().then((_) => {});
       return;

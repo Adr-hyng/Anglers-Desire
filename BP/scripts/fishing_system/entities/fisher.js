@@ -71,8 +71,7 @@ class Fisher {
         this.gainExperience().then((_) => { });
         const currentEntityCaughtByHook = this.caughtByHook;
         const currentPlayer = this.source;
-        if (currentEntityCaughtByHook.location.y >= currentPlayer.location.y)
-            throw new Error("You cannot reel an entity at this angle. You need to be above it for the pulling force to be effective.");
+        const stablizedLocation = this.fishingHook.stablizedLocation;
         const fishHealth = currentEntityCaughtByHook.getComponent(EntityHealthComponent.componentId);
         let currentReelingProcess = 0;
         const startPoint = currentEntityCaughtByHook.location;
@@ -84,7 +83,7 @@ class Fisher {
         const magnitude = endPoint.distance(startPoint);
         const controlPoint = new Vec3((startPoint.x + endPoint.x) / 2, startPoint.y + (magnitude * 1.65), (startPoint.z + endPoint.z) / 2);
         const reeledEntityOnAir = new StateController(false);
-        let reelingEventInterval = system.runInterval(async () => {
+        let reelingEventInterval = system.runInterval(() => {
             Logger.info("REELING INTERVAL RUNNING. ID=", reelingEventInterval);
             try {
                 if (fishHealth?.currentValue <= 0)
@@ -102,10 +101,11 @@ class Fisher {
                         this.source.dimension.spawnParticle("yn:item_water_splash_exit", this.fishingHook.stablizedLocation);
                     }
                     else {
-                        await system.waitTicks(3);
-                        if (this.fishingRod.upgrade.has("Pyroclasm"))
-                            currentEntityCaughtByHook.setOnFire(5, false);
-                        this.source.dimension.spawnParticle("yn:entity_water_splash_exit", this.fishingHook.stablizedLocation);
+                        system.waitTicks(3).then(() => {
+                            this.source.dimension.spawnParticle("yn:entity_water_splash_exit", stablizedLocation);
+                            if (this.fishingRod.upgrade.has("Pyroclasm"))
+                                currentEntityCaughtByHook.setOnFire(5, true);
+                        });
                     }
                     this.source.playSound('entity.generic.splash');
                 }

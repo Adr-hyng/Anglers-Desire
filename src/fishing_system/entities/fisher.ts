@@ -108,8 +108,8 @@ class Fisher {
         this.gainExperience().then((_)=> {});
         const currentEntityCaughtByHook = this.caughtByHook;
         const currentPlayer = this.source;
-
-        if(currentEntityCaughtByHook.location.y >= currentPlayer.location.y) throw new Error("You cannot reel an entity at this angle. You need to be above it for the pulling force to be effective.");
+        const stablizedLocation = this.fishingHook.stablizedLocation;
+        
         const fishHealth = (currentEntityCaughtByHook.getComponent(EntityHealthComponent.componentId) as EntityHealthComponent);
         let currentReelingProcess: number = 0;
         const startPoint: Vector3 = currentEntityCaughtByHook.location; // 1st point
@@ -125,11 +125,11 @@ class Fisher {
             (startPoint.x + endPoint.x) / 2,
             startPoint.y + (magnitude * 1.65),
             (startPoint.z + endPoint.z) / 2
-        ); // 3rd point
+        );
 
         const reeledEntityOnAir = new StateController(false); // state controller for when reeled entity goes into air after being in water then spawn particle
 
-        let reelingEventInterval: number = system.runInterval( async () => {
+        let reelingEventInterval: number = system.runInterval( () => {
             Logger.info("REELING INTERVAL RUNNING. ID=", reelingEventInterval);
             try {
                 if(fishHealth?.currentValue <= 0) throw new Error("Caught fish died while in mid air");
@@ -145,12 +145,12 @@ class Fisher {
                     if(currentEntityCaughtByHook.hasComponent(EntityItemComponent.componentId)){
                         this.source.dimension.spawnParticle("yn:item_water_splash_exit", this.fishingHook.stablizedLocation);
                     } else {
-                        await system.waitTicks(3);
+                        system.waitTicks(3).then(() => {
+                            // Upgrade Effect - Use State Controller next time with custom made event system listener
+                            this.source.dimension.spawnParticle("yn:entity_water_splash_exit", stablizedLocation);
+                            if(this.fishingRod.upgrade.has("Pyroclasm")) currentEntityCaughtByHook.setOnFire(5, true);
+                        });
                         
-                        // Upgrade Effect - Use State Controller next time with custom made event system listener
-                        if(this.fishingRod.upgrade.has("Pyroclasm")) currentEntityCaughtByHook.setOnFire(5, false);
-
-                        this.source.dimension.spawnParticle("yn:entity_water_splash_exit", this.fishingHook.stablizedLocation);
                     }
                     this.source.playSound('entity.generic.splash');
                 }

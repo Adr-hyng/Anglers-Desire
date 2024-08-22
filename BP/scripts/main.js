@@ -1,5 +1,5 @@
-import { world, system, Player, ScriptEventSource } from "@minecraft/server";
-import { ADDON_IDENTIFIER, fetchFisher } from "./constant";
+import { world, system, Player, ScriptEventSource, WeatherType } from "@minecraft/server";
+import { ADDON_IDENTIFIER, db, fetchFisher } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { overrideEverything } from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
@@ -55,10 +55,22 @@ world.beforeEvents.itemUse.subscribe((event) => {
                     fisher.particleVectorLocations.clear();
                 });
             }
-            if (fisher.canBeReeled || fisher.fishingHook.isSubmerged)
+            if ((fisher.canBeReeled || fisher.fishingHook.isSubmerged) && !fisher.caughtByHook?.isValid())
                 onHookedItem(fisher);
         });
     }, 0);
+});
+world.afterEvents.weatherChange.subscribe((e) => {
+    if ([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather))
+        db.set("WorldIsRaining", true);
+    else if (!([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather)))
+        db.set("WorldIsRaining", false);
+});
+world.beforeEvents.weatherChange.subscribe((e) => {
+    if ([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather))
+        db.set("WorldIsRaining", true);
+    else if (!([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather)))
+        db.set("WorldIsRaining", false);
 });
 system.afterEvents.scriptEventReceive.subscribe((event) => {
     if (event.sourceType !== ScriptEventSource.Entity)

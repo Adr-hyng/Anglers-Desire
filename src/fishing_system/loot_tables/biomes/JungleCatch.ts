@@ -1,14 +1,48 @@
-import { LootTableType } from "types/loot_table_type";
+import { EntryContent, LootTableContent } from "types/loot_table_type";
 import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { ModifierResult } from "./types";
 import { HookUpgrades } from "fishing_system/upgrades/upgrades";
+import { world } from "@minecraft/server";
+import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 
 export class JungleCatch {
-  static Loot (modifier: ModifierResult, upgrade: HookUpgrades): LootTableType {
+  private static upgrade: HookUpgrades;
+  private static OnLuminousSirenUpgradeLoot(): EntryContent[] {
+    if(!this.upgrade.has("LuminousSiren")) return [];
+    return [
+      {
+        "item": MinecraftItemTypes.Air,
+        "weight": 7,
+        "toEntity": MinecraftEntityTypes.GlowSquid
+      },
+      {
+        "item": MinecraftItemTypes.Air,
+        "weight": 5,
+        "toEntity": MinecraftEntityTypes.Guardian
+      },
+      {
+        "item": MinecraftItemTypes.Air,
+        "weight": 1,
+        "toEntity": MinecraftEntityTypes.Axolotl
+      },
+    ]
+  }
+  private static OnRainEventLoot(): EntryContent[] {
+    const IsRainingChanceModifier = world.IsRaining;
+    if(!IsRainingChanceModifier) return [];
+    return [
+      {
+        "item": MinecraftItemTypes.InkSac,
+        "weight": 35,
+        "toEntity": MinecraftEntityTypes.Squid
+      },
+    ];
+  }
+  static Loot (modifier: ModifierResult, upgrade: HookUpgrades): LootTableContent {
+    this.upgrade = upgrade;
     const fishWeight = ((85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5)) * (upgrade.has("Nautilus") ? 0 : 1);
     const junkWeight = ((10 - (modifier.LoTSModifier * 1.95)) + (modifier.deepnessModifier / 2)) + (upgrade.has("Nautilus") ? 50 : 0);
     const treasureWeight = ((5 + (modifier.LoTSModifier * 2.1)) + modifier.deepnessModifier) + (upgrade.has("Nautilus") ? 15 : 0);
-    console.warn(fishWeight, junkWeight, treasureWeight);
     return {
       pools: [
         {
@@ -34,7 +68,9 @@ export class JungleCatch {
               "item": MinecraftItemTypes.Pufferfish,
               "weight": 0,
               "toEntity": MinecraftEntityTypes.Pufferfish
-            }
+            },
+            ...this.OnRainEventLoot(),
+            ...this.OnLuminousSirenUpgradeLoot()
           ]
         },
         {
@@ -117,6 +153,10 @@ export class JungleCatch {
             {
               "item": MinecraftItemTypes.Saddle,
               "weight": 5
+            },
+            {
+              "item": MyCustomItemTypes.LuminousSirenHook,
+              "weight": 4 * (world.IsRaining ? 2 : 1)
             },
             {
               "item": MinecraftItemTypes.Bow,

@@ -1,5 +1,5 @@
-import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource} from "@minecraft/server";
-import { ADDON_IDENTIFIER, fetchFisher } from "./constant";
+import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource, WeatherType} from "@minecraft/server";
+import { ADDON_IDENTIFIER, db, fetchFisher } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { Fisher } from "./fishing_system/entities/fisher";
 
@@ -21,7 +21,7 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
       CommandObject.execute(player as Player, ['show']);
     }
   });
-})
+});
 
 world.afterEvents.playerSpawn.subscribe((e) => {
   if(!e.initialSpawn) return;
@@ -55,9 +55,19 @@ world.beforeEvents.itemUse.subscribe((event) => {
           fisher.particleVectorLocations.clear();
         });
       }
-      if(fisher.canBeReeled || fisher.fishingHook.isSubmerged) onHookedItem(fisher);
+      if((fisher.canBeReeled || fisher.fishingHook.isSubmerged) && !fisher.caughtByHook?.isValid()) onHookedItem(fisher);
     });
   }, 0);
+});
+
+world.afterEvents.weatherChange.subscribe((e) => {
+  if([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather)) db.set("WorldIsRaining", true);
+  else if(!([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather))) db.set("WorldIsRaining", false);
+});
+
+world.beforeEvents.weatherChange.subscribe((e) => {
+  if([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather)) db.set("WorldIsRaining", true);
+  else if(!([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather))) db.set("WorldIsRaining", false);
 });
 
 system.afterEvents.scriptEventReceive.subscribe((event: ScriptEventCommandMessageAfterEvent) => {

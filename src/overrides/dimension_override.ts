@@ -3,7 +3,7 @@ import { Enchantment, EnchantmentSlot, Dimension, Vector3, Entity, ItemStack, It
 import { randomEnchantByLevel} from 'enchantment_system/enchantment_table';
 import { OverTakes } from "./partial_overtakes";
 import { Logger, Random } from 'utils/index';
-import { RangeInternal, LootTableType, PollsTableType} from 'types/index';
+import { RangeInternal, LootTableContent, PollsTableContent} from 'types/index';
 import { EquipmentMaterialType, ItemMaterialType } from 'enchantment_system/enchantability';
 import { MinecraftItemTypes } from 'vanilla-types/index';
 
@@ -13,16 +13,16 @@ import { MinecraftItemTypes } from 'vanilla-types/index';
 */
 declare module "@minecraft/server" {
   interface Dimension {
-    spawnLoot(loot: LootTableType, location: Vector3): Entity[];
+    spawnLoot(loot: LootTableContent, location: Vector3): Entity[];
   }
 }
 
 
 OverTakes(Dimension.prototype, {
-  spawnLoot(loot: LootTableType, location: Vector3): Entity[] {
+  spawnLoot(loot: LootTableContent, location: Vector3): Entity[] {
     try {
       let spawnedItems: Entity[] = [];
-      const rollPools = Random.weighted<PollsTableType>();
+      const rollPools = Random.weighted<PollsTableContent>();
       const rollEntries = Random.weighted<ItemStack>();
 
       if(!loot.pools.length) throw new Error("loot: loot pools is empty");
@@ -31,7 +31,7 @@ OverTakes(Dimension.prototype, {
         rollPools.addEntry(pool, pool.weight ?? 100);
       }
       
-      const pool: PollsTableType = rollPools.getRandom();
+      const pool: PollsTableContent = rollPools.getRandom();
       // Some errors in case rolls does not exist or is <= 0
       if(!pool?.rolls) throw new Error(`/'rolls/' is missing at pools[${loot.pools.indexOf(pool)}]`);
       if((pool.rolls as number) <= 0) throw new Error(`>>rolls: ${pool.rolls}<< is very low, it should be at least 1, at pools[${loot.pools.indexOf(pool)}]`);

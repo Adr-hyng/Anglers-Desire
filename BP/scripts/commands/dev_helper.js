@@ -1,6 +1,6 @@
-import { EntityComponentTypes, EquipmentSlot, ItemComponentTypes, ItemStack } from "@minecraft/server";
+import { EnchantmentTypes, EntityComponentTypes, EquipmentSlot, ItemComponentTypes, ItemStack, MolangVariableMap } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
-import { MinecraftItemTypes } from "vanilla-types/index";
+import { MinecraftEnchantmentTypes } from "vanilla-types/index";
 import { SendMessageTo } from "utils/utilities";
 import { overrideEverything } from "overrides/index";
 import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
@@ -10,6 +10,7 @@ var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
     REQUIRED_PARAMETER["GET"] = "get";
     REQUIRED_PARAMETER["TEST"] = "test";
+    REQUIRED_PARAMETER["PARTICLE"] = "particle";
 })(REQUIRED_PARAMETER || (REQUIRED_PARAMETER = {}));
 const command = {
     name: 'dev_helper',
@@ -22,6 +23,7 @@ const command = {
         Usage:
         > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.GET} = GETS an enchanted fishing rod for development.
         > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.TEST} = TEST a Working-in-progress features.
+        > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.PARTICLE} = TEST a Working-in-progress particle.
         `).replaceAll("        ", "");
     },
     execute(player, args) {
@@ -42,6 +44,9 @@ const command = {
         switch (selectedReqParam) {
             case REQUIRED_PARAMETER.GET:
                 fishingRod = fetchFisher(player).fishingRod.getEquipment(EquipmentSlot.Mainhand);
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Lure), level: 3 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.LuckOfTheSea), level: 3 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Mending), level: 1 });
                 fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.Pyroclasm.name, level: 1 });
                 fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.Nautilus.name, level: 2 });
                 fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.LuminousSiren.name, level: 3 });
@@ -49,13 +54,18 @@ const command = {
                 player.getComponent(EntityComponentTypes.Inventory).container.setItem(player.selectedSlotIndex, fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
-                fishingRod = new ItemStack(MinecraftItemTypes.FishingRod, 1);
-                const enchantable = fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod);
-                enchantable.addCustomEnchantment(FishingCustomEnchantmentType.Pyroclasm);
-                enchantable.addCustomEnchantment(FishingCustomEnchantmentType.Nautilus);
-                enchantable.addCustomEnchantment(FishingCustomEnchantmentType.LuminousSiren);
-                enchantable.addCustomEnchantment(FishingCustomEnchantmentType.Tempus);
+                fishingRod = new ItemStack("minecraft:fishing_rod", 1);
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Lure), level: 1 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Mending), level: 1 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.Tempus.name, level: 1 });
                 player.getComponent(EntityComponentTypes.Inventory).container.addItem(fishingRod);
+                break;
+            case REQUIRED_PARAMETER.PARTICLE:
+                const molang = new MolangVariableMap();
+                molang.setFloat("max_lifetime", parseInt(args[1]) ?? 2);
+                molang.setFloat("splash_spread", parseInt(args[2]) ?? 5);
+                molang.setFloat("splash_radius", parseInt(args[3]) ?? 3);
+                player.dimension.spawnParticle("yn:test_splash", { x: player.location.x + 2, y: player.location.y - 2, z: player.location.z + 2 }, molang);
                 break;
             default:
                 break;
