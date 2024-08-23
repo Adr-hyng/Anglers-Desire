@@ -1,9 +1,45 @@
 import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
+import { world } from "@minecraft/server";
 export class DefaultCatch {
+    static OnLuminousSirenUpgradeLoot() {
+        if (!this.upgrade.has("LuminousSiren"))
+            return [];
+        return [
+            {
+                "item": MinecraftItemTypes.Air,
+                "weight": 5,
+                "toEntity": MinecraftEntityTypes.GlowSquid
+            },
+            {
+                "item": MinecraftItemTypes.Air,
+                "weight": 2,
+                "toEntity": MinecraftEntityTypes.Guardian
+            }
+        ];
+    }
+    static OnRainEventLoot() {
+        const IsRainingChanceModifier = world.IsRaining;
+        if (!IsRainingChanceModifier)
+            return [
+                {
+                    "item": MinecraftItemTypes.Air,
+                    "weight": 10,
+                    "toEntity": MinecraftEntityTypes.Squid
+                }
+            ];
+        return [
+            {
+                "item": MinecraftItemTypes.Air,
+                "weight": 18,
+                "toEntity": MinecraftEntityTypes.Squid
+            }
+        ];
+    }
     static Loot(modifier, upgrade) {
-        const fishWeight = ((85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5)) * (upgrade.has("TreasureCalls") ? 0 : 1);
-        const junkWeight = ((10 - (modifier.LoTSModifier * 1.95)) + (modifier.deepnessModifier / 2)) + (upgrade.has("TreasureCalls") ? 50 : 0);
-        const treasureWeight = ((5 + (modifier.LoTSModifier * 2.1)) + modifier.deepnessModifier) + (upgrade.has("TreasureCalls") ? 15 : 0);
+        this.upgrade = upgrade;
+        const fishWeight = ((85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5)) * (upgrade.has("Nautilus") ? 0 : 1);
+        const junkWeight = ((10 - (modifier.LoTSModifier * 1.95)) + (modifier.deepnessModifier / 2)) + (upgrade.has("Nautilus") ? 50 : 0);
+        const treasureWeight = ((5 + (modifier.LoTSModifier * 2.1)) + modifier.deepnessModifier) + (upgrade.has("Nautilus") ? 15 : 0);
         return {
             "pools": [
                 {
@@ -29,7 +65,9 @@ export class DefaultCatch {
                             "item": MinecraftItemTypes.Pufferfish,
                             "weight": 13,
                             "toEntity": MinecraftEntityTypes.Pufferfish
-                        }
+                        },
+                        ...this.OnRainEventLoot(),
+                        ...this.OnLuminousSirenUpgradeLoot(),
                     ]
                 },
                 {

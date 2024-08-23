@@ -1,10 +1,12 @@
-import { world, system, Player, ScriptEventSource, WeatherType } from "@minecraft/server";
+import { world, system, Player, ScriptEventSource, WeatherType, EquipmentSlot } from "@minecraft/server";
 import { ADDON_IDENTIFIER, db, fetchFisher } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { overrideEverything } from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
 import { Logger, SendMessageTo } from "utils/index";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
+import { MinecraftItemTypes } from "vanilla-types/index";
+import { MyCustomBlockTypes } from "fishing_system/blocks/custom_blocks";
 overrideEverything();
 world.beforeEvents.worldInitialize.subscribe((e) => {
     e.blockComponentRegistry.registerCustomComponent('yn:on_interact_with_fisher_table', {
@@ -12,10 +14,18 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
             const player = arg.player;
             if (!player?.isValid())
                 return;
-            if (arg.block.typeId !== 'yn:fishers_table')
+            if (arg.block.typeId !== MyCustomBlockTypes.FishersTable)
                 return;
-            const { default: CommandObject } = await import(`./commands/config.js`);
-            CommandObject.execute(player, ['show']);
+            const equipment = player.equippedTool(EquipmentSlot.Mainhand);
+            try {
+                if (equipment.typeId !== MinecraftItemTypes.FishingRod)
+                    throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested";
+                player.Configuration.showInspectScreen(equipment);
+            }
+            catch (e) {
+                const { default: CommandObject } = await import(`./commands/config.js`);
+                CommandObject.execute(player, ['show']);
+            }
         }
     });
 });

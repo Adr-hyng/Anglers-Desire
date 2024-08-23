@@ -21,7 +21,7 @@ export const serverConfiguration = {
 };
 
 export let serverConfigurationCopy = cloneConfiguration(serverConfiguration);
-export let setServerConfiguration = (newServerConfig: typeof serverConfiguration) => serverConfigurationCopy = newServerConfig;
+export let setServerConfiguration = (newServerConfig) => serverConfigurationCopy = newServerConfig;
 export let resetServerConfiguration = () => serverConfigurationCopy = cloneConfiguration(serverConfiguration);
 
 // version (do not change)

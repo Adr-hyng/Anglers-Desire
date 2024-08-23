@@ -11,7 +11,7 @@
           "type": "int",
           "client_sync": true,
           "range": [0, 2],
-          "default": 0
+          "default": 1
         }
       }
     },

@@ -1,4 +1,4 @@
-import { Player } from "@minecraft/server";
+import { ContainerSlot, EntityEquippableComponent, EquipmentSlot, ItemComponent, ItemComponentTypes, ItemStack, Player } from "@minecraft/server";
 import { ActionFormData, ActionFormResponse, FormCancelationReason, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
 import { cloneConfiguration, ConfigurationCollections_DB, ConfigurationTypes} from "./configuration_handler";
 import {ADDON_NAME, db, localFishersCache, fetchFisher} from "constant";
@@ -8,7 +8,12 @@ import { Fisher } from "fishing_system/entities/fisher";
 import { SendMessageTo } from "utils/index";
 import { FormBuilder } from "utils/form_builder";
 import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
+import { CustomEnchantment, CustomEnchantmentTypes, FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
 
+type DisassembleFormContent = {
+  key: string,
+  value: boolean;
+};
 export class __Configuration {
   private player: Player;
   private source: Fisher;
@@ -43,13 +48,52 @@ export class __Configuration {
     }
     else throw new Error("Database not found");
   }
+
+  showInspectScreen(equippedFishingRod: ContainerSlot) {
+    const form = new ModalFormData();
+    const fishingRod = equippedFishingRod.getItem();
+    const enchantments = fishingRod.enchantment.override(fishingRod);
+    const allCustomEnchantments = CustomEnchantmentTypes.getAll();
+
+    const availableEnchantments: Map<string, boolean> = new Map();
+    const IsEnchantmentAvailable = (customEnchantment: CustomEnchantment) => Boolean(enchantments.getCustomEnchantment(customEnchantment));
+    form.title("Fishing Rod Information");
+    for(const customEnchantment of allCustomEnchantments) {
+      // Temporary durability usage (Not yet implemented)
+      const isAvailable = IsEnchantmentAvailable(customEnchantment);
+      availableEnchantments.set(customEnchantment.name, isAvailable);
+      form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name} (${50}/${100})`, false);
+    }
+    form.submitButton("Disassemble");
+    form.show(this.player).then( (response) => {
+      if (!response.formValues) return;
+      if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
+        return;
+      }
+      let hasChanges = false;
+      let index = 0;
+      const validEnchantmentsToRemove: DisassembleFormContent[] = [];
+      for(const [key, availableValue] of availableEnchantments.entries()) {
+        const newVal = <boolean>response.formValues[index];
+        if(newVal === availableValue && newVal) { hasChanges = true; }
+        validEnchantmentsToRemove.push({key: key, value: newVal && availableValue});
+        index++;
+      }
+      if (!hasChanges)
+      for(const enchantmentToRemove of validEnchantmentsToRemove) {
+        if(!enchantmentToRemove.value) continue;
+        enchantments.override(fishingRod).removeCustomEnchantment(CustomEnchantmentTypes.get({name: enchantmentToRemove.key, level: 1}));
+        equippedFishingRod.setItem(fishingRod);
+      }
+    });
+  }
   
   showMainScreen() {
     const form = new ActionFormData()
     .title("Fisher's Table")
-    .button("Open Configuration")
-    .button("Upgrade Fishing Rod")
-    .button("Open Book");
+    .button("Configuration")
+    .button("Upgrade")
+    .button("Craft");
     form.show(this.player).then( (response: ActionFormResponse) => {
       if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) return;
       switch(response.selection) {

@@ -1,8 +1,11 @@
-import { GameMode, Player } from "@minecraft/server";
+import { GameMode, Player, EntityEquippableComponent } from "@minecraft/server";
 import { __Configuration } from "fishing_system/configuration/configuration_screen";
 import { OverTakes } from "overrides/partial_overtakes";
 const screenConfigs = new WeakMap();
 OverTakes(Player.prototype, {
+    equippedTool(equipmentSlot) {
+        return this.getComponent(EntityEquippableComponent.componentId).getEquipmentSlot(equipmentSlot).getItem();
+    },
     isSurvival() {
         return this.getGameMode() === GameMode.survival;
     },

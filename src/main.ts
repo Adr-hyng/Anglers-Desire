@@ -1,4 +1,4 @@
-import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource, WeatherType, EntityInventoryComponent} from "@minecraft/server";
+import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource, WeatherType, EntityInventoryComponent, EquipmentSlot} from "@minecraft/server";
 import { ADDON_IDENTIFIER, db, fetchFisher } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { Fisher } from "./fishing_system/entities/fisher";
@@ -7,6 +7,8 @@ import {overrideEverything} from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
 import { Logger, SendMessageTo } from "utils/index";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
+import { MinecraftItemTypes } from "vanilla-types/index";
+import { MyCustomBlockTypes } from "fishing_system/blocks/custom_blocks";
 overrideEverything();
 
 world.beforeEvents.worldInitialize.subscribe((e) => {
@@ -14,11 +16,18 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
     async onPlayerInteract(arg){
       const player = <Player> arg.player;
       if(!player?.isValid()) return;
-      if(arg.block.typeId !== 'yn:fishers_table') return;
-      const {
-        default: CommandObject
-      } = await import(`./commands/config.js`);
-      CommandObject.execute(player as Player, ['show']);
+      if(arg.block.typeId !== MyCustomBlockTypes.FishersTable) return;
+
+      const equipment = player.equippedTool(EquipmentSlot.Mainhand);
+      try {
+        if(equipment.typeId !== MinecraftItemTypes.FishingRod) throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested"
+        player.Configuration.showInspectScreen(equipment);
+      } catch (e) {
+        const {
+          default: CommandObject
+        } = await import(`./commands/config.js`);
+        CommandObject.execute(player as Player, ['show']);
+      }
     }
   });
 });

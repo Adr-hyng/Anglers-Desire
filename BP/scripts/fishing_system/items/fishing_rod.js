@@ -4,20 +4,20 @@ import { MinecraftEnchantmentTypes, MinecraftItemTypes } from "vanilla-types/ind
 import { OverTakes } from "overrides/partial_overtakes";
 import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 OverTakes(EntityEquippableComponent.prototype, {
+    get equipment() {
+        return this.getEquipment(EquipmentSlot.Mainhand);
+    },
     get upgrade() {
         return new HookUpgrades(this.equipment);
     },
     get isEquipped() {
-        this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
         return (this.equipment?.typeId === MinecraftItemTypes.FishingRod);
     },
     getLuckOfSea() {
-        this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
         const enchantments = this.equipment.getComponent(ItemComponentTypes.Enchantable);
         return enchantments.hasEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) : undefined;
     },
     getLure() {
-        this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
         const enchantments = this.equipment.getComponent(ItemComponentTypes.Enchantable);
         return enchantments.hasEnchantment(MinecraftEnchantmentTypes.Lure) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.Lure) : undefined;
     },

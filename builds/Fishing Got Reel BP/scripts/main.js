@@ -1,10 +1,12 @@
-import { world, system, Player, ScriptEventSource } from "@minecraft/server";
-import { ADDON_IDENTIFIER, fetchFisher } from "./constant";
+import { world, system, Player, ScriptEventSource, WeatherType, EquipmentSlot } from "@minecraft/server";
+import { ADDON_IDENTIFIER, db, fetchFisher } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { overrideEverything } from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
 import { Logger, SendMessageTo } from "utils/index";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
+import { MinecraftItemTypes } from "vanilla-types/index";
+import { MyCustomBlockTypes } from "fishing_system/blocks/custom_blocks";
 overrideEverything();
 world.beforeEvents.worldInitialize.subscribe((e) => {
     e.blockComponentRegistry.registerCustomComponent('yn:on_interact_with_fisher_table', {
@@ -12,10 +14,16 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
             const player = arg.player;
             if (!player?.isValid())
                 return;
-            if (arg.block.typeId !== 'yn:fishers_table')
-                return;
-            const { default: CommandObject } = await import(`./commands/config.js`);
-            CommandObject.execute(player, ['show']);
+            const equipment = player.equippedTool(EquipmentSlot.Mainhand);
+            if (equipment?.typeId === MinecraftItemTypes.FishingRod) {
+                player.Configuration.showInspectScreen(equipment);
+            }
+            else {
+                if (arg.block.typeId !== MyCustomBlockTypes.FishersTable)
+                    return;
+                const { default: CommandObject } = await import(`./commands/config.js`);
+                CommandObject.execute(player, ['show']);
+            }
         }
     });
 });
@@ -55,10 +63,22 @@ world.beforeEvents.itemUse.subscribe((event) => {
                     fisher.particleVectorLocations.clear();
                 });
             }
-            if (fisher.canBeReeled || fisher.fishingHook.isSubmerged)
+            if ((fisher.canBeReeled || fisher.fishingHook.isSubmerged) && !fisher.caughtByHook?.isValid())
                 onHookedItem(fisher);
         });
     }, 0);
+});
+world.afterEvents.weatherChange.subscribe((e) => {
+    if ([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather))
+        db.set("WorldIsRaining", true);
+    else if (!([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather)))
+        db.set("WorldIsRaining", false);
+});
+world.beforeEvents.weatherChange.subscribe((e) => {
+    if ([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather))
+        db.set("WorldIsRaining", true);
+    else if (!([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather)))
+        db.set("WorldIsRaining", false);
 });
 system.afterEvents.scriptEventReceive.subscribe((event) => {
     if (event.sourceType !== ScriptEventSource.Entity)

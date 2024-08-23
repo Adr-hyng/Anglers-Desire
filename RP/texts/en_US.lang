@@ -14,8 +14,6 @@ yn:fishing_got_reel.on_caught_command_404=§cError while fetching %1 command: %2
 yn:fishing_got_reel.on_caught_main_command_not_found=§cInvalid Command: §l%1§r%2§cCheck If The Command Actually Exists. Use /scriptevent %3 help
 yn:fishing_got_reel.on_client_reset=§aClient Configuration has been reset.§r
 
-
-
 ## Items
 item.yn:fishing_got_reel:nautilus_hook=Nautilus Hook
 item.yn:fishing_got_reel:luminous_siren_hook=Luminous Hook

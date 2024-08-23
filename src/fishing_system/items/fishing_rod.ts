@@ -6,7 +6,7 @@ import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 
 declare module "@minecraft/server" {
   interface EntityEquippableComponent {
-    equipment: ItemStack;
+    get equipment(): ItemStack;
     getLuckOfSea(): Enchantment | undefined;
     getLure(): Enchantment | undefined;
     /**
@@ -22,20 +22,20 @@ declare module "@minecraft/server" {
 }
 
 OverTakes(EntityEquippableComponent.prototype, {
+  get equipment() {
+    return this.getEquipment(EquipmentSlot.Mainhand);
+  },
   get upgrade() {
     return new HookUpgrades(this.equipment);
   },
   get isEquipped() {
-    this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
     return (this.equipment?.typeId === MinecraftItemTypes.FishingRod);
   },
   getLuckOfSea(): Enchantment | undefined {
-    this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
     const enchantments = (this.equipment.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent);
     return enchantments.hasEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) : undefined;
   },
   getLure(): Enchantment | undefined {
-    this.equipment = this.getEquipment(EquipmentSlot.Mainhand);
     const enchantments = (this.equipment.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent);
     return enchantments.hasEnchantment(MinecraftEnchantmentTypes.Lure) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.Lure) : undefined;
   },

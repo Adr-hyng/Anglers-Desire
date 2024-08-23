@@ -8,6 +8,10 @@ export function onHookedItem(fisher) {
     const player = fisher.source;
     system.run(() => {
         try {
+            fisher.canBeReeled = false;
+            fisher.fishingHook.isSubmerged = false;
+            if (fisher.fishingHook.stablizedLocation.y >= player.location.y + 5)
+                return;
             if (fisher.fishingRod.damageDurability(5))
                 return;
             const hookLandedVector = fisher.fishingHook.stablizedLocation;

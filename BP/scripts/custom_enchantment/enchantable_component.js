@@ -49,7 +49,7 @@ OverTakes(ItemEnchantableComponent.prototype, {
             throw "No Itemstack source found in custom enchantment component";
         const index = this.source.getLore().findIndex(lore => lore.startsWith(`§r§7${enchantment.name}`));
         if (index === -1)
-            return;
+            return null;
         const [_, name, level] = this.source.getLore()[index].match(new RegExp(`(§r§7.*?)([IVXLCDM]+)$`));
         if (!name)
             throw "extraction error with regex in custom enchantment";
@@ -66,5 +66,10 @@ OverTakes(ItemEnchantableComponent.prototype, {
             availableEnchantments.push(CustomEnchantmentTypes.get({ name: eName.replace("§r§7", "").slice(0, -1), level: RomanNumericConverter.toNumeric(level) }));
         }
         return availableEnchantments;
+    },
+    removeCustomEnchantment(enchantment) {
+        if (!this.source)
+            throw "No Itemstack source found in custom enchantment component";
+        this.source.setLore(this.source.getLore().filter(lore => !(lore.startsWith(`§r§7${enchantment.name}`))));
     }
 });

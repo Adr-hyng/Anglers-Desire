@@ -5,6 +5,7 @@ import { clientConfiguration } from "./client_configuration";
 import { FishingOutputBuilder } from "fishing_system/outputs/output_builder";
 import { SendMessageTo } from "utils/index";
 import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
+import { CustomEnchantmentTypes } from "custom_enchantment/custom_enchantment_types";
 export class __Configuration {
     constructor(player) {
         this.player = player;
@@ -37,12 +38,52 @@ export class __Configuration {
         else
             throw new Error("Database not found");
     }
+    showInspectScreen(equippedFishingRod) {
+        const form = new ModalFormData();
+        const enchantments = equippedFishingRod.enchantment.override(equippedFishingRod);
+        const allCustomEnchantments = CustomEnchantmentTypes.getAll();
+        const availableEnchantments = new Map();
+        const IsEnchantmentAvailable = (customEnchantment) => Boolean(enchantments.getCustomEnchantment(customEnchantment));
+        form.title("Fishing Rod Information");
+        for (const customEnchantment of allCustomEnchantments) {
+            const isAvailable = IsEnchantmentAvailable(customEnchantment);
+            availableEnchantments[customEnchantment.name] = isAvailable;
+            form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name} (${50}/${100})`, false);
+        }
+        form.submitButton("Disassemble");
+        form.show(this.player).then((response) => {
+            if (!response.formValues)
+                return;
+            if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
+                return;
+            }
+            let hasChanges = false;
+            let index = 0;
+            const validEnchantmentsToRemove = [];
+            console.warn("Meow", JSON.stringify(availableEnchantments));
+            for (const [key, availableValue] of availableEnchantments.entries()) {
+                console.warn("SETP");
+                const newVal = response.formValues[index];
+                if (newVal === availableValue && newVal) {
+                    hasChanges = true;
+                }
+                validEnchantmentsToRemove.push({ key: key, value: hasChanges });
+                index++;
+            }
+            console.warn("HAS CHANGED " + hasChanges);
+            if (hasChanges) {
+                for (const enchantmentToRemove of validEnchantmentsToRemove.filter(unnecessaryEnchantment => !unnecessaryEnchantment.value)) {
+                    console.warn("REMOVING: ", enchantmentToRemove.key + " - " + enchantmentToRemove.value);
+                }
+            }
+        });
+    }
     showMainScreen() {
         const form = new ActionFormData()
             .title("Fisher's Table")
-            .button("Open Configuration")
-            .button("Upgrade Fishing Rod")
-            .button("Open Book");
+            .button("Configuration")
+            .button("Upgrade")
+            .button("Craft");
         form.show(this.player).then((response) => {
             if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
                 return;

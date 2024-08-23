@@ -18,6 +18,7 @@ declare module "@minecraft/server" {
     hasCustomEnchantments(): boolean;
     getCustomEnchantment(enchantment: CustomEnchantment): CustomEnchantment;
     getCustomEnchantments(): CustomEnchantment[];
+    removeCustomEnchantment(enchantment: CustomEnchantment): void;
   }
 }
 
@@ -60,7 +61,7 @@ OverTakes(ItemEnchantableComponent.prototype, {
   getCustomEnchantment(enchantment: CustomEnchantment): CustomEnchantment {
     if(!this.source) throw "No Itemstack source found in custom enchantment component";
     const index = this.source.getLore().findIndex(lore => lore.startsWith(`§r§7${enchantment.name}`)); 
-    if(index === -1) return;
+    if(index === -1) return null;
     const [_, name, level] = this.source.getLore()[index].match(new RegExp(`(§r§7.*?)([IVXLCDM]+)$`));
     if(!name) throw "extraction error with regex in custom enchantment"
     const fetchedCustomEnchantment = CustomEnchantmentTypes.get({name: enchantment.name, level: RomanNumericConverter.toNumeric(level), conflicts: enchantment.conflicts});
@@ -75,5 +76,9 @@ OverTakes(ItemEnchantableComponent.prototype, {
       availableEnchantments.push( CustomEnchantmentTypes.get({name: eName.replace("§r§7", "").slice(0, -1), level: RomanNumericConverter.toNumeric(level)}) );
     }
     return availableEnchantments;
+  },
+  removeCustomEnchantment(enchantment: CustomEnchantment): void {
+    if(!this.source) throw "No Itemstack source found in custom enchantment component";
+    this.source.setLore(this.source.getLore().filter(lore => !(lore.startsWith(`§r§7${enchantment.name}`)) ));
   }
 });
