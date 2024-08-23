@@ -21,6 +21,8 @@ item.yn:fishing_got_reel:nautilus_hook=Nautilus Hook
 item.yn:fishing_got_reel:luminous_siren_hook=Luminous Hook
 item.yn:fishing_got_reel:pyroclasm_hook=Pyroclasm Hook
 item.yn:fishing_got_reel:tempus_hook=Tempus Hook
+item.yn:fishing_got_reel:normal_hook=Normal Hook
+item.yn:fishing_got_reel:fermented_spider_eye_hook=Hook with Fermented Spider Eye
 
 entity.yn:particle_spawner.name=Particle Builder
 tile.yn:fishers_table.name=Fisher's Table

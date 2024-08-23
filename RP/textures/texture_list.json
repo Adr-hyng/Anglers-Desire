@@ -3,5 +3,7 @@
   "textures/items/nautilus_hook",
   "textures/items/luminous_siren_hook",
   "textures/items/pyroclasm_hook",
-  "textures/items/tempus_hook"
+  "textures/items/tempus_hook",
+  "textures/items/fermented_spider_eye_hook",
+  "textures/items/normal_hook"
 ]
