@@ -1,4 +1,4 @@
-import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemComponent, } from "@minecraft/server";
+import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemComponent, MolangVariableMap, } from "@minecraft/server";
 import { MinecraftEntityTypes } from "vanilla-types/index";
 import { Random } from "utils/Random/random";
 import { Logger, StateController, VectorContainer, } from "utils/index";
@@ -29,6 +29,7 @@ class Fisher {
         this.canBeReeled = false;
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
+        this._particleSplashMolang = new MolangVariableMap();
         this.clientConfiguration = cloneConfiguration(clientConfiguration);
         const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT"));
         if (configuration) {
@@ -81,7 +82,7 @@ class Fisher {
         const CatchingPosition = CatchingLocalPosition.get(serverConfigurationCopy.CatchingPlacement.defaultValue) ?? 1;
         const endPoint = new Vec3(x - CatchingPosition * viewX, y, z - CatchingPosition * viewZ);
         const magnitude = endPoint.distance(startPoint);
-        const controlPoint = new Vec3((startPoint.x + endPoint.x) / 2, startPoint.y + (magnitude * 1.65), (startPoint.z + endPoint.z) / 2);
+        const controlPoint = new Vec3((startPoint.x + endPoint.x) / 2, startPoint.y + (magnitude * 1.35), (startPoint.z + endPoint.z) / 2);
         const reeledEntityOnAir = new StateController(false);
         let reelingEventInterval = system.runInterval(() => {
             Logger.info("REELING INTERVAL RUNNING. ID=", reelingEventInterval);
@@ -98,11 +99,21 @@ class Fisher {
                 reeledEntityOnAir.setValue(!currentEntityCaughtByHook.isInWater && !currentEntityCaughtByHook.isOnGround);
                 if (reeledEntityOnAir.hasChanged() && reeledEntityOnAir.getCurrentValue()) {
                     if (currentEntityCaughtByHook.hasComponent(EntityItemComponent.componentId)) {
-                        this.source.dimension.spawnParticle("yn:item_water_splash_exit", this.fishingHook.stablizedLocation);
+                        this._particleSplashMolang.setFloat("max_height", 1.3);
+                        this._particleSplashMolang.setFloat("splash_spread", 100);
+                        this._particleSplashMolang.setFloat("splash_radius", 2);
+                        this._particleSplashMolang.setFloat("min_splashes", 10);
+                        this._particleSplashMolang.setFloat("max_splashes", 17);
+                        this.source.dimension.spawnParticle("yn:water_splash", stablizedLocation, this._particleSplashMolang);
                     }
                     else {
+                        this._particleSplashMolang.setFloat("max_height", 1.9);
+                        this._particleSplashMolang.setFloat("splash_spread", 100);
+                        this._particleSplashMolang.setFloat("splash_radius", 2.8);
+                        this._particleSplashMolang.setFloat("min_splashes", 20);
+                        this._particleSplashMolang.setFloat("max_splashes", 35);
                         system.waitTicks(3).then(() => {
-                            this.source.dimension.spawnParticle("yn:entity_water_splash_exit", stablizedLocation);
+                            this.source.dimension.spawnParticle("yn:water_splash", stablizedLocation, this._particleSplashMolang);
                             if (this.fishingRod.upgrade.has("Pyroclasm"))
                                 currentEntityCaughtByHook.setOnFire(5, true);
                         });

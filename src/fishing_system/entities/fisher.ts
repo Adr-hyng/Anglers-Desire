@@ -6,6 +6,9 @@ import {
     system, 
     EntityEquippableComponent,
     EntityItemComponent,
+    MolangVariableMap,
+    EntityComponentTypes,
+    EntityScaleComponent,
 } from "@minecraft/server";
 
 import {MinecraftEntityTypes} from "vanilla-types/index";
@@ -16,6 +19,7 @@ import {
 
 import {
     Logger,
+    SendMessageTo,
     StateController,
     VectorContainer,
 } from "utils/index";
@@ -47,6 +51,7 @@ const FishingTimeInterval: number = 0.03;
 class Fisher {
     private _source: Player = null;
     private _fishingOutputManager: FishingStateTypes;
+    private _particleSplashMolang: MolangVariableMap;
     particleSpawner: Entity = null;
     particleVectorLocations: VectorContainer = null;
     clientConfiguration: typeof clientConfiguration;
@@ -62,6 +67,7 @@ class Fisher {
     constructor(player: Player) {
         this._source = player;
         this.particleVectorLocations = new VectorContainer(2);
+        this._particleSplashMolang = new MolangVariableMap();
         this.clientConfiguration = cloneConfiguration(clientConfiguration);
         const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT")); // unserialized data, need to be serialized
         // Copy only the values, if there's a configuration already.
@@ -123,7 +129,7 @@ class Fisher {
         const magnitude: number = endPoint.distance(startPoint);
         const controlPoint = new Vec3( 
             (startPoint.x + endPoint.x) / 2,
-            startPoint.y + (magnitude * 1.65),
+            startPoint.y + (magnitude * 1.35),
             (startPoint.z + endPoint.z) / 2
         );
 
@@ -143,11 +149,21 @@ class Fisher {
                 reeledEntityOnAir.setValue(!currentEntityCaughtByHook.isInWater && !currentEntityCaughtByHook.isOnGround);
                 if(reeledEntityOnAir.hasChanged() && reeledEntityOnAir.getCurrentValue()) {
                     if(currentEntityCaughtByHook.hasComponent(EntityItemComponent.componentId)){
-                        this.source.dimension.spawnParticle("yn:item_water_splash_exit", this.fishingHook.stablizedLocation);
+                        this._particleSplashMolang.setFloat("max_height", 1.3);
+                        this._particleSplashMolang.setFloat("splash_spread", 100);
+                        this._particleSplashMolang.setFloat("splash_radius", 2);
+                        this._particleSplashMolang.setFloat("min_splashes", 10);
+                        this._particleSplashMolang.setFloat("max_splashes", 17);
+                        this.source.dimension.spawnParticle("yn:water_splash", stablizedLocation, this._particleSplashMolang);
                     } else {
+                        this._particleSplashMolang.setFloat("max_height", 1.9);
+                        this._particleSplashMolang.setFloat("splash_spread", 100);
+                        this._particleSplashMolang.setFloat("splash_radius", 2.8);
+                        this._particleSplashMolang.setFloat("min_splashes", 20);
+                        this._particleSplashMolang.setFloat("max_splashes", 35);
                         system.waitTicks(3).then(() => {
                             // Upgrade Effect - Use State Controller next time with custom made event system listener
-                            this.source.dimension.spawnParticle("yn:entity_water_splash_exit", stablizedLocation);
+                            this.source.dimension.spawnParticle("yn:water_splash", stablizedLocation, this._particleSplashMolang);
                             if(this.fishingRod.upgrade.has("Pyroclasm")) currentEntityCaughtByHook.setOnFire(5, true);
                         });
                         

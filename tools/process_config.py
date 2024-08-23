@@ -61,7 +61,7 @@ def generateScript(isServer):
     result += '};\n\n'
 
     result += 'export let serverConfigurationCopy = cloneConfiguration(serverConfiguration);\n'
-    result += 'export let setServerConfiguration = (newServerConfig: typeof serverConfiguration) => serverConfigurationCopy = newServerConfig;\n'
+    result += 'export let setServerConfiguration = (newServerConfig) => serverConfigurationCopy = newServerConfig;\n'
     result += 'export let resetServerConfiguration = () => serverConfigurationCopy = cloneConfiguration(serverConfiguration);\n\n'
     result += '\n'.join([
         '// version (do not change)',

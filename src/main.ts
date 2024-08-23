@@ -1,4 +1,4 @@
-import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource, WeatherType} from "@minecraft/server";
+import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource, WeatherType, EntityInventoryComponent} from "@minecraft/server";
 import { ADDON_IDENTIFIER, db, fetchFisher } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { Fisher } from "./fishing_system/entities/fisher";
@@ -34,6 +34,10 @@ world.afterEvents.playerSpawn.subscribe((e) => {
     ]
   });
 });
+
+// world.beforeEvents.itemUseOn.subscribe((e) => {
+//   console.warn(e.itemStack.typeId, e.block.typeId);
+// });
 
 world.beforeEvents.itemUse.subscribe((event) => {
   const player: Player = event.source as Player;

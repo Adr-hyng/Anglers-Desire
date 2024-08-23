@@ -44,13 +44,10 @@ const command = {
         switch (selectedReqParam) {
             case REQUIRED_PARAMETER.GET:
                 fishingRod = fetchFisher(player).fishingRod.getEquipment(EquipmentSlot.Mainhand);
-                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Lure), level: 3 });
-                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.LuckOfTheSea), level: 3 });
-                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Mending), level: 1 });
                 fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.Pyroclasm.name, level: 1 });
-                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.Nautilus.name, level: 2 });
-                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.LuminousSiren.name, level: 3 });
-                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.Tempus.name, level: 4 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.Nautilus.name, level: 1 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.LuminousSiren.name, level: 1 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment({ name: FishingCustomEnchantmentType.Tempus.name, level: 1 });
                 player.getComponent(EntityComponentTypes.Inventory).container.setItem(player.selectedSlotIndex, fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
@@ -62,10 +59,13 @@ const command = {
                 break;
             case REQUIRED_PARAMETER.PARTICLE:
                 const molang = new MolangVariableMap();
-                molang.setFloat("max_lifetime", parseInt(args[1]) ?? 2);
-                molang.setFloat("splash_spread", parseInt(args[2]) ?? 5);
-                molang.setFloat("splash_radius", parseInt(args[3]) ?? 3);
-                player.dimension.spawnParticle("yn:test_splash", { x: player.location.x + 2, y: player.location.y - 2, z: player.location.z + 2 }, molang);
+                molang.setFloat("max_height", parseFloat(args[1]) ?? 2);
+                molang.setFloat("splash_spread", parseFloat(args[2]) ?? 5);
+                molang.setFloat("splash_radius", parseFloat(args[3]) ?? 3);
+                molang.setFloat("min_splashes", parseFloat(args[4]) ?? 30);
+                molang.setFloat("max_splashes", parseFloat(args[5]) ?? 50);
+                molang.setFloat("max_splashes", parseFloat(args[5]) ?? 50);
+                player.dimension.spawnParticle("yn:water_splash", { x: player.location.x + parseFloat(args[6]), y: player.location.y + parseFloat(args[7]), z: player.location.z + parseFloat(args[8]) }, molang);
                 break;
             default:
                 break;

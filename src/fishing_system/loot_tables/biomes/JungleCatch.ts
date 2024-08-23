@@ -3,7 +3,6 @@ import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { ModifierResult } from "./types";
 import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 import { world } from "@minecraft/server";
-import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 
 export class JungleCatch {
   private static upgrade: HookUpgrades;
@@ -12,12 +11,12 @@ export class JungleCatch {
     return [
       {
         "item": MinecraftItemTypes.Air,
-        "weight": 7,
+        "weight": 5,
         "toEntity": MinecraftEntityTypes.GlowSquid
       },
       {
         "item": MinecraftItemTypes.Air,
-        "weight": 5,
+        "weight": 2,
         "toEntity": MinecraftEntityTypes.Guardian
       },
       {
@@ -29,11 +28,17 @@ export class JungleCatch {
   }
   private static OnRainEventLoot(): EntryContent[] {
     const IsRainingChanceModifier = world.IsRaining;
-    if(!IsRainingChanceModifier) return [];
+    if(!IsRainingChanceModifier) return [
+      {
+        "item": MinecraftItemTypes.InkSac,
+        "weight": 12,
+        "toEntity": MinecraftEntityTypes.Squid
+      },
+    ];
     return [
       {
         "item": MinecraftItemTypes.InkSac,
-        "weight": 35,
+        "weight": 21,
         "toEntity": MinecraftEntityTypes.Squid
       },
     ];
@@ -153,10 +158,6 @@ export class JungleCatch {
             {
               "item": MinecraftItemTypes.Saddle,
               "weight": 5
-            },
-            {
-              "item": MyCustomItemTypes.LuminousSirenHook,
-              "weight": 4 * (world.IsRaining ? 2 : 1)
             },
             {
               "item": MinecraftItemTypes.Bow,

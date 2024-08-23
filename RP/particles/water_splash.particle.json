@@ -1,0 +1,107 @@
+{
+	"format_version": "1.10.0",
+	"particle_effect": {
+		"description": {
+			"identifier": "yn:water_splash",
+			"basic_render_parameters": {
+				"material": "particles_alpha",
+				"texture": "textures/particle/water_splash"
+			}
+		},
+		"curves": {
+			"variable.e_acc_y": {
+				"type": "linear",
+				"input": "v.particle_age",
+				"horizontal_range": "variable.max_height",
+				"nodes": [50, -22.36, -30, -30, -30, -30, -30, -30, 0]
+			},
+			"variable.scale_droplet": {
+				"type": "bezier",
+				"input": "v.particle_age",
+				"horizontal_range": "variable.max_height",
+				"nodes": [0.4, 0.32, 0, 0]
+			}
+		},
+		"events": {
+			"ripple": {
+				"particle_effect": {
+					"effect": "sp:ripple",
+					"type": "emitter",
+					"pre_effect_expression": "variable.rand_size = 0.3;"
+				}
+			},
+			"splash_foam_test": {
+				"sequence": [
+					{},
+					{
+						"particle_effect": {
+							"effect": "sp:splashfoam",
+							"type": "emitter",
+							"pre_effect_expression": "v.min_lifetime = 0.5;\nv.max_lifetime = 1;\nv.direction_x = Math.random(-1, 1);\nv.direction_z = Math.random(-1, 1);\n\nv.bounce_count = 0;\nt.min_bounce = 2;\nt.max_bounce = 5;\nv.min_bounce_range = t.min_bounce;\nv.max_bounce_range = t.max_bounce;\nv.bounce_range = Math.random(t.min_bounce, t.max_bounce);"
+						}
+					}
+				]
+			},
+			"splash_foam": {
+				"particle_effect": {
+					"effect": "sp:splashfoam",
+					"type": "emitter",
+					"pre_effect_expression": "v.min_lifetime = 0.5;\nv.max_lifetime = 1;\nv.direction_x = t.direction;\nv.direction_z = t.direction;"
+				}
+			}
+		},
+		"components": {
+			"minecraft:emitter_initialization": {
+				"creation_expression": "variable.splash_spread;variable.splash_radius;variable.min_splashes;variable.max_splashes;variable.max_height;variable.current_splash_spread = math.random(-variable.splash_spread, variable.splash_spread);variable.current_splash_radius = math.random(0.5, v.splash_radius);variable.current_splashes = math.random(variable.min_splashes, variable.max_splashes);",
+				"per_update_expression": "variable.current_splash_spread = math.random(-variable.splash_spread, variable.splash_spread);variable.current_splash_radius = math.random(0.5, v.splash_radius);"
+			},
+			"minecraft:emitter_rate_instant": {
+				"num_particles": "variable.current_splashes = math.random(variable.min_splashes, variable.max_splashes);return variable.current_splashes;"
+			},
+			"minecraft:emitter_lifetime_once": {
+				"active_time": 3
+			},
+			"minecraft:emitter_shape_point": {
+				"offset": [0, 0.28, 0],
+				"direction": ["temp.current_splash_spread_x = math.random(-variable.splash_spread, variable.splash_spread);return temp.current_splash_spread_x;", 1, "temp.current_splash_spread_z = math.random(-variable.splash_spread, variable.splash_spread);return temp.current_splash_spread_z;"]
+			},
+			"minecraft:particle_lifetime_expression": {
+				"max_lifetime": 2,
+				"expiration_expression": "variable.current_splashes == 0"
+			},
+			"minecraft:particle_expire_if_in_blocks": ["minecraft:water", "minecraft:flowing_water"],
+			"minecraft:particle_lifetime_events": {
+				"expiration_event": ["splash_foam_test", "ripple"]
+			},
+			"minecraft:particle_initial_spin": {
+				"rotation": "math.random(-180, 180)"
+			},
+			"minecraft:particle_initial_speed": "variable.current_splash_radius = math.random(0.5, v.splash_radius);return variable.current_splash_radius;",
+			"minecraft:particle_motion_dynamic": {
+				"linear_acceleration": ["variable.current_splash_radius = math.random(-v.splash_radius, v.splash_radius);return variable.current_splash_radius;", "variable.e_acc_y", "variable.current_splash_radius = math.random(-v.splash_radius, v.splash_radius);return variable.current_splash_radius;"]
+			},
+			"minecraft:particle_appearance_billboard": {
+				"size": ["variable.scale_droplet", "variable.scale_droplet"],
+				"facing_camera_mode": "lookat_xyz",
+				"uv": {
+					"texture_width": 128,
+					"texture_height": 8,
+					"flipbook": {
+						"base_UV": [0, 0],
+						"size_UV": [8, 8],
+						"step_UV": [16, 0],
+						"frames_per_second": 4,
+						"max_frame": 4
+					}
+				}
+			},
+			"minecraft:particle_motion_collision": {
+				"collision_radius": 0.01,
+				"expire_on_contact": true
+			},
+			"minecraft:particle_appearance_tinting": {
+				"color": [1, 1, 1, 1]
+			}
+		}
+	}
+}

@@ -18,7 +18,7 @@ yn:fishing_got_reel.on_client_reset=§aClient Configuration has been reset.§r
 
 ## Items
 item.yn:fishing_got_reel:nautilus_hook=Nautilus Hook
-item.yn:fishing_got_reel:luminous_siren_hook=Luminous Siren Hook
+item.yn:fishing_got_reel:luminous_siren_hook=Luminous Hook
 item.yn:fishing_got_reel:pyroclasm_hook=Pyroclasm Hook
 item.yn:fishing_got_reel:tempus_hook=Tempus Hook
 

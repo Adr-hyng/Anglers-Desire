@@ -8,40 +8,54 @@
 				"texture": "textures/particle/particles"
 			}
 		},
+		"curves": {
+			"variable.gravity": {
+				"type": "catmull_rom",
+				"input": "v.particle_age",
+				"horizontal_range": "v.particle_lifetime",
+				"nodes": [0, 0.5, -9.81, -12.81, -12.81, -12.81, -12.81]
+			}
+		},
 		"events": {
 			"ripple": {
 				"particle_effect": {
 					"effect": "sp:ripple",
-					"type": "emitter"
-				}
-			}
+					"type": "emitter",
+					"pre_effect_expression": "variable.rand_size = temp.ripple_initial_size;"
+				},
+				"expression": "variable.bounce_count = variable.bounce_count + 1;\ntemp.ripple_initial_size = temp.ripple_initial_size - temp.ripple_reduced;"
+			},
+			"event": {}
 		},
 		"components": {
-			"minecraft:emitter_rate_instant": {
-				"num_particles": "variable.max_count"
+			"minecraft:emitter_initialization": {
+				"creation_expression": "temp.ripple_reduced = 0.01;temp.ripple_initial_size = 0.2;",
+				"per_update_expression": "temp.ripple_initial_size;"
 			},
-			"minecraft:emitter_lifetime_looping": {
+			"minecraft:emitter_rate_instant": {
+				"num_particles": 1
+			},
+			"minecraft:emitter_lifetime_once": {
 				"active_time": 1
 			},
-			"minecraft:emitter_shape_disc": {
-				"offset": [0, "math.random(v.min_y_offset, v.max_y_offset)", 0],
-				"radius": "v.width",
-				"plane_normal": "y",
-				"direction": ["(v.particle_random_1-0.5)/2", "0.75+v.particle_random_3*0.5", "(v.particle_random_2-0.5)/2"]
+			"minecraft:emitter_shape_point": {
+				"offset": [0, 0.3, 0],
+				"direction": ["variable.direction_x", 1, "variable.direction_z"]
 			},
 			"minecraft:particle_lifetime_expression": {
-				"max_lifetime": 3
+				"max_lifetime": 1,
+				"expiration_expression": "variable.bounce_range <= variable.bounce_count || variable.bounce_count == v.min_bounce_range"
 			},
-			"minecraft:particle_expire_if_in_blocks": ["minecraft:water"],
+			"minecraft:particle_expire_if_in_blocks": ["minecraft:water", "minecraft:flowing_water"],
 			"minecraft:particle_lifetime_events": {
 				"expiration_event": "ripple"
 			},
 			"minecraft:particle_initial_speed": "math.random(v.min_lifetime, v.max_lifetime)",
 			"minecraft:particle_motion_dynamic": {
-				"linear_acceleration": ["math.random(-1, 1)", "v.gravity", "math.random(-1, 1)"]
+				"linear_acceleration": ["variable.direction_x", "v.gravity", "variable.direction_z"]
 			},
 			"minecraft:particle_appearance_billboard": {
-				"size": ["0.5/16", "0.5/16"],
+				"size": ["(0.05 + variable.particle_random_1*0.01) - (0.045 * variable.particle_age)", "(0.05 + variable.particle_random_1*0.01) - (0.045 * variable.particle_age)"],
 				"facing_camera_mode": "rotate_xyz",
 				"uv": {
 					"texture_width": 128,
@@ -51,8 +65,15 @@
 				}
 			},
 			"minecraft:particle_motion_collision": {
-				"collision_radius": 0,
-				"expire_on_contact": true
+				"collision_drag": 4,
+				"coefficient_of_restitution": 0.9,
+				"collision_radius": 0.1,
+				"events": [
+					{
+						"event": "ripple",
+						"min_speed": 0
+					}
+				]
 			},
 			"minecraft:particle_appearance_lighting": {}
 		}

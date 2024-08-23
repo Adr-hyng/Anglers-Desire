@@ -1,6 +1,5 @@
 import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { world } from "@minecraft/server";
-import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 export class DefaultCatch {
     static OnLuminousSirenUpgradeLoot() {
         if (!this.upgrade.has("LuminousSiren"))
@@ -8,29 +7,30 @@ export class DefaultCatch {
         return [
             {
                 "item": MinecraftItemTypes.Air,
-                "weight": 7,
+                "weight": 5,
                 "toEntity": MinecraftEntityTypes.GlowSquid
             },
             {
                 "item": MinecraftItemTypes.Air,
-                "weight": 5,
-                "toEntity": MinecraftEntityTypes.Guardian
-            },
-            {
-                "item": MinecraftItemTypes.Air,
                 "weight": 2,
-                "toEntity": MinecraftEntityTypes.ElderGuardian
+                "toEntity": MinecraftEntityTypes.Guardian
             }
         ];
     }
     static OnRainEventLoot() {
         const IsRainingChanceModifier = world.IsRaining;
         if (!IsRainingChanceModifier)
-            return [];
+            return [
+                {
+                    "item": MinecraftItemTypes.Air,
+                    "weight": 10,
+                    "toEntity": MinecraftEntityTypes.Squid
+                }
+            ];
         return [
             {
                 "item": MinecraftItemTypes.Air,
-                "weight": 35,
+                "weight": 18,
                 "toEntity": MinecraftEntityTypes.Squid
             }
         ];
@@ -148,10 +148,6 @@ export class DefaultCatch {
                         {
                             "item": MinecraftItemTypes.Saddle,
                             "weight": 5
-                        },
-                        {
-                            "item": MyCustomItemTypes.LuminousSirenHook,
-                            "weight": 3 * (world.IsRaining ? 2 : 1)
                         },
                         {
                             "item": MinecraftItemTypes.Bow,
