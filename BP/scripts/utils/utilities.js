@@ -45,7 +45,7 @@ export class RomanNumericConverter {
 export function ExecuteAtGivenTick(tick) {
     return (system.currentTick % tick) === 0;
 }
-export function SendMessageTo(executor, rawMessage) {
+export function SendMessageTo(executor, rawMessage = { text: "Not Localized Yet" }) {
     const formattedRawMessage = JSON.stringify(rawMessage);
     executor.runCommandAsync(`tellraw ${executor.name} ` + formattedRawMessage);
 }

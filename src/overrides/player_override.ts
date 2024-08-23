@@ -7,18 +7,25 @@ declare module "@minecraft/server" {
   interface Player {
     Configuration: __Configuration;
     isSurvival(): boolean;
-    equippedTool(equipmentSlot: EquipmentSlot.Mainhand | EquipmentSlot.Offhand): ContainerSlot;
+    equippedToolSlot(equipmentSlot: EquipmentSlot.Mainhand | EquipmentSlot.Offhand): ContainerSlot;
+    equippedTool(equipmentSlot: EquipmentSlot.Mainhand | EquipmentSlot.Offhand): ItemStack;
   }
 }
 
 const screenConfigs = new WeakMap<Player, __Configuration>();
 
 OverTakes(Player.prototype, {
-  equippedTool(equipmentSlot: EquipmentSlot.Mainhand | EquipmentSlot.Offhand): ContainerSlot | null {
+  equippedToolSlot(equipmentSlot: EquipmentSlot.Mainhand | EquipmentSlot.Offhand): ContainerSlot | null {
     if(!(this.hasComponent(EntityEquippableComponent.componentId)) ) return;
     const equipment = (this.getComponent(EntityEquippableComponent.componentId) as EntityEquippableComponent);
     if(!equipment.isValid()) return;
     return equipment.getEquipmentSlot(equipmentSlot);
+  },
+  equippedTool(equipmentSlot: EquipmentSlot.Mainhand | EquipmentSlot.Offhand): ItemStack | null {
+    if(!(this.hasComponent(EntityEquippableComponent.componentId)) ) return;
+    const equipment = (this.getComponent(EntityEquippableComponent.componentId) as EntityEquippableComponent);
+    if(!equipment.isValid()) return;
+    return equipment.getEquipment(equipmentSlot);
   },
   isSurvival(): boolean {
     return this.getGameMode() === GameMode.survival;

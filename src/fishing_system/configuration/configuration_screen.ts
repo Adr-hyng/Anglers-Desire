@@ -1,4 +1,4 @@
-import { ContainerSlot, EntityEquippableComponent, EquipmentSlot, ItemComponent, ItemComponentTypes, ItemStack, Player } from "@minecraft/server";
+import { ContainerSlot, EntityEquippableComponent, EntityInventoryComponent, EquipmentSlot, ItemComponent, ItemComponentTypes, ItemEnchantableComponent, ItemStack, Player, system } from "@minecraft/server";
 import { ActionFormData, ActionFormResponse, FormCancelationReason, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
 import { cloneConfiguration, ConfigurationCollections_DB, ConfigurationTypes} from "./configuration_handler";
 import {ADDON_NAME, db, localFishersCache, fetchFisher} from "constant";
@@ -9,6 +9,7 @@ import { SendMessageTo } from "utils/index";
 import { FormBuilder } from "utils/form_builder";
 import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
 import { CustomEnchantment, CustomEnchantmentTypes, FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
+import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 
 type DisassembleFormContent = {
   key: string,
@@ -47,6 +48,78 @@ export class __Configuration {
       }
     }
     else throw new Error("Database not found");
+  }
+
+  showUpgradeScreen() {
+    const inventory = (this.player.getComponent(EntityInventoryComponent.componentId) as EntityInventoryComponent).container;
+    let equippedFishingRod: ContainerSlot;
+    equippedFishingRod = this.player.equippedToolSlot(EquipmentSlot.Offhand);
+    try { 
+      if(equippedFishingRod?.typeId !== "minecraft:fishing_rod") throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested";
+    } catch (e) {
+      equippedFishingRod = null;
+      // Use RunJob
+      let enchantments: ItemEnchantableComponent;
+      const getFishingRodFromInventory = () => {
+        inventorySearch: for(let itemSlot = 0; itemSlot < inventory.size; itemSlot++) {
+          const item = inventory.getItem(itemSlot);
+          if(!item) continue;
+          else if(item.typeId !== "minecraft:fishing_rod") continue;
+
+          enchantments = item.enchantment.override(item);
+          for(const validCustomEnchantment of CustomEnchantmentTypes.getAll()) {
+            if(!enchantments.addCustomEnchantment(validCustomEnchantment)) continue inventorySearch; // Meaning we cannot add anymore enchantment to this item, so just search for next item
+            break; // Meaning we can still add enchantment to this item, so proceed.
+          }
+          
+          return inventory.getSlot(itemSlot);
+        }SendMessageTo(this.player)
+        return;
+      };
+      equippedFishingRod = getFishingRodFromInventory() ?? null;
+    }
+    if(!equippedFishingRod) return SendMessageTo(this.player); 
+    const allCustomEnchantments = CustomEnchantmentTypes.getAll();
+    const fishingRod = equippedFishingRod.getItem();
+    const enchantments = fishingRod.enchantment.override(fishingRod);
+    const availableEnchantments: Map<string, boolean> = new Map();
+    
+    const form = new ModalFormData();
+    form.title("Choose Available Hook to Embed");
+    for(const customEnchantment of allCustomEnchantments){
+      let isAvailable = false;
+      const result = this.player.runCommand(`testfor @s[hasItem={item=${customEnchantment.id}}]`)
+      if(result.successCount && !enchantments.hasCustomEnchantment(customEnchantment) && !enchantments.hasConflicts(customEnchantment.name)) {
+        isAvailable = true;
+      }
+      availableEnchantments.set(customEnchantment.name, isAvailable);
+      form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name}`, false);
+    }
+    form.submitButton("Embbed Hook");
+
+    form.show(this.player).then( (response) => {
+      if (!response.formValues) return;
+      if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
+        return;
+      }
+      let hasChanges = false;
+      let index = 0;
+      const validEnchantmentsToAdd: DisassembleFormContent[] = [];
+      for(const [key, availableValue] of availableEnchantments.entries()) {
+        const newVal = <boolean>response.formValues[index];
+        if(newVal === availableValue && newVal) { hasChanges = true; }
+        validEnchantmentsToAdd.push({key: key, value: newVal && availableValue});
+        index++;
+      }
+      if (!hasChanges) return;
+      for(const enchantmentToAdd of validEnchantmentsToAdd) {
+        if(!enchantmentToAdd.value) continue;
+        const customEnchantment = CustomEnchantmentTypes.get({name: enchantmentToAdd.key, level: 1});
+        enchantments.override(fishingRod).addCustomEnchantment(customEnchantment);
+        inventory.override(this.player).clearItem(customEnchantment.id, 1);
+      }
+      equippedFishingRod.setItem(fishingRod);
+    });
   }
 
   showInspectScreen(equippedFishingRod: ContainerSlot) {
@@ -92,8 +165,8 @@ export class __Configuration {
     const form = new ActionFormData()
     .title("Fisher's Table")
     .button("Configuration")
-    .button("Upgrade")
-    .button("Craft");
+    .button("Attach Hook")
+    .button("Craft Hook");
     form.show(this.player).then( (response: ActionFormResponse) => {
       if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) return;
       switch(response.selection) {
@@ -101,7 +174,7 @@ export class __Configuration {
           this.showConfigurationScreen();
           break;
         case 1:
-          this.showServerScreen();
+          this.showUpgradeScreen();
           break;
         default:
           break;

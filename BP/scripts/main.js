@@ -16,7 +16,7 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
                 return;
             if (arg.block.typeId !== MyCustomBlockTypes.FishersTable)
                 return;
-            const equipment = player.equippedTool(EquipmentSlot.Mainhand);
+            const equipment = player.equippedToolSlot(EquipmentSlot.Mainhand);
             try {
                 if (equipment.typeId !== MinecraftItemTypes.FishingRod)
                     throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested";
