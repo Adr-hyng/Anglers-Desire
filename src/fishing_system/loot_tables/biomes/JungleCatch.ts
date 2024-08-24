@@ -7,7 +7,7 @@ import { world } from "@minecraft/server";
 export class JungleCatch {
   private static upgrade: HookUpgrades;
   private static OnLuminousSirenUpgradeLoot(): EntryContent[] {
-    if(!this.upgrade.has("LuminousSiren")) return [];
+    if(!this.upgrade.has("Luminous")) return [];
     return [
       {
         "item": MinecraftItemTypes.Air,

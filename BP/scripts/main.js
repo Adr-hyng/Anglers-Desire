@@ -1,5 +1,5 @@
 import { world, system, Player, ScriptEventSource, WeatherType, EquipmentSlot } from "@minecraft/server";
-import { ADDON_IDENTIFIER, db, fetchFisher } from "./constant";
+import { ADDON_IDENTIFIER, db, fetchFisher, onCustomBlockInteractLogMap } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { overrideEverything } from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
@@ -16,14 +16,19 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
                 return;
             if (arg.block.typeId !== MyCustomBlockTypes.FishersTable)
                 return;
+            const oldLog = onCustomBlockInteractLogMap.get(player.id);
+            onCustomBlockInteractLogMap.set(player.id, Date.now());
+            if ((oldLog + 500) >= Date.now())
+                return;
             const equipment = player.equippedToolSlot(EquipmentSlot.Mainhand);
+            const itemEquipment = equipment.getItem();
             try {
-                if (equipment.typeId !== MinecraftItemTypes.FishingRod)
+                const enchantment = itemEquipment.enchantment.override(itemEquipment);
+                if (equipment.typeId !== MinecraftItemTypes.FishingRod || !enchantment.hasCustomEnchantments())
                     throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested";
-                player.Configuration.showInspectScreen(equipment);
+                player.Configuration.showInspectScreen(equipment, enchantment);
             }
             catch (e) {
-                console.warn(e, e.stack);
                 const { default: CommandObject } = await import(`./commands/config.js`);
                 CommandObject.execute(player, ['show']);
             }

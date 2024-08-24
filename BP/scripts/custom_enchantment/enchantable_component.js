@@ -55,16 +55,16 @@ OverTakes(ItemEnchantableComponent.prototype, {
     },
     canAddCustomEnchantment() {
         let canBeEnchanted = false;
-        const AllValidCustomEnchantments = new Set();
+        const ImplementedCustomEnchantments = new Set();
         const AcquiredCustomEnchantments = new Set();
         for (const validCustomEnchantment of CustomEnchantmentTypes.getAll()) {
-            AllValidCustomEnchantments.add(validCustomEnchantment.name);
+            ImplementedCustomEnchantments.add(validCustomEnchantment.name);
         }
         for (const validCustomEnchantment of this.getCustomEnchantments()) {
             AcquiredCustomEnchantments.add(validCustomEnchantment.name);
         }
-        for (const currentAvailableEnchantment of AllValidCustomEnchantments) {
-            if (!AcquiredCustomEnchantments.has(currentAvailableEnchantment) && this.hasConflicts(currentAvailableEnchantment)) {
+        for (const implementedEnchantment of ImplementedCustomEnchantments) {
+            if (!AcquiredCustomEnchantments.has(implementedEnchantment) && this.hasConflicts(implementedEnchantment)) {
                 return true;
             }
         }

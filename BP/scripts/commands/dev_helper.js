@@ -52,14 +52,6 @@ const command = {
                 console.warn(JSON.stringify(fishingRod.getDynamicPropertyIds()), fishingRod.getDynamicPropertyIds()[0]);
                 break;
             case REQUIRED_PARAMETER.TEST:
-                fishingRod = fetchFisher(player).fishingRod.getEquipment(EquipmentSlot.Mainhand);
-                for (const customEnchantment of fishingRod.enchantment.override(fishingRod).getCustomEnchantments()) {
-                    if (customEnchantment.damageUsage(1)) {
-                        player.playSound("random.break", { volume: 0.5, pitch: 0.7 });
-                    }
-                    console.warn(customEnchantment.name, customEnchantment.usage);
-                }
-                player.getComponent(EntityComponentTypes.Inventory).container.setItem(player.selectedSlotIndex, fishingRod);
                 break;
             case REQUIRED_PARAMETER.PARTICLE:
                 const molang = new MolangVariableMap();

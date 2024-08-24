@@ -10,6 +10,7 @@ export const db = new JsonDatabase(ADDON_NAME);
 export const localFishersCache: Map<string, Fisher> = new Map();
 export const spawnedLogMap: Map<string, number> = new Map();
 export const fishingCallingLogMap: Map<string, number> = new Map();
+export const onCustomBlockInteractLogMap: Map<string, number> = new Map();
 
 export function fetchFisher(player: Player): Fisher {
   const existingFisher = localFishersCache.get(player.id);

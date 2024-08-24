@@ -26,7 +26,7 @@ OverTakes(EntityEquippableComponent.prototype, {
         const player = this.entity;
         if (!player.isSurvival)
             return false;
-        if (!equipmentToDamage.hasComponent(ItemComponentTypes.Durability))
+        if (!equipmentToDamage?.hasComponent(ItemComponentTypes.Durability))
             throw "Item doesn't have durability to damage with";
         let level = 0;
         const itemDurability = equipmentToDamage.getComponent(ItemComponentTypes.Durability);

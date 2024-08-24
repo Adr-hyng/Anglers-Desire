@@ -1,4 +1,4 @@
-import { ContainerSlot, EntityInventoryComponent, EquipmentSlot, ItemEnchantableComponent, Player } from "@minecraft/server";
+import { ContainerSlot, EntityInventoryComponent, EquipmentSlot, ItemEnchantableComponent, ItemStack, Player } from "@minecraft/server";
 import { ActionFormData, ActionFormResponse, FormCancelationReason, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
 import { cloneConfiguration, ConfigurationCollections_DB, ConfigurationTypes} from "./configuration_handler";
 import {ADDON_NAME, db, localFishersCache, fetchFisher} from "constant";
@@ -10,6 +10,7 @@ import { FormBuilder } from "utils/form_builder";
 import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
 import { CustomEnchantmentTypes } from "custom_enchantment/custom_enchantment_types";
 import { CustomEnchantment } from "custom_enchantment/custom_enchantment";
+import { MinecraftItemTypes } from "vanilla-types/index";
 
 type DisassembleFormContent = {
   key: string,
@@ -54,27 +55,35 @@ export class __Configuration {
     const inventory = (this.player.getComponent(EntityInventoryComponent.componentId) as EntityInventoryComponent).container;
     let equippedFishingRod: ContainerSlot;
     equippedFishingRod = this.player.equippedToolSlot(EquipmentSlot.Offhand);
-    try { 
-      if(equippedFishingRod?.typeId !== "minecraft:fishing_rod") throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested";
+    try {
+      if(equippedFishingRod?.typeId !== MinecraftItemTypes.FishingRod) {
+        throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested";
+      }
     } catch (e) {
-      equippedFishingRod = null;
-      // Use RunJob
+      // Logic for when you cannot add anymore enchantments to this item, go next that you can add one.
       let enchantments: ItemEnchantableComponent;
+      function isFull(item: ItemStack) {
+        enchantments = item.enchantment.override(item);
+        return enchantments.canAddCustomEnchantment();
+      }
+      // Currently when all is visited, it doesn't wanna visit that anymore even though you can still enchant stuffs.
       const getFishingRodFromInventory = () => {
-        inventorySearch: for(let itemSlot = 0; itemSlot < inventory.size; itemSlot++) {
+        let itemSlot = 0
+        for(itemSlot = 0; itemSlot < inventory.size; itemSlot++) {
           const item = inventory.getItem(itemSlot);
           if(!item) continue;
-          else if(item.typeId !== "minecraft:fishing_rod") continue;
+          if(item.typeId !== MinecraftItemTypes.FishingRod) continue;
 
-          enchantments = item.enchantment.override(item);
-          for(const validCustomEnchantment of CustomEnchantmentTypes.getAll()) {
-            if(!enchantments.addCustomEnchantment(validCustomEnchantment)) continue inventorySearch; // Meaning we cannot add anymore enchantment to this item, so just search for next item
-            break; // Meaning we can still add enchantment to this item, so proceed.
-          }
-          
-          return inventory.getSlot(itemSlot);
-        }SendMessageTo(this.player)
-        return;
+          // Detect for conflicts or possible cannot be enchanted anymore, then go next
+          // const temp = isFull(item);
+          // console.warn(temp, item.typeId, itemSlot);
+          // if(temp) continue;
+          break;
+        }
+        if(itemSlot >= inventory.size) return;
+        SendMessageTo(this.player);
+        console.warn("succ", itemSlot);
+        return inventory.getSlot(itemSlot);
       };
       equippedFishingRod = getFishingRodFromInventory() ?? null;
     }
@@ -122,14 +131,10 @@ export class __Configuration {
     });
   }
 
-  showInspectScreen(equippedFishingRod: ContainerSlot) {
+  showInspectScreen(equippedFishingRod: ContainerSlot, enchantments: ItemEnchantableComponent) {
     const form = new ModalFormData();
     const fishingRod = equippedFishingRod.getItem();
-    const enchantments = fishingRod.enchantment.override(fishingRod);
-    if(!enchantments.hasCustomEnchantments()) return SendMessageTo(this.player);
-    // const allCustomEnchantments = enchantments.getCustomEnchantments();
     const allCustomEnchantments = new Set([...CustomEnchantmentTypes.getAll(), ...enchantments.getCustomEnchantments()]);
-
 
     const availableEnchantments: Map<string, boolean> = new Map();
     form.title("Fishing Rod Information");

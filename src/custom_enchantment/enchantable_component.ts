@@ -75,17 +75,17 @@ OverTakes(ItemEnchantableComponent.prototype, {
   // I think this is useless?? IDK. I think the better implementation for this is in the upgrade section of screen configuration.
   canAddCustomEnchantment(): boolean {
     let canBeEnchanted = false;
-    const AllValidCustomEnchantments: Set<string> = new Set();
+    const ImplementedCustomEnchantments: Set<string> = new Set();
     const AcquiredCustomEnchantments: Set<string> = new Set();
 
     for(const validCustomEnchantment of CustomEnchantmentTypes.getAll()) {
-      AllValidCustomEnchantments.add(validCustomEnchantment.name);
+      ImplementedCustomEnchantments.add(validCustomEnchantment.name);
     }
     for(const validCustomEnchantment of this.getCustomEnchantments()) {
       AcquiredCustomEnchantments.add(validCustomEnchantment.name);
     }
-    for(const currentAvailableEnchantment of AllValidCustomEnchantments) {
-      if(!AcquiredCustomEnchantments.has(currentAvailableEnchantment) && this.hasConflicts(currentAvailableEnchantment)) {
+    for(const implementedEnchantment of ImplementedCustomEnchantments) {
+      if(!AcquiredCustomEnchantments.has(implementedEnchantment) && this.hasConflicts(implementedEnchantment)) {
         return true;
       }
     }

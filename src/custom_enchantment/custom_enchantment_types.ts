@@ -5,65 +5,74 @@ export class FishingCustomEnchantmentType {
   static get Nautilus(): CustomEnchantment { return CustomEnchantment.from({
     id: MyCustomItemTypes.NautilusHook,
     name: "Nautilus Hook",
+    dynamicPropId: "Nautilus",
     level: 1, 
-    maxUsage: 50, 
-    conflicts: ["Pyroclasm Hook"]
+    maxUsage: 68, 
+    conflicts: ["Pyroclasm Hook"],
   }); }
-  static get LuminousSiren(): CustomEnchantment { return CustomEnchantment.from({
+  static get Luminous(): CustomEnchantment { return CustomEnchantment.from({
     id: MyCustomItemTypes.LuminousHook, 
-    name: "Luminous Siren Hook", 
+    name: "Luminous Hook", 
+    dynamicPropId: "Luminous",
     level: 1, 
-    maxUsage: 50
+    maxUsage: 54,
   }); }
   static get Pyroclasm(): CustomEnchantment { return CustomEnchantment.from({
     id: MyCustomItemTypes.PyroclasmHook, 
     name: "Pyroclasm Hook", 
+    dynamicPropId: "Pyroclasm",
     level: 1, 
-    maxUsage: 50, 
-    conflicts: ["Nautilus Hook"]
+    maxUsage: 40, 
+    conflicts: ["Nautilus Hook"],
   }); }
   static get Tempus(): CustomEnchantment { return CustomEnchantment.from({
     id: MyCustomItemTypes.TempusHook, 
     name: "Tempus Hook",
+    dynamicPropId: "Tempus",
     level: 1, 
-    maxUsage: 50
+    maxUsage: 89
   }); }
-  static get FermentedSpiderEyeHook(): CustomEnchantment { return CustomEnchantment.from({
+  static get FermentedEye(): CustomEnchantment { return CustomEnchantment.from({
     id: MyCustomItemTypes.FermentedSpiderEyeHook, 
     name: "Hook With Fermented Spider Eye", 
+    dynamicPropId: "FermentedEye",
     level: 1, 
-    maxUsage: 50
+    maxUsage: 35
   }); }
-
-  static getAll(): string[] {
-    return Object.getOwnPropertyNames(this).filter((prop) => !(['length', 'name', 'prototype', 'getAll'].includes(prop)));
-  }
 }
 
 
 export class CustomEnchantmentTypes {
   private static CachedAvailableEnchantments: Array<CustomEnchantment> = [];
+  private static CachedImplementedEnchantments: Set<string>;
 
   static get(customEnchantmentType: CustomEnchantment): CustomEnchantment {
-    const customEnchant = this.getAll().filter((enchantment) => enchantment.name === customEnchantmentType.name)[0];
+    const allAvailableCustomEnchantments = this.CachedAvailableEnchantments.length ? this.CachedAvailableEnchantments : this.getAll();
+    const customEnchant = allAvailableCustomEnchantments.filter((enchantment) => enchantment.name === customEnchantmentType.name)[0];
     customEnchant.level = customEnchantmentType.level ?? 1;
     return customEnchant;
   }
 
   static getAll(): CustomEnchantment[] {
-    
-    // If it doesn't have yet, then just create, if it does, then just use that.
     if(!this.CachedAvailableEnchantments.length) {
-      const customEnchantments = FishingCustomEnchantmentType.getAll();
+      const customEnchantments = Object.getOwnPropertyNames(FishingCustomEnchantmentType).filter((prop) => !(['length', 'name', 'prototype'].includes(prop)));
       const availableEnchantments: CustomEnchantment[] = [];
       for(const customEnchantmentKey of customEnchantments) {
         availableEnchantments.push(FishingCustomEnchantmentType[customEnchantmentKey]);
       }
       this.CachedAvailableEnchantments = availableEnchantments;
-      return availableEnchantments;
-    } 
+    }
     return this.CachedAvailableEnchantments;
+  }
+
+  static getAllAsProperties() {
+    if(!this.CachedImplementedEnchantments.size) {
+      const ImplementedEnchantments = Object.getOwnPropertyNames(FishingCustomEnchantmentType).filter((prop) => !(['length', 'name', 'prototype'].includes(prop)));
+      this.CachedImplementedEnchantments = new Set(ImplementedEnchantments);
+      return ImplementedEnchantments;
+    }
+    return this.CachedImplementedEnchantments;
   }
 }
 
-export type AvailableCustomEnchantments = Exclude<keyof typeof FishingCustomEnchantmentType, 'prototype' | 'getAll'>;
+export type AvailableCustomEnchantments = Exclude<keyof typeof FishingCustomEnchantmentType, 'prototype'>;

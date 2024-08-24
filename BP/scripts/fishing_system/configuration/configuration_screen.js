@@ -8,6 +8,7 @@ import { SendMessageTo } from "utils/index";
 import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
 import { CustomEnchantmentTypes } from "custom_enchantment/custom_enchantment_types";
 import { CustomEnchantment } from "custom_enchantment/custom_enchantment";
+import { MinecraftItemTypes } from "vanilla-types/index";
 export class __Configuration {
     constructor(player) {
         this.player = player;
@@ -45,29 +46,31 @@ export class __Configuration {
         let equippedFishingRod;
         equippedFishingRod = this.player.equippedToolSlot(EquipmentSlot.Offhand);
         try {
-            if (equippedFishingRod?.typeId !== "minecraft:fishing_rod")
+            if (equippedFishingRod?.typeId !== MinecraftItemTypes.FishingRod) {
                 throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested";
+            }
         }
         catch (e) {
-            equippedFishingRod = null;
             let enchantments;
+            function isFull(item) {
+                enchantments = item.enchantment.override(item);
+                return enchantments.canAddCustomEnchantment();
+            }
             const getFishingRodFromInventory = () => {
-                inventorySearch: for (let itemSlot = 0; itemSlot < inventory.size; itemSlot++) {
+                let itemSlot = 0;
+                for (itemSlot = 0; itemSlot < inventory.size; itemSlot++) {
                     const item = inventory.getItem(itemSlot);
                     if (!item)
                         continue;
-                    else if (item.typeId !== "minecraft:fishing_rod")
+                    if (item.typeId !== MinecraftItemTypes.FishingRod)
                         continue;
-                    enchantments = item.enchantment.override(item);
-                    for (const validCustomEnchantment of CustomEnchantmentTypes.getAll()) {
-                        if (!enchantments.addCustomEnchantment(validCustomEnchantment))
-                            continue inventorySearch;
-                        break;
-                    }
-                    return inventory.getSlot(itemSlot);
+                    break;
                 }
+                if (itemSlot >= inventory.size)
+                    return;
                 SendMessageTo(this.player);
-                return;
+                console.warn("succ", itemSlot);
+                return inventory.getSlot(itemSlot);
             };
             equippedFishingRod = getFishingRodFromInventory() ?? null;
         }
@@ -118,12 +121,9 @@ export class __Configuration {
             equippedFishingRod.setItem(fishingRod);
         });
     }
-    showInspectScreen(equippedFishingRod) {
+    showInspectScreen(equippedFishingRod, enchantments) {
         const form = new ModalFormData();
         const fishingRod = equippedFishingRod.getItem();
-        const enchantments = fishingRod.enchantment.override(fishingRod);
-        if (!enchantments.hasCustomEnchantments())
-            return SendMessageTo(this.player);
         const allCustomEnchantments = new Set([...CustomEnchantmentTypes.getAll(), ...enchantments.getCustomEnchantments()]);
         const availableEnchantments = new Map();
         form.title("Fishing Rod Information");
