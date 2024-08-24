@@ -209,7 +209,7 @@ export class __Configuration {
             .button("Remove Enhancement")
             .button("Game Options")
             .button("Guide")
-            .button("Others");
+            .button("Information");
         form.show(this.player).then((response) => {
             if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
                 return;
@@ -236,8 +236,8 @@ export class __Configuration {
         const parsedAddonTitle = ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
         const form = new ActionFormData()
             .title(parsedAddonTitle + " Options")
-            .button(" Client Configuration")
-            .button(" Server Configuration");
+            .button("Client Options")
+            .button("Server Options");
         form.show(this.player).then((response) => {
             if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
                 return;

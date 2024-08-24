@@ -5,46 +5,67 @@ import { IFishingOutput } from "./IFishingOutput";
 import { FormBuilder } from "utils/form_builder";
 
 export class FishingOutputBuilder {
-  private static executedTextEvents: Set<IFishingOutput> = new Set();
-  private static executedUIEvents: Set<IFishingOutput> = new Set();
-
-  // This creates or updates
-  // This is use in initialized, upon client configuration updates, and upon reset.
+  private static playerOutputs: Map<string, { [key: string]: IFishingOutput }> = new Map();
   static create(
     config: FormBuilder<any>,
     fisher: Fisher
   ): IFishingOutput {
-    const keyName = Object.keys(fisher.clientConfiguration).find(key => fisher.clientConfiguration[key] === config);
-    if(!this.isInParticleManager(keyName)) throw new Error("No Particle Key exist / found");
-    switch (config.defaultValue) {
+    console.warn("Active Events:", JSON.stringify(this.activeEventCount()));
+
+    const playerId = fisher.source.id;
+    const keyName = this.extractKeyName(fisher, config);
+    if (!this.isInParticleManager(keyName)) {
+      throw new Error("No Particle Key exist / found");
+    }
+
+    if (!this.playerOutputs.has(playerId)) {
+      this.playerOutputs.set(playerId, {});
+    }
+
+    const events = this.playerOutputs.get(playerId);
+    const eventKey = `${keyName}_${config.defaultValue}`;
+    
+    if (!events[eventKey]) {
+      events[eventKey] = this.createEvent(keyName, config.defaultValue, fisher);
+    }
+
+    return events[eventKey];
+  }
+
+  private static extractKeyName(fisher: Fisher, config: FormBuilder<any>): string {
+    return Object.keys(fisher.clientConfiguration).find(key => fisher.clientConfiguration[key] === config) || "defaultKey";
+  }
+
+  private static createEvent(keyName: string, type: string, fisher: Fisher): IFishingOutput {
+    switch (type) {
       case 'TEXT':
-        const textEvent = new TextResult(FishingOutputHandler[keyName].text, fisher);
-        if (!this.executedTextEvents.has(textEvent)) {
-          this.executedTextEvents.add(textEvent);
-          return textEvent;
-        }
-        return new DisabledResult(); // Return OffEvent if already executed
+        return new TextResult(FishingOutputHandler[keyName].text, fisher);
       case 'ICON':
-        const iconEvent = new ParticleResult(FishingOutputHandler[keyName].particle, fisher);
-        if (!this.executedUIEvents.has(iconEvent)) {
-          this.executedUIEvents.add(iconEvent);
-          return iconEvent;
-        }
-        return new DisabledResult(); // Return OffEvent if already executed
+        return new ParticleResult(FishingOutputHandler[keyName].particle, fisher);
       case 'BOTH':
-        const bothEvent = new BothResult(FishingOutputHandler[keyName].text, FishingOutputHandler[keyName].particle, fisher);
-        if (!this.executedTextEvents.has(bothEvent) || !this.executedUIEvents.has(bothEvent)) {
-          this.executedTextEvents.add(bothEvent);
-          this.executedUIEvents.add(bothEvent);
-          return bothEvent;
-        }
-        return new DisabledResult(); // Return OffEvent if both already executed
+        return new BothResult(FishingOutputHandler[keyName].text, FishingOutputHandler[keyName].particle, fisher);
       default:
         return new DisabledResult();
     }
   }
 
-  private static isInParticleManager(key: string) {
-    return (Object.getOwnPropertyNames(FishingOutputHandler).filter(prop => !(['length', 'name', 'prototype'].includes(prop)))).includes(key);
+  private static isInParticleManager(key: string): boolean {
+    return Object.getOwnPropertyNames(FishingOutputHandler).includes(key);
+  }
+
+  private static activeEventCount(): { text: number; ui: number } {
+    let textCount = 0;
+    let uiCount = 0;
+    this.playerOutputs.forEach(events => {
+      Object.values(events).forEach(event => {
+        if (event instanceof TextResult || event instanceof BothResult) {
+          textCount++;
+        }
+        if (event instanceof ParticleResult || event instanceof BothResult) {
+          uiCount++;
+        }
+      });
+    });
+    return { text: textCount, ui: uiCount };
   }
 }
