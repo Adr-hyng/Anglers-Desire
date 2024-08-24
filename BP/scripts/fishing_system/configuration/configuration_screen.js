@@ -7,6 +7,7 @@ import { FishingOutputBuilder } from "fishing_system/outputs/output_builder";
 import { SendMessageTo } from "utils/index";
 import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
 import { CustomEnchantmentTypes } from "custom_enchantment/custom_enchantment_types";
+import { CustomEnchantment } from "custom_enchantment/custom_enchantment";
 export class __Configuration {
     constructor(player) {
         this.player = player;
@@ -110,7 +111,7 @@ export class __Configuration {
             for (const enchantmentToAdd of validEnchantmentsToAdd) {
                 if (!enchantmentToAdd.value)
                     continue;
-                const customEnchantment = CustomEnchantmentTypes.get({ name: enchantmentToAdd.key, level: 1 });
+                const customEnchantment = CustomEnchantmentTypes.get(CustomEnchantment.from({ name: enchantmentToAdd.key, level: 1 }));
                 enchantments.override(fishingRod).addCustomEnchantment(customEnchantment);
                 inventory.override(this.player).clearItem(customEnchantment.id, 1);
             }
@@ -121,14 +122,15 @@ export class __Configuration {
         const form = new ModalFormData();
         const fishingRod = equippedFishingRod.getItem();
         const enchantments = fishingRod.enchantment.override(fishingRod);
-        const allCustomEnchantments = CustomEnchantmentTypes.getAll();
+        if (!enchantments.hasCustomEnchantments())
+            return SendMessageTo(this.player);
+        const allCustomEnchantments = new Set([...CustomEnchantmentTypes.getAll(), ...enchantments.getCustomEnchantments()]);
         const availableEnchantments = new Map();
-        const IsEnchantmentAvailable = (customEnchantment) => Boolean(enchantments.getCustomEnchantment(customEnchantment));
         form.title("Fishing Rod Information");
         for (const customEnchantment of allCustomEnchantments) {
-            const isAvailable = IsEnchantmentAvailable(customEnchantment);
+            const isAvailable = enchantments.hasCustomEnchantment(customEnchantment);
             availableEnchantments.set(customEnchantment.name, isAvailable);
-            form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name} (${50}/${100})`, false);
+            form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name} ${isAvailable ? ("(" + customEnchantment.usage + "/" + customEnchantment.maxUsage + ")") : ""}`, false);
         }
         form.submitButton("Disassemble");
         form.show(this.player).then((response) => {
@@ -149,12 +151,13 @@ export class __Configuration {
                 index++;
             }
             if (!hasChanges)
-                for (const enchantmentToRemove of validEnchantmentsToRemove) {
-                    if (!enchantmentToRemove.value)
-                        continue;
-                    enchantments.override(fishingRod).removeCustomEnchantment(CustomEnchantmentTypes.get({ name: enchantmentToRemove.key, level: 1 }));
-                    equippedFishingRod.setItem(fishingRod);
-                }
+                return;
+            for (const enchantmentToRemove of validEnchantmentsToRemove) {
+                if (!enchantmentToRemove.value)
+                    continue;
+                enchantments.override(fishingRod).removeCustomEnchantment(CustomEnchantment.from({ name: enchantmentToRemove.key, level: 1 }));
+                equippedFishingRod.setItem(fishingRod);
+            }
         });
     }
     showMainScreen() {

@@ -23,6 +23,7 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
         if(equipment.typeId !== MinecraftItemTypes.FishingRod) throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested"
         player.Configuration.showInspectScreen(equipment);
       } catch (e) {
+        console.warn(e, e.stack);
         const {
           default: CommandObject
         } = await import(`./commands/config.js`);

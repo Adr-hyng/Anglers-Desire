@@ -3,6 +3,7 @@ import { EntityEquippableComponent, EquipmentSlot } from "@minecraft/server";
 import { MinecraftEnchantmentTypes, MinecraftItemTypes} from "vanilla-types/index";
 import { OverTakes } from "overrides/partial_overtakes";
 import { HookUpgrades } from "fishing_system/upgrades/upgrades";
+import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
 
 declare module "@minecraft/server" {
   interface EntityEquippableComponent {
@@ -51,6 +52,23 @@ OverTakes(EntityEquippableComponent.prototype, {
       const enchantment = equipmentToDamage.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent;
       if(enchantment.hasEnchantment(MinecraftEnchantmentTypes.Unbreaking)) level = enchantment.getEnchantment(MinecraftEnchantmentTypes.Unbreaking).level;
     }
+
+
+    // Custom Enchantment Usage
+    // const customEnchantComponent = equipmentToDamage.enchantment.override(equipmentToDamage);
+    try {
+
+      for(const customEnchantment of equipmentToDamage.enchantment.override(equipmentToDamage).getCustomEnchantments()) {
+        if(customEnchantment.damageUsage()) player.playSound("random.break", {volume: 0.5, pitch: 0.7});
+      }
+    } catch (e) {
+      console.warn(e, e.stack);
+    }
+
+    // for(const customEnchantment of  equipmentToDamage.enchantment.override(equipmentToDamage).getCustomEnchantments()) {
+    //   console.warn("UP DAMAGE2: ", customEnchantment.usage);
+    // }
+    
     const unbreakingMultiplier: number = (100 / (level + 1)) / 100;
     const unbreakingDamage: number = damageApplied * unbreakingMultiplier;
     if(itemDurability.damage + unbreakingDamage >= itemDurability.maxDurability){
@@ -60,6 +78,7 @@ OverTakes(EntityEquippableComponent.prototype, {
     } else if(itemDurability.damage + unbreakingDamage < itemDurability.maxDurability){
       (equipmentToDamage.getComponent(ItemComponentTypes.Durability) as ItemDurabilityComponent).damage += unbreakingDamage;
       this.setEquipment(EquipmentSlot.Mainhand, equipmentToDamage);
+
       return false;
     }
   }

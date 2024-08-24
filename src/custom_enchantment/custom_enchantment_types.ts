@@ -1,22 +1,49 @@
 import { MyCustomItemTypes } from "fishing_system/items/custom_items";
-
-export type CustomEnchantment = {
-  level: number;
-  name: string;
-  id?: string;
-  conflicts?: string[];
-}
-
+import { CustomEnchantment } from "./custom_enchantment";
 export class FishingCustomEnchantmentType {
-  static get Nautilus(): CustomEnchantment { return {id: MyCustomItemTypes.NautilusHook ,name: "Nautilus Hook", level: 1, conflicts: ["Pyroclasm Hook"]} as CustomEnchantment; }
-  static get LuminousSiren(): CustomEnchantment { return {id: MyCustomItemTypes.LuminousHook, name: "Luminous Siren Hook", level: 1} as CustomEnchantment; }
-  static get Pyroclasm(): CustomEnchantment { return {id: MyCustomItemTypes.PyroclasmHook, name: "Pyroclasm Hook", level: 1, conflicts: ["Nautilus Hook"]} as CustomEnchantment; }
-  static get Tempus(): CustomEnchantment { return {id: MyCustomItemTypes.TempusHook, name: "Tempus Hook", level: 1} as CustomEnchantment; }
-  static get FermentedSpiderEyeHook(): CustomEnchantment { return {id: MyCustomItemTypes.FermentedSpiderEyeHook, name: "Hook With Fermented Spider Eye", level: 1} as CustomEnchantment; }
+  // Storing just the lore.
+  static get Nautilus(): CustomEnchantment { return CustomEnchantment.from({
+    id: MyCustomItemTypes.NautilusHook,
+    name: "Nautilus Hook",
+    level: 1, 
+    maxUsage: 50, 
+    conflicts: ["Pyroclasm Hook"]
+  }); }
+  static get LuminousSiren(): CustomEnchantment { return CustomEnchantment.from({
+    id: MyCustomItemTypes.LuminousHook, 
+    name: "Luminous Siren Hook", 
+    level: 1, 
+    maxUsage: 50
+  }); }
+  static get Pyroclasm(): CustomEnchantment { return CustomEnchantment.from({
+    id: MyCustomItemTypes.PyroclasmHook, 
+    name: "Pyroclasm Hook", 
+    level: 1, 
+    maxUsage: 50, 
+    conflicts: ["Nautilus Hook"]
+  }); }
+  static get Tempus(): CustomEnchantment { return CustomEnchantment.from({
+    id: MyCustomItemTypes.TempusHook, 
+    name: "Tempus Hook",
+    level: 1, 
+    maxUsage: 50
+  }); }
+  static get FermentedSpiderEyeHook(): CustomEnchantment { return CustomEnchantment.from({
+    id: MyCustomItemTypes.FermentedSpiderEyeHook, 
+    name: "Hook With Fermented Spider Eye", 
+    level: 1, 
+    maxUsage: 50
+  }); }
+
+  static getAll(): string[] {
+    return Object.getOwnPropertyNames(this).filter((prop) => !(['length', 'name', 'prototype', 'getAll'].includes(prop)));
+  }
 }
 
 
 export class CustomEnchantmentTypes {
+  private static CachedAvailableEnchantments: Array<CustomEnchantment> = [];
+
   static get(customEnchantmentType: CustomEnchantment): CustomEnchantment {
     const customEnchant = this.getAll().filter((enchantment) => enchantment.name === customEnchantmentType.name)[0];
     customEnchant.level = customEnchantmentType.level ?? 1;
@@ -24,13 +51,19 @@ export class CustomEnchantmentTypes {
   }
 
   static getAll(): CustomEnchantment[] {
-    const customEnchantments = Object.getOwnPropertyNames(FishingCustomEnchantmentType).filter((prop) => !(['length', 'name', 'prototype'].includes(prop)));
-    const availableEnchantments: CustomEnchantment[] = [];
-    for(const customEnchantmentKey of customEnchantments) {
-      availableEnchantments.push(FishingCustomEnchantmentType[customEnchantmentKey]);
-    }
-    return availableEnchantments;
+    
+    // If it doesn't have yet, then just create, if it does, then just use that.
+    if(!this.CachedAvailableEnchantments.length) {
+      const customEnchantments = FishingCustomEnchantmentType.getAll();
+      const availableEnchantments: CustomEnchantment[] = [];
+      for(const customEnchantmentKey of customEnchantments) {
+        availableEnchantments.push(FishingCustomEnchantmentType[customEnchantmentKey]);
+      }
+      this.CachedAvailableEnchantments = availableEnchantments;
+      return availableEnchantments;
+    } 
+    return this.CachedAvailableEnchantments;
   }
 }
 
-export type AvailableCustomEnchantments = Exclude<keyof typeof FishingCustomEnchantmentType, "prototype">;
+export type AvailableCustomEnchantments = Exclude<keyof typeof FishingCustomEnchantmentType, 'prototype' | 'getAll'>;

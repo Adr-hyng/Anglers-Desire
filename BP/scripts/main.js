@@ -23,6 +23,7 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
                 player.Configuration.showInspectScreen(equipment);
             }
             catch (e) {
+                console.warn(e, e.stack);
                 const { default: CommandObject } = await import(`./commands/config.js`);
                 CommandObject.execute(player, ['show']);
             }

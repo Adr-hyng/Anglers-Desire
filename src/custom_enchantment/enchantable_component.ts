@@ -2,8 +2,9 @@
 import { ItemEnchantableComponent, ItemStack } from '@minecraft/server';
 import { overrideEverything } from 'overrides/index';
 import { OverTakes } from "overrides/partial_overtakes";
-import { CustomEnchantment, CustomEnchantmentTypes } from './custom_enchantment_types';
-import { RomanNumericConverter } from 'utils/utilities';
+import { CustomEnchantmentTypes } from './custom_enchantment_types';
+import { RomanNumericConverter } from 'utils/roman_converter';
+import { CustomEnchantment } from './custom_enchantment';
 overrideEverything();
 
 declare module "@minecraft/server" {
@@ -39,6 +40,7 @@ OverTakes(ItemEnchantableComponent.prototype, {
     if(!this.hasCustomEnchantments()) {
       const enchantmentInfo = `§r§7${enchantment.name} ${RomanNumericConverter.toRoman(enchantment.level)}`;
       this.source.setLore([...this.source.getLore(), enchantmentInfo]);
+      enchantment.create(this.source);
       return true;
     }
 
@@ -46,13 +48,15 @@ OverTakes(ItemEnchantableComponent.prototype, {
     if(!this.hasCustomEnchantment(enchantment)) {
       const enchantmentInfo = `§r§7${enchantment.name} ${RomanNumericConverter.toRoman(enchantment.level)}`;
       this.source.setLore([...this.source.getLore(), enchantmentInfo]);
+      enchantment.create(this.source);
       return true;
     }
     
     const currentEnchantment = this.getCustomEnchantment(enchantment);
     if(currentEnchantment.level < enchantment.level) {
       const enchantmentInfo = `§r§7${enchantment.name} ${RomanNumericConverter.toRoman(enchantment.level)}`;
-      this.source.setLore([...this.source.getLore().filter(lore => !(lore.startsWith(`§r§7${enchantment.name}`))), enchantmentInfo])
+      this.source.setLore([...this.source.getLore().filter(lore => !(lore.startsWith(`§r§7${enchantment.name}`))), enchantmentInfo]);
+      enchantment.create(this.source);
       return true;
     }
     return false;
@@ -68,6 +72,7 @@ OverTakes(ItemEnchantableComponent.prototype, {
   hasConflicts(enchantmentName: string): boolean {
     return this.getCustomEnchantments().some(enchant => enchant.conflicts?.includes(enchantmentName));
   },
+  // I think this is useless?? IDK. I think the better implementation for this is in the upgrade section of screen configuration.
   canAddCustomEnchantment(): boolean {
     let canBeEnchanted = false;
     const AllValidCustomEnchantments: Set<string> = new Set();
@@ -92,7 +97,13 @@ OverTakes(ItemEnchantableComponent.prototype, {
     if(index === -1) return null;
     const [_, name, level] = this.source.getLore()[index].match(new RegExp(`(§r§7.*?)([IVXLCDM]+)$`));
     if(!name) throw "extraction error with regex in custom enchantment"
-    const fetchedCustomEnchantment = CustomEnchantmentTypes.get({name: enchantment.name, level: RomanNumericConverter.toNumeric(level), conflicts: enchantment.conflicts});
+    const currentCustomEnchantment = CustomEnchantment.from({
+      name: enchantment.name, 
+      level: RomanNumericConverter.toNumeric(level), 
+      conflicts: enchantment.conflicts,
+    });
+    currentCustomEnchantment.init(this.source);
+    const fetchedCustomEnchantment = CustomEnchantmentTypes.get(currentCustomEnchantment);
     return fetchedCustomEnchantment;
   },
   getCustomEnchantments(): CustomEnchantment[] {
@@ -101,7 +112,15 @@ OverTakes(ItemEnchantableComponent.prototype, {
     const ValidCustomEnchantments: string[] = this.source.getLore().filter(lore => new RegExp(/(§r§7.*?)([IVXLCDM]+)$/).test(lore)) || [];
     for (const validLore of ValidCustomEnchantments) {
       let [, eName, level] = validLore.match(/(§r§7.*?)([IVXLCDM]+)$/);
-      availableEnchantments.push( CustomEnchantmentTypes.get({name: eName.replace("§r§7", "").slice(0, -1), level: RomanNumericConverter.toNumeric(level)}) );
+
+      const currentCustomEnchantment = CustomEnchantmentTypes.get(
+        CustomEnchantment.from({
+          name: eName.replace("§r§7", "").slice(0, -1), 
+          level: RomanNumericConverter.toNumeric(level),
+        })
+      );
+      currentCustomEnchantment.init(this.source);
+      availableEnchantments.push(currentCustomEnchantment);
     }
     return availableEnchantments;
   },
