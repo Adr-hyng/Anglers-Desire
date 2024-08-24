@@ -141,7 +141,7 @@ def load_settings():
     try:
         os.utime(f'src/configuration_settings.json', None)
         with open(f'src/configuration_settings.json', 'r') as file:
-            settings = {**settings, **json.load(file)}
+            settings = {**json.load(file), **settings}
             
     except (FileNotFoundError, json.JSONDecodeError):
         # Handle the case where the file is empty or not valid JSON.

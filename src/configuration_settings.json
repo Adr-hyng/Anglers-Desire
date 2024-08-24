@@ -4,14 +4,18 @@
     "name": "Expiration Timer",
     "default": 300
   },
-  "ShowMessageUponJoin": {
-    "description": "Shows the script initialization message log upon player joining, default is true.",
-    "name": "Show Message On Join",
-    "default": true
-  },
   "CatchingPlacement": {
     "description": "The locator for when will be caught entity be placed or reeled",
-    "name": "Fishing Placement Offset",
-    "default": ["BACK", "CURRENT", "FRONT"]
+    "name": "Caught Direction",
+    "default": [
+      "CURRENT", 
+      "BACK", 
+      "FRONT"
+    ]
+  },
+  "ShowMessageUponJoin": {
+    "description": "Shows the script initialization message log upon player joining, default is true.",
+    "name": "Show Message On Join ",
+    "default": true
   }
 }

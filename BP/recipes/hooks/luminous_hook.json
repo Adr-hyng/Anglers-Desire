@@ -1,0 +1,27 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shapeless": {
+    "description": {
+    "identifier": "yn:luminous_hook"
+    },
+
+    
+    "tags": [ "crafting_table" ],
+    "ingredients": [
+      {
+        "item": "minecraft:glow_ink_sac"
+      },
+      {
+        "item": "yn:normal_hook"
+      }
+    ],
+	"unlock": [
+      {
+        "item": "minecraft:glow_ink_sac"
+	    }
+    ],
+    "result": {
+      "item": "yn:luminous_siren_hook"
+    }
+  }
+}

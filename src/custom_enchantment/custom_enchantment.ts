@@ -45,8 +45,6 @@ export class CustomEnchantment {
     this._usage = this.usage;
     this._usage -= decrementedValue;
     if(this._usage <= 1) {
-      this.source.setDynamicProperty(`Fishing${this._dynamicPropertyIdentifier}Usage`, undefined);
-      this.source.setDynamicProperty(`Fishing${this._dynamicPropertyIdentifier}MaxUsage`, undefined);
       this.source.enchantment.override(this.source).removeCustomEnchantment(this);
       return true;
     }
@@ -76,6 +74,12 @@ export class CustomEnchantment {
     this.source = source;
     this._usage = this.usage;
     this._maxUsage = this.maxUsage;
+  }
+
+  remove() {
+    if(!this.source) throw "Source of Itemstack doesn't exists in Custom Enchantment in remove method";
+    this.source.setDynamicProperty(`Fishing${this._dynamicPropertyIdentifier}Usage`, undefined);
+    this.source.setDynamicProperty(`Fishing${this._dynamicPropertyIdentifier}MaxUsage`, undefined);
   }
 
   static from(ref: TCustomEnchantment) {

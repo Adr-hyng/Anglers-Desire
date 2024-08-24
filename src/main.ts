@@ -21,19 +21,10 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
       const oldLog = onCustomBlockInteractLogMap.get(player.id) as number;
       onCustomBlockInteractLogMap.set(player.id, Date.now());
       if ((oldLog + 500) >= Date.now()) return;
-
-      const equipment = player.equippedToolSlot(EquipmentSlot.Mainhand);
-      const itemEquipment = equipment.getItem();
-      try {
-        const enchantment = itemEquipment.enchantment.override(itemEquipment);
-        if(equipment.typeId !== MinecraftItemTypes.FishingRod || !enchantment.hasCustomEnchantments()) throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested"
-        player.Configuration.showInspectScreen(equipment, enchantment);
-      } catch (e) {
-        const {
-          default: CommandObject
-        } = await import(`./commands/config.js`);
-        CommandObject.execute(player as Player, ['show']);
-      }
+      const {
+        default: CommandObject
+      } = await import(`./commands/config.js`);
+      CommandObject.execute(player as Player, ['show']);
     }
   });
 });

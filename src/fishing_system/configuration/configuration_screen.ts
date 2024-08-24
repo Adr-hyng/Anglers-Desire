@@ -1,5 +1,5 @@
 import { ContainerSlot, EntityInventoryComponent, EquipmentSlot, ItemEnchantableComponent, ItemStack, Player } from "@minecraft/server";
-import { ActionFormData, ActionFormResponse, FormCancelationReason, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
+import { ActionFormData, ActionFormResponse, FormCancelationReason, MessageFormData, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
 import { cloneConfiguration, ConfigurationCollections_DB, ConfigurationTypes} from "./configuration_handler";
 import {ADDON_NAME, db, localFishersCache, fetchFisher} from "constant";
 import { clientConfiguration} from "./client_configuration";
@@ -54,9 +54,8 @@ export class __Configuration {
   showUpgradeScreen() {
     const inventory = (this.player.getComponent(EntityInventoryComponent.componentId) as EntityInventoryComponent).container;
     let equippedFishingRod: ContainerSlot;
-    equippedFishingRod = this.player.equippedToolSlot(EquipmentSlot.Offhand);
     try {
-      if(equippedFishingRod?.typeId !== MinecraftItemTypes.FishingRod) {
+      if((equippedFishingRod = this.player.equippedToolSlot(EquipmentSlot.Mainhand))?.typeId !== MinecraftItemTypes.FishingRod || (equippedFishingRod = this.player.equippedToolSlot(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
         throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested";
       }
     } catch (e) {
@@ -82,7 +81,6 @@ export class __Configuration {
         }
         if(itemSlot >= inventory.size) return;
         SendMessageTo(this.player);
-        console.warn("succ", itemSlot);
         return inventory.getSlot(itemSlot);
       };
       equippedFishingRod = getFishingRodFromInventory() ?? null;
@@ -94,7 +92,7 @@ export class __Configuration {
     const availableEnchantments: Map<string, boolean> = new Map();
     
     const form = new ModalFormData();
-    form.title("Choose Available Hook to Embed");
+    form.title("Choose enhancement to add");
     for(const customEnchantment of allCustomEnchantments){
       let isAvailable = false;
       const result = this.player.runCommand(`testfor @s[hasItem={item=${customEnchantment.id}}]`)
@@ -104,7 +102,7 @@ export class __Configuration {
       availableEnchantments.set(customEnchantment.name, isAvailable);
       form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name}`, false);
     }
-    form.submitButton("Embbed Hook");
+    form.submitButton("Add ");
 
     form.show(this.player).then( (response) => {
       if (!response.formValues) return;
@@ -130,20 +128,65 @@ export class __Configuration {
       equippedFishingRod.setItem(fishingRod);
     });
   }
+  showCreditsScreen() {
+    const form = new MessageFormData();
+    form.title(" Credits / Shoutout ")
+    .button2("BACK")
+    .button1("EXIT")
+    .body(
+      `
+  Here are the people who really made this all possible:
 
-  showInspectScreen(equippedFishingRod: ContainerSlot, enchantments: ItemEnchantableComponent) {
+   Dal4y - For the texture-related coolness. Follow this talented artist in Twitter: @DaL4ydobeballin.
+
+   BAO - Minecraft Bedrock-Addons peps (scripts, and technical).
+
+   Big Chungus - Splash Particle Template for VFX.
+
+   Pots - For being a supportive girlfriend.
+
+   Martin - For the support and letting me use his microsoft account to create this project.
+
+           You reading this! 
+      
+              Enjoy fishing!
+      `
+    );
+    form.show(this.player).then((response) => {
+      if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
+        return;
+      }
+      console.warn(response.selection);
+      switch(response.selection) {
+        case 0: return;
+        case 1:
+          return this.showMainScreen();
+        default:
+          break;
+      }
+      return;
+    });
+  }
+  showInspectScreen() {
+    // Must be either offhand or mainhand to remove hook
+    let fishingRod = this.player.equippedTool(EquipmentSlot.Mainhand);
+    const enchantments = fishingRod.enchantment.override(fishingRod);
+    if(fishingRod?.typeId !== MinecraftItemTypes.FishingRod 
+    && (fishingRod = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod
+    || (!enchantments.hasCustomEnchantments())) {
+      return SendMessageTo(this.player);
+    }
     const form = new ModalFormData();
-    const fishingRod = equippedFishingRod.getItem();
     const allCustomEnchantments = new Set([...CustomEnchantmentTypes.getAll(), ...enchantments.getCustomEnchantments()]);
 
     const availableEnchantments: Map<string, boolean> = new Map();
-    form.title("Fishing Rod Information");
+    form.title("Choose enhancement to remove");
     for(const customEnchantment of allCustomEnchantments) {
       const isAvailable = enchantments.hasCustomEnchantment(customEnchantment);
       availableEnchantments.set(customEnchantment.name, isAvailable);
-      form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name} ${isAvailable ? ("(" + customEnchantment.usage + "/" + customEnchantment.maxUsage + ")") : ""}`, false);
+      form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name}${isAvailable ? (" [" + customEnchantment.usage + "/" + customEnchantment.maxUsage + "]") : ""} `, false);
     }
-    form.submitButton("Disassemble");
+    form.submitButton("Remove ");
     form.show(this.player).then( (response) => {
       if (!response.formValues) return;
       if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
@@ -161,26 +204,34 @@ export class __Configuration {
       if (!hasChanges) return;
       for(const enchantmentToRemove of validEnchantmentsToRemove) {
         if(!enchantmentToRemove.value) continue;
-        enchantments.override(fishingRod).removeCustomEnchantment(CustomEnchantment.from({name: enchantmentToRemove.key, level: 1}));
-        equippedFishingRod.setItem(fishingRod);
+        const customEnchantmentToRemove = enchantments.getCustomEnchantment(CustomEnchantment.from({name: enchantmentToRemove.key, level: 1}));
+        enchantments.removeCustomEnchantment(customEnchantmentToRemove);
+        this.player.equippedToolSlot(EquipmentSlot.Mainhand).setItem(fishingRod);
       }
     });
   }
-  
   showMainScreen() {
     const form = new ActionFormData()
-    .title("Fisher's Table")
-    .button("Configuration")
-    .button("Attach Hook")
-    .button("Craft Hook");
+    .title(" Fisher's Table ")
+    .button("Add Enhancement")
+    .button("Remove Enhancement")
+    .button("Game Options")
+    .button("Guide")
+    .button("Others");
     form.show(this.player).then( (response: ActionFormResponse) => {
       if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) return;
       switch(response.selection) {
         case 0:
-          this.showConfigurationScreen();
+          this.showUpgradeScreen();
           break;
         case 1:
-          this.showUpgradeScreen();
+          this.showInspectScreen();
+          break;
+        case 2:
+          this.showConfigurationScreen();
+          break;
+        case 3:
+          this.showCreditsScreen()
           break;
         default:
           break;
@@ -191,10 +242,9 @@ export class __Configuration {
   showConfigurationScreen() {
     const parsedAddonTitle = ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
     const form = new ActionFormData()
-    .title(parsedAddonTitle + " Configuration")
-    .button("Client")
-    .button("Server")
-    .button("Help");
+    .title(parsedAddonTitle + " Options")
+    .button(" Client Configuration")
+    .button(" Server Configuration")
     form.show(this.player).then( (response: ActionFormResponse) => {
       if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) return;
       switch(response.selection) {
@@ -214,7 +264,6 @@ export class __Configuration {
   showServerScreen() {
     const form: ModalFormData = new ModalFormData().title("Server-side Configuration");
     
-    // Fetch client configuration from the database if valid, else set it.
     if (db.isValid()) {
       if (db.has(this.SERVER_CONFIGURATION_DB)) {
         setServerConfiguration( db.get(this.SERVER_CONFIGURATION_DB) );
@@ -277,7 +326,6 @@ export class __Configuration {
   showClientScreen() {
     const form: ModalFormData = new ModalFormData().title("Client-side Configuration");
     
-    // Fetch client configuration from the database if valid, else set it.
     if (db.isValid()) {
       if (db.has(this.CLIENT_CONFIGURATION_DB)) {
         this.source.clientConfiguration = db.get(this.CLIENT_CONFIGURATION_DB);
@@ -294,12 +342,12 @@ export class __Configuration {
         const currentValue = builder.values.indexOf(builder.defaultValue);
         cachedConfigurationValues[index] = currentValue !== -1 ? currentValue : parseInt(builder.defaultValue as string);
         form.dropdown(builder.name, builder.values as string[], cachedConfigurationValues[index] as number);
-      } else if (typeof builder.defaultValue === "boolean") {
-        cachedConfigurationValues[index] = builder.defaultValue;
-        form.toggle(builder.name, cachedConfigurationValues[index] as boolean);
       } else if (typeof builder.defaultValue === "string" && !isArrayEmpty) {
         cachedConfigurationValues[index] = builder.defaultValue;
         form.textField(builder.name, cachedConfigurationValues[index]);
+      } else if (typeof builder.defaultValue === "boolean") {
+        cachedConfigurationValues[index] = builder.defaultValue;
+        form.toggle(builder.name, cachedConfigurationValues[index] as boolean);
       }
     });
 

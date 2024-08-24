@@ -107,6 +107,8 @@ OverTakes(ItemEnchantableComponent.prototype, {
     removeCustomEnchantment(enchantment) {
         if (!this.source)
             throw "No Itemstack source found in custom enchantment component";
+        enchantment.init(this.source);
+        enchantment.remove();
         this.source.setLore(this.source.getLore().filter(lore => !(lore.startsWith(`§r§7${enchantment.name}`))));
     }
 });

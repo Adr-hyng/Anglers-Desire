@@ -1,0 +1,27 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shapeless": {
+    "description": {
+    "identifier": "yn:tempus_hook"
+    },
+
+    
+    "tags": [ "crafting_table" ],
+    "ingredients": [
+      {
+        "item": "minecraft:amethyst_shard"
+      },
+      {
+        "item": "yn:normal_hook"
+      }
+    ],
+	"unlock": [
+      {
+        "item": "minecraft:amethyst_shard"
+	    }
+    ],
+    "result": {
+      "item": "yn:tempus_hook"
+    }
+  }
+}

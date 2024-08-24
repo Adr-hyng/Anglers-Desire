@@ -7,8 +7,8 @@ export class FishingCustomEnchantmentType {
     name: "Nautilus Hook",
     dynamicPropId: "Nautilus",
     level: 1, 
-    maxUsage: 68, 
-    conflicts: ["Pyroclasm Hook"],
+    maxUsage: 75, 
+    conflicts: ["Pyroclasm Hook", "Fermented Hook"],
   }); }
   static get Luminous(): CustomEnchantment { return CustomEnchantment.from({
     id: MyCustomItemTypes.LuminousHook, 
@@ -22,7 +22,7 @@ export class FishingCustomEnchantmentType {
     name: "Pyroclasm Hook", 
     dynamicPropId: "Pyroclasm",
     level: 1, 
-    maxUsage: 40, 
+    maxUsage: 45, 
     conflicts: ["Nautilus Hook"],
   }); }
   static get Tempus(): CustomEnchantment { return CustomEnchantment.from({
@@ -30,14 +30,15 @@ export class FishingCustomEnchantmentType {
     name: "Tempus Hook",
     dynamicPropId: "Tempus",
     level: 1, 
-    maxUsage: 89
+    maxUsage: 92
   }); }
   static get FermentedEye(): CustomEnchantment { return CustomEnchantment.from({
     id: MyCustomItemTypes.FermentedSpiderEyeHook, 
-    name: "Hook With Fermented Spider Eye", 
+    name: "Fermented Hook", 
     dynamicPropId: "FermentedEye",
     level: 1, 
-    maxUsage: 35
+    maxUsage: 60,
+    conflicts: ["Nautilus Hook"],
   }); }
 }
 

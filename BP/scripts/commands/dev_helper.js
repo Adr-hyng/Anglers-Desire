@@ -43,15 +43,17 @@ const command = {
             case REQUIRED_PARAMETER.GET:
                 const fisher = fetchFisher(player);
                 fishingRod = fisher.fishingRod.getEquipment(EquipmentSlot.Mainhand);
-                for (const customEnchantment of fishingRod.enchantment.override(fishingRod).getCustomEnchantments()) {
-                    customEnchantment.damageUsage(10);
-                    console.warn(customEnchantment.name, customEnchantment.usage);
-                }
-                fishingRod.clearDynamicProperties();
-                player.getComponent(EntityComponentTypes.Inventory).container.setItem(player.selectedSlotIndex, fishingRod);
-                console.warn(JSON.stringify(fishingRod.getDynamicPropertyIds()), fishingRod.getDynamicPropertyIds()[0]);
+                console.warn(JSON.stringify(fishingRod.getDynamicPropertyIds()), fishingRod.getDynamicProperty(fishingRod.getDynamicPropertyIds()[0]));
                 break;
             case REQUIRED_PARAMETER.TEST:
+                fishingRod = fetchFisher(player).fishingRod.getEquipment(EquipmentSlot.Mainhand);
+                for (const customEnchantment of fishingRod.enchantment.override(fishingRod).getCustomEnchantments()) {
+                    if (customEnchantment.damageUsage(10)) {
+                        player.playSound("random.break", { volume: 0.5, pitch: 0.7 });
+                    }
+                    console.warn(customEnchantment.name, customEnchantment.usage);
+                }
+                player.getComponent(EntityComponentTypes.Inventory).container.setItem(player.selectedSlotIndex, fishingRod);
                 break;
             case REQUIRED_PARAMETER.PARTICLE:
                 const molang = new MolangVariableMap();

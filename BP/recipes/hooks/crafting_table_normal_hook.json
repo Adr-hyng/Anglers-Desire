@@ -1,0 +1,29 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "yn:crafting_table_normal_hook"
+    },
+    "tags": [ "crafting_table" ],
+    "pattern": [
+      "  #",
+      "# #",
+      " # "
+    ],
+    "key": {
+      "#": {
+        "item": "minecraft:iron_nugget"
+      }
+    },
+	  "unlock": [
+      {
+        "item": "minecraft:iron_nugget"
+      },
+      {
+        "item": "minecraft:fishing_rod"
+      }
+    ],
+    "result": { "item": "yn:normal_hook" },
+    "priority": 1
+  }
+}

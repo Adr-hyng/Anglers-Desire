@@ -59,23 +59,23 @@ const command: ICommandBase = {
                 // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Nautilus);
                 // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Pyroclasm);
                 // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Tempus);
-                for(const customEnchantment of fishingRod.enchantment.override(fishingRod).getCustomEnchantments()) {
-                    customEnchantment.damageUsage(10);
-                    console.warn(customEnchantment.name, customEnchantment.usage);
-                }
-                fishingRod.clearDynamicProperties();
-                (player.getComponent(EntityComponentTypes.Inventory) as EntityInventoryComponent).container.setItem(player.selectedSlotIndex, fishingRod);
-                console.warn(JSON.stringify(fishingRod.getDynamicPropertyIds()), fishingRod.getDynamicPropertyIds()[0]);
+                // for(const customEnchantment of fishingRod.enchantment.override(fishingRod).getCustomEnchantments()) {
+                    // customEnchantment.damageUsage(10);
+                    // console.warn(customEnchantment.name, customEnchantment.usage);
+                // }
+                // fishingRod.clearDynamicProperties();
+                // (player.getComponent(EntityComponentTypes.Inventory) as EntityInventoryComponent).container.setItem(player.selectedSlotIndex, fishingRod);
+                console.warn(JSON.stringify(fishingRod.getDynamicPropertyIds()), fishingRod.getDynamicProperty(fishingRod.getDynamicPropertyIds()[0]));
                 break;
             case REQUIRED_PARAMETER.TEST:
-                // fishingRod = fetchFisher(player).fishingRod.getEquipment(EquipmentSlot.Mainhand);
-                // for(const customEnchantment of fishingRod.enchantment.override(fishingRod).getCustomEnchantments()) {
-                //     if(customEnchantment.damageUsage(1)) {
-                //         player.playSound("random.break", {volume: 0.5, pitch: 0.7});
-                //     }
-                //     console.warn(customEnchantment.name, customEnchantment.usage);
-                // }
-                // (player.getComponent(EntityComponentTypes.Inventory) as EntityInventoryComponent).container.setItem(player.selectedSlotIndex, fishingRod);
+                fishingRod = fetchFisher(player).fishingRod.getEquipment(EquipmentSlot.Mainhand);
+                for(const customEnchantment of fishingRod.enchantment.override(fishingRod).getCustomEnchantments()) {
+                    if(customEnchantment.damageUsage(10)) {
+                        player.playSound("random.break", {volume: 0.5, pitch: 0.7});
+                    }
+                    console.warn(customEnchantment.name, customEnchantment.usage);
+                }
+                (player.getComponent(EntityComponentTypes.Inventory) as EntityInventoryComponent).container.setItem(player.selectedSlotIndex, fishingRod);
 
                 // fishingRod = new ItemStack("minecraft:fishing_rod", 1);
                 // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).addEnchantment({type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Lure), level: 3});
