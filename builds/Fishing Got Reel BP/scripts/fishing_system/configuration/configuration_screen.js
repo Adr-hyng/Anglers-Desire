@@ -1,4 +1,5 @@
-import { ActionFormData, FormCancelationReason, ModalFormData } from "@minecraft/server-ui";
+import { EntityInventoryComponent, EquipmentSlot } from "@minecraft/server";
+import { ActionFormData, FormCancelationReason, MessageFormData, ModalFormData } from "@minecraft/server-ui";
 import { cloneConfiguration, ConfigurationCollections_DB } from "./configuration_handler";
 import { ADDON_NAME, db, localFishersCache, fetchFisher } from "constant";
 import { clientConfiguration } from "./client_configuration";
@@ -6,6 +7,8 @@ import { FishingOutputBuilder } from "fishing_system/outputs/output_builder";
 import { SendMessageTo } from "utils/index";
 import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
 import { CustomEnchantmentTypes } from "custom_enchantment/custom_enchantment_types";
+import { CustomEnchantment } from "custom_enchantment/custom_enchantment";
+import { MinecraftItemTypes } from "vanilla-types/index";
 export class __Configuration {
     constructor(player) {
         this.player = player;
@@ -38,19 +41,139 @@ export class __Configuration {
         else
             throw new Error("Database not found");
     }
-    showInspectScreen(equippedFishingRod) {
-        const form = new ModalFormData();
-        const enchantments = equippedFishingRod.enchantment.override(equippedFishingRod);
-        const allCustomEnchantments = CustomEnchantmentTypes.getAll();
-        const availableEnchantments = new Map();
-        const IsEnchantmentAvailable = (customEnchantment) => Boolean(enchantments.getCustomEnchantment(customEnchantment));
-        form.title("Fishing Rod Information");
-        for (const customEnchantment of allCustomEnchantments) {
-            const isAvailable = IsEnchantmentAvailable(customEnchantment);
-            availableEnchantments[customEnchantment.name] = isAvailable;
-            form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name} (${50}/${100})`, false);
+    showUpgradeScreen() {
+        const inventory = this.player.getComponent(EntityInventoryComponent.componentId).container;
+        let equippedFishingRod;
+        try {
+            if ((equippedFishingRod = this.player.equippedToolSlot(EquipmentSlot.Mainhand))?.typeId !== MinecraftItemTypes.FishingRod || (equippedFishingRod = this.player.equippedToolSlot(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
+                throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested";
+            }
         }
-        form.submitButton("Disassemble");
+        catch (e) {
+            let enchantments;
+            function isFull(item) {
+                enchantments = item.enchantment.override(item);
+                return enchantments.canAddCustomEnchantment();
+            }
+            const getFishingRodFromInventory = () => {
+                let itemSlot = 0;
+                for (itemSlot = 0; itemSlot < inventory.size; itemSlot++) {
+                    const item = inventory.getItem(itemSlot);
+                    if (!item)
+                        continue;
+                    if (item.typeId !== MinecraftItemTypes.FishingRod)
+                        continue;
+                    break;
+                }
+                if (itemSlot >= inventory.size)
+                    return;
+                SendMessageTo(this.player);
+                return inventory.getSlot(itemSlot);
+            };
+            equippedFishingRod = getFishingRodFromInventory() ?? null;
+        }
+        if (!equippedFishingRod)
+            return SendMessageTo(this.player);
+        const allCustomEnchantments = CustomEnchantmentTypes.getAll();
+        const fishingRod = equippedFishingRod.getItem();
+        const enchantments = fishingRod.enchantment.override(fishingRod);
+        const availableEnchantments = new Map();
+        const form = new ModalFormData();
+        form.title("Choose enhancement to add");
+        for (const customEnchantment of allCustomEnchantments) {
+            let isAvailable = false;
+            const result = this.player.runCommand(`testfor @s[hasItem={item=${customEnchantment.id}}]`);
+            if (result.successCount && !enchantments.hasCustomEnchantment(customEnchantment) && !enchantments.hasConflicts(customEnchantment.name)) {
+                isAvailable = true;
+            }
+            availableEnchantments.set(customEnchantment.name, isAvailable);
+            form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name}`, false);
+        }
+        form.submitButton("Add ");
+        form.show(this.player).then((response) => {
+            if (!response.formValues)
+                return;
+            if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
+                return;
+            }
+            let hasChanges = false;
+            let index = 0;
+            const validEnchantmentsToAdd = [];
+            for (const [key, availableValue] of availableEnchantments.entries()) {
+                const newVal = response.formValues[index];
+                if (newVal === availableValue && newVal) {
+                    hasChanges = true;
+                }
+                validEnchantmentsToAdd.push({ key: key, value: newVal && availableValue });
+                index++;
+            }
+            if (!hasChanges)
+                return;
+            for (const enchantmentToAdd of validEnchantmentsToAdd) {
+                if (!enchantmentToAdd.value)
+                    continue;
+                const customEnchantment = CustomEnchantmentTypes.get(CustomEnchantment.from({ name: enchantmentToAdd.key, level: 1 }));
+                enchantments.override(fishingRod).addCustomEnchantment(customEnchantment);
+                inventory.override(this.player).clearItem(customEnchantment.id, 1);
+            }
+            equippedFishingRod.setItem(fishingRod);
+        });
+    }
+    showCreditsScreen() {
+        const form = new MessageFormData();
+        form.title(" Credits / Shoutout ")
+            .button2("BACK")
+            .button1("EXIT")
+            .body(`
+  Here are the people who really made this all possible:
+
+   Dal4y - For the texture-related coolness. Follow this talented artist in Twitter: @DaL4ydobeballin.
+
+   BAO - Minecraft Bedrock-Addons peps (scripts, and technical).
+
+   Big Chungus - Splash Particle Template for VFX.
+
+   Pots - For being a supportive girlfriend.
+
+   Martin - For the support and letting me use his microsoft account to create this project.
+
+           You reading this! 
+      
+              Enjoy fishing!
+      `);
+        form.show(this.player).then((response) => {
+            if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
+                return;
+            }
+            console.warn(response.selection);
+            switch (response.selection) {
+                case 0: return;
+                case 1:
+                    return this.showMainScreen();
+                default:
+                    break;
+            }
+            return;
+        });
+    }
+    showDisenchantingScreen() {
+        let fishingRod = this.player.equippedTool(EquipmentSlot.Mainhand);
+        const enchantments = fishingRod.enchantment.override(fishingRod);
+        if (fishingRod?.typeId !== MinecraftItemTypes.FishingRod
+            && (fishingRod = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod
+            || (!enchantments.hasCustomEnchantments())) {
+            return SendMessageTo(this.player);
+        }
+        const form = new ModalFormData();
+        const allCustomEnchantments = new Set([...CustomEnchantmentTypes.getAll(), ...enchantments.getCustomEnchantments()]);
+        const availableEnchantments = new Map();
+        form.title("Choose enhancement to remove");
+        for (const customEnchantment of allCustomEnchantments) {
+            const isAvailable = enchantments.hasCustomEnchantment(customEnchantment);
+            availableEnchantments.set(customEnchantment.name, isAvailable);
+            form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name}${isAvailable ? (" [" + customEnchantment.usage + "/" + customEnchantment.maxUsage + "]") : ""} `, false);
+        }
+        form.submitButton("Remove ");
         form.show(this.player).then((response) => {
             if (!response.formValues)
                 return;
@@ -60,39 +183,48 @@ export class __Configuration {
             let hasChanges = false;
             let index = 0;
             const validEnchantmentsToRemove = [];
-            console.warn("Meow", JSON.stringify(availableEnchantments));
             for (const [key, availableValue] of availableEnchantments.entries()) {
-                console.warn("SETP");
                 const newVal = response.formValues[index];
                 if (newVal === availableValue && newVal) {
                     hasChanges = true;
                 }
-                validEnchantmentsToRemove.push({ key: key, value: hasChanges });
+                validEnchantmentsToRemove.push({ key: key, value: newVal && availableValue });
                 index++;
             }
-            console.warn("HAS CHANGED " + hasChanges);
-            if (hasChanges) {
-                for (const enchantmentToRemove of validEnchantmentsToRemove.filter(unnecessaryEnchantment => !unnecessaryEnchantment.value)) {
-                    console.warn("REMOVING: ", enchantmentToRemove.key + " - " + enchantmentToRemove.value);
-                }
+            if (!hasChanges)
+                return;
+            for (const enchantmentToRemove of validEnchantmentsToRemove) {
+                if (!enchantmentToRemove.value)
+                    continue;
+                const customEnchantmentToRemove = enchantments.getCustomEnchantment(CustomEnchantment.from({ name: enchantmentToRemove.key, level: 1 }));
+                enchantments.removeCustomEnchantment(customEnchantmentToRemove);
+                this.player.equippedToolSlot(EquipmentSlot.Mainhand).setItem(fishingRod);
             }
         });
     }
     showMainScreen() {
         const form = new ActionFormData()
-            .title("Fisher's Table")
-            .button("Configuration")
-            .button("Upgrade")
-            .button("Craft");
+            .title(" Fisher's Table ")
+            .button("Add Enhancement")
+            .button("Remove Enhancement")
+            .button("Game Options")
+            .button("Guide")
+            .button("Information");
         form.show(this.player).then((response) => {
             if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
                 return;
             switch (response.selection) {
                 case 0:
-                    this.showConfigurationScreen();
+                    this.showUpgradeScreen();
                     break;
                 case 1:
-                    this.showServerScreen();
+                    this.showDisenchantingScreen();
+                    break;
+                case 2:
+                    this.showConfigurationScreen();
+                    break;
+                case 3:
+                    this.showCreditsScreen();
                     break;
                 default:
                     break;
@@ -103,10 +235,9 @@ export class __Configuration {
     showConfigurationScreen() {
         const parsedAddonTitle = ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
         const form = new ActionFormData()
-            .title(parsedAddonTitle + " Configuration")
-            .button("Client")
-            .button("Server")
-            .button("Help");
+            .title(parsedAddonTitle + " Options")
+            .button("Client Options")
+            .button("Server Options");
         form.show(this.player).then((response) => {
             if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
                 return;
@@ -201,13 +332,13 @@ export class __Configuration {
                 cachedConfigurationValues[index] = currentValue !== -1 ? currentValue : parseInt(builder.defaultValue);
                 form.dropdown(builder.name, builder.values, cachedConfigurationValues[index]);
             }
-            else if (typeof builder.defaultValue === "boolean") {
-                cachedConfigurationValues[index] = builder.defaultValue;
-                form.toggle(builder.name, cachedConfigurationValues[index]);
-            }
             else if (typeof builder.defaultValue === "string" && !isArrayEmpty) {
                 cachedConfigurationValues[index] = builder.defaultValue;
                 form.textField(builder.name, cachedConfigurationValues[index]);
+            }
+            else if (typeof builder.defaultValue === "boolean") {
+                cachedConfigurationValues[index] = builder.defaultValue;
+                form.toggle(builder.name, cachedConfigurationValues[index]);
             }
         });
         form.show(this.player).then((result) => {

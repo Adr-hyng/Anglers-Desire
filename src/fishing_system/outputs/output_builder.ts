@@ -10,25 +10,19 @@ export class FishingOutputBuilder {
     config: FormBuilder<any>,
     fisher: Fisher
   ): IFishingOutput {
-    console.warn("Active Events:", JSON.stringify(this.activeEventCount()));
-
     const playerId = fisher.source.id;
     const keyName = this.extractKeyName(fisher, config);
     if (!this.isInParticleManager(keyName)) {
       throw new Error("No Particle Key exist / found");
     }
-
     if (!this.playerOutputs.has(playerId)) {
       this.playerOutputs.set(playerId, {});
     }
-
     const events = this.playerOutputs.get(playerId);
     const eventKey = `${keyName}_${config.defaultValue}`;
-    
     if (!events[eventKey]) {
       events[eventKey] = this.createEvent(keyName, config.defaultValue, fisher);
     }
-
     return events[eventKey];
   }
 
@@ -50,7 +44,7 @@ export class FishingOutputBuilder {
   }
 
   private static isInParticleManager(key: string): boolean {
-    return Object.getOwnPropertyNames(FishingOutputHandler).includes(key);
+    return Object.getOwnPropertyNames(FishingOutputHandler).filter(prop => !(['length', 'name', 'prototype'].includes(prop))).includes(key);
   }
 
   private static activeEventCount(): { text: number; ui: number } {

@@ -5,7 +5,7 @@
 	"num_mip_levels": 4,
 	"texture_data": {
 		"fishers_table": {
-			"textures": "textures/blocks/workbench"
+			"textures": "textures/blocks/workbench2"
 		}
 	}
 }

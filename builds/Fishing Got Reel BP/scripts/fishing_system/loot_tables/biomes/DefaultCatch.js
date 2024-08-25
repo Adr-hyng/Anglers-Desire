@@ -2,7 +2,7 @@ import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { world } from "@minecraft/server";
 export class DefaultCatch {
     static OnLuminousSirenUpgradeLoot() {
-        if (!this.upgrade.has("LuminousSiren"))
+        if (!this.upgrade.has("Luminous"))
             return [];
         return [
             {

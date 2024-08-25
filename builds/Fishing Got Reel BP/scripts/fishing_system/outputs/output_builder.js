@@ -2,39 +2,54 @@ import { FishingOutputHandler } from "types/index";
 import { TextResult, BothResult, DisabledResult, ParticleResult } from "./output_types/index";
 export class FishingOutputBuilder {
     static create(config, fisher) {
-        const keyName = Object.keys(fisher.clientConfiguration).find(key => fisher.clientConfiguration[key] === config);
-        if (!this.isInParticleManager(keyName))
+        console.warn("Active Events:", JSON.stringify(this.activeEventCount()));
+        const playerId = fisher.source.id;
+        const keyName = this.extractKeyName(fisher, config);
+        if (!this.isInParticleManager(keyName)) {
             throw new Error("No Particle Key exist / found");
-        switch (config.defaultValue) {
+        }
+        if (!this.playerOutputs.has(playerId)) {
+            this.playerOutputs.set(playerId, {});
+        }
+        const events = this.playerOutputs.get(playerId);
+        const eventKey = `${keyName}_${config.defaultValue}`;
+        if (!events[eventKey]) {
+            events[eventKey] = this.createEvent(keyName, config.defaultValue, fisher);
+        }
+        return events[eventKey];
+    }
+    static extractKeyName(fisher, config) {
+        return Object.keys(fisher.clientConfiguration).find(key => fisher.clientConfiguration[key] === config) || "defaultKey";
+    }
+    static createEvent(keyName, type, fisher) {
+        switch (type) {
             case 'TEXT':
-                const textEvent = new TextResult(FishingOutputHandler[keyName].text, fisher);
-                if (!this.executedTextEvents.has(textEvent)) {
-                    this.executedTextEvents.add(textEvent);
-                    return textEvent;
-                }
-                return new DisabledResult();
+                return new TextResult(FishingOutputHandler[keyName].text, fisher);
             case 'ICON':
-                const iconEvent = new ParticleResult(FishingOutputHandler[keyName].particle, fisher);
-                if (!this.executedUIEvents.has(iconEvent)) {
-                    this.executedUIEvents.add(iconEvent);
-                    return iconEvent;
-                }
-                return new DisabledResult();
+                return new ParticleResult(FishingOutputHandler[keyName].particle, fisher);
             case 'BOTH':
-                const bothEvent = new BothResult(FishingOutputHandler[keyName].text, FishingOutputHandler[keyName].particle, fisher);
-                if (!this.executedTextEvents.has(bothEvent) || !this.executedUIEvents.has(bothEvent)) {
-                    this.executedTextEvents.add(bothEvent);
-                    this.executedUIEvents.add(bothEvent);
-                    return bothEvent;
-                }
-                return new DisabledResult();
+                return new BothResult(FishingOutputHandler[keyName].text, FishingOutputHandler[keyName].particle, fisher);
             default:
                 return new DisabledResult();
         }
     }
     static isInParticleManager(key) {
-        return (Object.getOwnPropertyNames(FishingOutputHandler).filter(prop => !(['length', 'name', 'prototype'].includes(prop)))).includes(key);
+        return Object.getOwnPropertyNames(FishingOutputHandler).includes(key);
+    }
+    static activeEventCount() {
+        let textCount = 0;
+        let uiCount = 0;
+        this.playerOutputs.forEach(events => {
+            Object.values(events).forEach(event => {
+                if (event instanceof TextResult || event instanceof BothResult) {
+                    textCount++;
+                }
+                if (event instanceof ParticleResult || event instanceof BothResult) {
+                    uiCount++;
+                }
+            });
+        });
+        return { text: textCount, ui: uiCount };
     }
 }
-FishingOutputBuilder.executedTextEvents = new Set();
-FishingOutputBuilder.executedUIEvents = new Set();
+FishingOutputBuilder.playerOutputs = new Map();

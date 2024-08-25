@@ -1,11 +1,10 @@
-import { world, system, Player, ScriptEventSource, WeatherType, EquipmentSlot } from "@minecraft/server";
-import { ADDON_IDENTIFIER, db, fetchFisher } from "./constant";
+import { world, system, Player, ScriptEventSource, WeatherType } from "@minecraft/server";
+import { ADDON_IDENTIFIER, db, fetchFisher, onCustomBlockInteractLogMap } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { overrideEverything } from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
 import { Logger, SendMessageTo } from "utils/index";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
-import { MinecraftItemTypes } from "vanilla-types/index";
 import { MyCustomBlockTypes } from "fishing_system/blocks/custom_blocks";
 overrideEverything();
 world.beforeEvents.worldInitialize.subscribe((e) => {
@@ -14,16 +13,14 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
             const player = arg.player;
             if (!player?.isValid())
                 return;
-            const equipment = player.equippedTool(EquipmentSlot.Mainhand);
-            if (equipment?.typeId === MinecraftItemTypes.FishingRod) {
-                player.Configuration.showInspectScreen(equipment);
-            }
-            else {
-                if (arg.block.typeId !== MyCustomBlockTypes.FishersTable)
-                    return;
-                const { default: CommandObject } = await import(`./commands/config.js`);
-                CommandObject.execute(player, ['show']);
-            }
+            if (arg.block.typeId !== MyCustomBlockTypes.FishersTable)
+                return;
+            const oldLog = onCustomBlockInteractLogMap.get(player.id);
+            onCustomBlockInteractLogMap.set(player.id, Date.now());
+            if ((oldLog + 500) >= Date.now())
+                return;
+            const { default: CommandObject } = await import(`./commands/config.js`);
+            CommandObject.execute(player, ['show']);
         }
     });
 });

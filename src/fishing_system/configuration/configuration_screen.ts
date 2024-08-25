@@ -167,7 +167,7 @@ export class __Configuration {
       return;
     });
   }
-  showInspectScreen() {
+  showDisenchantingScreen() {
     // Must be either offhand or mainhand to remove hook
     let fishingRod = this.player.equippedTool(EquipmentSlot.Mainhand);
     const enchantments = fishingRod.enchantment.override(fishingRod);
@@ -225,7 +225,7 @@ export class __Configuration {
           this.showUpgradeScreen();
           break;
         case 1:
-          this.showInspectScreen();
+          this.showDisenchantingScreen();
           break;
         case 2:
           this.showConfigurationScreen();

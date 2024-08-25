@@ -156,7 +156,7 @@ export class __Configuration {
             return;
         });
     }
-    showInspectScreen() {
+    showDisenchantingScreen() {
         let fishingRod = this.player.equippedTool(EquipmentSlot.Mainhand);
         const enchantments = fishingRod.enchantment.override(fishingRod);
         if (fishingRod?.typeId !== MinecraftItemTypes.FishingRod
@@ -218,7 +218,7 @@ export class __Configuration {
                     this.showUpgradeScreen();
                     break;
                 case 1:
-                    this.showInspectScreen();
+                    this.showDisenchantingScreen();
                     break;
                 case 2:
                     this.showConfigurationScreen();
