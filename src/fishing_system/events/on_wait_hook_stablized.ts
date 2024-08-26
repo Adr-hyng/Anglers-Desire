@@ -1,5 +1,5 @@
 import { Player, TicksPerSecond, system, BlockTypes} from "@minecraft/server";
-import { fishingCallingLogMap, fetchFisher, localFishersCache } from "constant";
+import { onHookLandedCallingLogMap, fetchFisher, localFishersCache, onCaughtParticleLogMap, onLostParticleLogMap } from "constant";
 import { Fisher } from "fishing_system/entities/fisher";
 import { Logger, StateController, Timer } from "utils/index";
 
@@ -16,8 +16,8 @@ const HOOK_TREASURE_OFFSET: number = 1.0;
 export async function onHookLanded(player: Player): Promise<void> {
   let fisher: Fisher = fetchFisher(player);
 
-  const oldLog = fishingCallingLogMap.get(player.id) as number;
-  fishingCallingLogMap.set(player.id, Date.now());
+  const oldLog = onHookLandedCallingLogMap.get(player.id) as number;
+  onHookLandedCallingLogMap.set(player.id, Date.now());
   if ((oldLog + 500) >= Date.now()) return;
 
   const isInWater = await requestHookOnWater();
@@ -73,6 +73,10 @@ export async function onHookLanded(player: Player): Promise<void> {
         if(!delayTimer.isDone()) {
           delayTimer.update();
         } else {
+          const oldLog = onLostParticleLogMap.get(player.id) as number;
+          onLostParticleLogMap.set(player.id, Date.now());
+          if ((oldLog + 150) >= Date.now()) return;
+
           FishingStateIndicator.Escaped.run();
           fisher.canBeReeled = false;
           delayTimer.reset();
@@ -105,7 +109,7 @@ export async function onHookLanded(player: Player): Promise<void> {
       fisher.fishingHook.isSubmerged = false;
       fisher.canBeReeled = false;
       localFishersCache.set(player.id, fisher);
-      FishingStateIndicator.Escaped.reset().then((_) => {});
+      FishingStateIndicator.Escaped.reset();
       return;
     }
   }, 1);
@@ -113,6 +117,10 @@ export async function onHookLanded(player: Player): Promise<void> {
   function HookOnSubmergedForItemFishing(): void {
     if(hookSubmergeState.hasChanged()) {
       if(hookSubmergeState.getCurrentValue()) {
+        const oldLog = onCaughtParticleLogMap.get(player.id) as number;
+        onCaughtParticleLogMap.set(player.id, Date.now());
+        if ((oldLog + 150) >= Date.now()) return;
+        
         FishingStateIndicator.Caught.run();
         if(fisher.clientConfiguration.OnSubmergeSE.defaultValue) player.playSound('note.chime');
       } else { 

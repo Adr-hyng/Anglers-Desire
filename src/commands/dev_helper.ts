@@ -1,13 +1,10 @@
-import { EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, EquipmentSlot, ItemComponentTypes, ItemEnchantableComponent, ItemStack, MolangVariableMap, RawMessage, system } from "@minecraft/server";
+import { EntityInventoryComponent, EquipmentSlot, ItemStack, ItemTypes, MolangVariableMap } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
-import { MinecraftItemTypes, MinecraftEnchantmentTypes } from "vanilla-types/index";
 import { ICommandBase} from "./ICommandBase";
 import { SendMessageTo} from "utils/utilities";
 import { overrideEverything } from "overrides/index";
-import { CustomEnchantmentTypes, FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
 import { fetchFisher } from "constant";
-import { MinecraftEntityTypes } from "vanilla-types/index";
-import { CustomEnchantment } from "custom_enchantment/custom_enchantment";
+import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 overrideEverything();
 
 // Automate this, the values should be the description.
@@ -68,14 +65,14 @@ const command: ICommandBase = {
                 console.warn(JSON.stringify(fishingRod.getDynamicPropertyIds()), fishingRod.getDynamicProperty(fishingRod.getDynamicPropertyIds()[0]));
                 break;
             case REQUIRED_PARAMETER.TEST:
-                fishingRod = fetchFisher(player).fishingRod.getEquipment(EquipmentSlot.Mainhand);
-                for(const customEnchantment of fishingRod.enchantment.override(fishingRod).getCustomEnchantments()) {
-                    if(customEnchantment.damageUsage(10)) {
-                        player.playSound("random.break", {volume: 0.5, pitch: 0.7});
-                    }
-                    console.warn(customEnchantment.name, customEnchantment.usage);
-                }
-                (player.getComponent(EntityComponentTypes.Inventory) as EntityInventoryComponent).container.setItem(player.selectedSlotIndex, fishingRod);
+                const inventory = (player.getComponent(EntityInventoryComponent.componentId) as EntityInventoryComponent).container.override(player);
+                console.warn(JSON.stringify(ItemTypes.get(MyCustomItemTypes.AddonConfiguration)));
+                inventory.giveItem(ItemTypes.get(MyCustomItemTypes.AddonConfiguration), 1);
+                // console.warn(inventory.size, inventory.emptySlotsCount);
+                // for(const customEnchantment of fishingRod.enchantment.override(fishingRod).getCustomEnchantments()) {
+                //     console.warn(customEnchantment.name, customEnchantment.icon);
+                // }
+                // (player.getComponent(EntityComponentTypes.Inventory) as EntityInventoryComponent).container.setItem(player.selectedSlotIndex, fishingRod);
 
                 // fishingRod = new ItemStack("minecraft:fishing_rod", 1);
                 // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).addEnchantment({type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Lure), level: 3});

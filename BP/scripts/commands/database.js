@@ -67,8 +67,8 @@ const command = {
                         },
                     ]
                 });
-                player.Configuration.reset("CLIENT");
-                player.Configuration.reset("SERVER");
+                player.configuration.reset("CLIENT");
+                player.configuration.reset("SERVER");
                 db.clear();
                 if (!db.isDisposed)
                     db.dispose();

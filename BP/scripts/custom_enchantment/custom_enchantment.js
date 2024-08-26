@@ -1,8 +1,11 @@
 export class CustomEnchantment {
-    constructor(name, level, conflicts, maxUsage, usage, id, dynamicPropId) {
+    constructor({ name, level, conflicts = [], maxUsage, usage = maxUsage, id, dynamicPropId, icon, description, lore, }) {
+        this.icon = icon;
         this.id = id;
         this.name = name;
         this.level = level;
+        this.description = description;
+        this.lore = lore;
         this.conflicts = conflicts ?? [];
         this._maxUsage = maxUsage;
         this._usage = usage ?? maxUsage;
@@ -47,8 +50,5 @@ export class CustomEnchantment {
             throw "Source of Itemstack doesn't exists in Custom Enchantment in remove method";
         this.source.setDynamicProperty(`Fishing${this._dynamicPropertyIdentifier}Usage`, undefined);
         this.source.setDynamicProperty(`Fishing${this._dynamicPropertyIdentifier}MaxUsage`, undefined);
-    }
-    static from(ref) {
-        return new CustomEnchantment(ref.name, ref.level, ref.conflicts, ref.maxUsage, ref.usage, ref.id, ref.dynamicPropId);
     }
 }

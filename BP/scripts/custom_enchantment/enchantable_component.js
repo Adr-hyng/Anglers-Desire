@@ -79,10 +79,11 @@ OverTakes(ItemEnchantableComponent.prototype, {
         const [_, name, level] = this.source.getLore()[index].match(new RegExp(`(§r§7.*?)([IVXLCDM]+)$`));
         if (!name)
             throw "extraction error with regex in custom enchantment";
-        const currentCustomEnchantment = CustomEnchantment.from({
+        const currentCustomEnchantment = new CustomEnchantment({
             name: enchantment.name,
             level: RomanNumericConverter.toNumeric(level),
             conflicts: enchantment.conflicts,
+            icon: enchantment.icon
         });
         currentCustomEnchantment.init(this.source);
         const fetchedCustomEnchantment = CustomEnchantmentTypes.get(currentCustomEnchantment);
@@ -95,7 +96,7 @@ OverTakes(ItemEnchantableComponent.prototype, {
         const ValidCustomEnchantments = this.source.getLore().filter(lore => new RegExp(/(§r§7.*?)([IVXLCDM]+)$/).test(lore)) || [];
         for (const validLore of ValidCustomEnchantments) {
             let [, eName, level] = validLore.match(/(§r§7.*?)([IVXLCDM]+)$/);
-            const currentCustomEnchantment = CustomEnchantmentTypes.get(CustomEnchantment.from({
+            const currentCustomEnchantment = CustomEnchantmentTypes.get(new CustomEnchantment({
                 name: eName.replace("§r§7", "").slice(0, -1),
                 level: RomanNumericConverter.toNumeric(level),
             }));

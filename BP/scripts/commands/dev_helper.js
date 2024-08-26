@@ -1,8 +1,9 @@
-import { EntityComponentTypes, EquipmentSlot, MolangVariableMap } from "@minecraft/server";
+import { EntityInventoryComponent, EquipmentSlot, ItemTypes, MolangVariableMap } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { SendMessageTo } from "utils/utilities";
 import { overrideEverything } from "overrides/index";
 import { fetchFisher } from "constant";
+import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 overrideEverything();
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
@@ -46,14 +47,9 @@ const command = {
                 console.warn(JSON.stringify(fishingRod.getDynamicPropertyIds()), fishingRod.getDynamicProperty(fishingRod.getDynamicPropertyIds()[0]));
                 break;
             case REQUIRED_PARAMETER.TEST:
-                fishingRod = fetchFisher(player).fishingRod.getEquipment(EquipmentSlot.Mainhand);
-                for (const customEnchantment of fishingRod.enchantment.override(fishingRod).getCustomEnchantments()) {
-                    if (customEnchantment.damageUsage(10)) {
-                        player.playSound("random.break", { volume: 0.5, pitch: 0.7 });
-                    }
-                    console.warn(customEnchantment.name, customEnchantment.usage);
-                }
-                player.getComponent(EntityComponentTypes.Inventory).container.setItem(player.selectedSlotIndex, fishingRod);
+                const inventory = player.getComponent(EntityInventoryComponent.componentId).container.override(player);
+                console.warn(JSON.stringify(ItemTypes.get(MyCustomItemTypes.AddonConfiguration)));
+                inventory.giveItem(ItemTypes.get(MyCustomItemTypes.AddonConfiguration), 1);
                 break;
             case REQUIRED_PARAMETER.PARTICLE:
                 const molang = new MolangVariableMap();

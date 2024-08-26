@@ -19,6 +19,9 @@
     },
     "fermented_spider_eye_hook": {
       "textures": "textures/items/fermented_spider_eye_hook.png"
+    },
+    "addon_configuration": {
+      "textures": "textures/items/addon_configuration.png"
     }
   }
 }

@@ -11,7 +11,7 @@
           "type": "int",
           "client_sync": true,
           "range": [0, 2],
-          "default": 1
+          "default": 0
         }
       }
     },
@@ -22,8 +22,8 @@
     },
     "components": {
       "minecraft:timer": {
-        "looping": false,
-        "time": 1,
+        "looping": true,
+        "time": 3,
         "time_down_event": {
           "event": "despawn"
         }
@@ -63,6 +63,18 @@
       }
     },
     "events": {
+      "minecraft:entity_spawned": {
+        "queue_command": {
+          "command": [
+            "say SPAWNED"
+          ]
+        }
+      },
+      "show_fish_reset_particle": {
+        "set_property": {
+          "yn:particle_state": 0
+        }
+      },
       "show_fish_caught_particle": {
         "set_property": {
           "yn:particle_state": 1
@@ -76,6 +88,11 @@
       "despawn": {
         "sequence": [
           {
+            "queue_command": {
+              "command": [
+                "say GONE"
+              ]
+            },
             "set_property": {
               "yn:particle_state": 0
             },

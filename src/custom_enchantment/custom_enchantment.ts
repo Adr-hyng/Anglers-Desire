@@ -8,6 +8,9 @@ export type TCustomEnchantment = {
   maxUsage?: number;
   conflicts?: string[];
   dynamicPropId?: string;
+  icon?: string;
+  description?: string;
+  lore?: string;
 }
 
 // To make it efficient, use caching to not get dynamic property always, just use it if it did change the mainhand equipment.
@@ -20,20 +23,29 @@ export class CustomEnchantment {
   private _dynamicPropertyIdentifier: string;
   name: string;
   level: number;
+  description: string;
+  lore: string;
   conflicts?: string[];
+  icon: string;
 
-  constructor(
-    name: string, 
-    level: number,
-    conflicts?: string[], 
-    maxUsage?: number,
-    usage?: number,
-    id?: string, 
-    dynamicPropId?: string,
-  ) {
+  constructor({
+    name,
+    level,
+    conflicts = [],
+    maxUsage,
+    usage = maxUsage,
+    id,
+    dynamicPropId,
+    icon,
+    description,
+    lore,
+  }: TCustomEnchantment) {
+    this.icon = icon;
     this.id = id;
     this.name = name;
     this.level = level;
+    this.description = description;
+    this.lore = lore;
     this.conflicts = conflicts ?? [];
     this._maxUsage = maxUsage;
     this._usage = usage ?? maxUsage;
@@ -80,9 +92,5 @@ export class CustomEnchantment {
     if(!this.source) throw "Source of Itemstack doesn't exists in Custom Enchantment in remove method";
     this.source.setDynamicProperty(`Fishing${this._dynamicPropertyIdentifier}Usage`, undefined);
     this.source.setDynamicProperty(`Fishing${this._dynamicPropertyIdentifier}MaxUsage`, undefined);
-  }
-
-  static from(ref: TCustomEnchantment) {
-    return new CustomEnchantment(ref.name, ref.level, ref.conflicts, ref.maxUsage, ref.usage, ref.id, ref.dynamicPropId);
   }
 }

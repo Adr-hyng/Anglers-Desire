@@ -2,7 +2,7 @@
 yn.fishing_got_reel.on_load_message=§a§lFishing Got Reel Addon§r §ahas been loaded successfully. Created by Adr-hyng.
 yn.fishing_got_reel.on_caught_message=%s: There's something caught by the hook...
 yn.fishing_got_reel.on_drop_hook=%s: It got away...
-yn.fishing_got_reel.on_afk_detected=Afk Detected. Cancelled the fishing system.
+yn.fishing_got_reel.on_afk_detected=%s: Afk Detected. Cancelled the fishing system.
 
 ## Send Command Message 
 yn:fishing_got_reel.on_caught_invalid_command=§cInvalid Usage Format. %1
@@ -14,6 +14,8 @@ yn:fishing_got_reel.on_caught_command_404=§cError while fetching %1 command: %2
 yn:fishing_got_reel.on_caught_main_command_not_found=§cInvalid Command: §l%1§r%2§cCheck If The Command Actually Exists. Use /scriptevent %3 help
 yn:fishing_got_reel.on_client_reset=§aClient Configuration has been reset.§r
 
+yn:fishing_got_reel.already_has_item=§cYou already have %1 in your inventory. Check your inventory.
+
 ## Items
 item.yn:fishing_got_reel:nautilus_hook=Nautilus Hook
 item.yn:fishing_got_reel:luminous_siren_hook=Luminous Hook
@@ -21,6 +23,7 @@ item.yn:fishing_got_reel:pyroclasm_hook=Pyroclasm Hook
 item.yn:fishing_got_reel:tempus_hook=Tempus Hook
 item.yn:fishing_got_reel:normal_hook=Normal Hook
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Hook with Fermented Spider Eye
+item.yn:fishing_got_reel:addon_configuration=Reelz Configuration
 
 entity.yn:particle_spawner.name=Particle Builder
 tile.yn:fishers_table.name=Fisher's Table

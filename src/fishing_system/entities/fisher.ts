@@ -7,8 +7,6 @@ import {
     EntityEquippableComponent,
     EntityItemComponent,
     MolangVariableMap,
-    EntityComponentTypes,
-    EntityScaleComponent,
 } from "@minecraft/server";
 
 import {MinecraftEntityTypes} from "vanilla-types/index";
@@ -19,9 +17,7 @@ import {
 
 import {
     Logger,
-    SendMessageTo,
-    StateController,
-    VectorContainer,
+    StateController
 } from "utils/index";
 import { LootTable, FishingOutputBuilder, ConfigurationCollections_DB, cloneConfiguration } from "fishing_system/index";
 import { clientConfiguration} from "../configuration/client_configuration";
@@ -32,7 +28,6 @@ import { db } from "constant";
 import { FormBuilder } from "utils/form_builder";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
 import { overrideEverything } from "overrides/index";
-
 overrideEverything();
 
 export type FishingStateTypes = {
@@ -53,7 +48,6 @@ class Fisher {
     private _fishingOutputManager: FishingStateTypes;
     private _particleSplashMolang: MolangVariableMap;
     particleSpawner: Entity = null;
-    particleVectorLocations: VectorContainer = null;
     clientConfiguration: typeof clientConfiguration;
     
     fishingHook: FishingHook = null;
@@ -66,7 +60,6 @@ class Fisher {
     
     constructor(player: Player) {
         this._source = player;
-        this.particleVectorLocations = new VectorContainer(2);
         this._particleSplashMolang = new MolangVariableMap();
         this.clientConfiguration = cloneConfiguration(clientConfiguration);
         const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT")); // unserialized data, need to be serialized

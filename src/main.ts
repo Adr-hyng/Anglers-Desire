@@ -1,4 +1,4 @@
-import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource, WeatherType, EntityInventoryComponent, EquipmentSlot} from "@minecraft/server";
+import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource, WeatherType, EntityInventoryComponent, EquipmentSlot, ItemTypes} from "@minecraft/server";
 import { ADDON_IDENTIFIER, db, fetchFisher, onCustomBlockInteractLogMap } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { Fisher } from "./fishing_system/entities/fisher";
@@ -7,8 +7,8 @@ import {overrideEverything} from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
 import { Logger, SendMessageTo } from "utils/index";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
-import { MinecraftItemTypes } from "vanilla-types/index";
 import { MyCustomBlockTypes } from "fishing_system/blocks/custom_blocks";
+import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 overrideEverything();
 
 world.beforeEvents.worldInitialize.subscribe((e) => {
@@ -39,15 +39,34 @@ world.afterEvents.playerSpawn.subscribe((e) => {
       }
     ]
   });
+  const addonConfigItemType = ItemTypes.get(MyCustomItemTypes.AddonConfiguration);
+  e.player.runCommandAsync(`testfor @s[hasItem={item=${addonConfigItemType.id}}]`).then((result) => {
+    if(!result.successCount) {
+      const inventory = (e.player.getComponent(EntityInventoryComponent.componentId) as EntityInventoryComponent).container.override(e.player);
+      inventory.giveItem(addonConfigItemType, 1);
+    } else {
+      SendMessageTo(e.player, {rawtext: [
+        {
+          translate: "yn:fishing_got_reel.already_has_item",
+          with: ["Reelz Configuration (Item)"]
+        }
+      ]});
+    }
+  });
 });
 
 // world.beforeEvents.itemUseOn.subscribe((e) => {
-//   console.warn(e.itemStack.typeId, e.block.typeId);
 // });
 
 world.beforeEvents.itemUse.subscribe((event) => {
   const player: Player = event.source as Player;
   let fisher: Fisher = fetchFisher(player);
+  
+  // Make this Maintainable in the future to use classes methods of this instead of using this as the codebase
+  // ItemUseRegister.FishingRod
+  // ItemUseRegister.AddonConfiguration
+
+  if(event.itemStack.typeId === MyCustomItemTypes.AddonConfiguration) return player.configuration.showConfigurationScreen();
   if(!fisher.fishingRod.isEquipped) return;
   system.run(() => {
     system.run(() => world.afterEvents.entitySpawn.unsubscribe(tt));
@@ -60,11 +79,6 @@ world.beforeEvents.itemUse.subscribe((event) => {
     const t = world.afterEvents.entityRemove.subscribe((removedEvent) => {
       const removedEntity = removedEvent.typeId;
       if(removedEntity !== "minecraft:fishing_hook") return;
-      if(fisher.particleVectorLocations.getVectors().length > 5) {
-        fisher.fishingOutputManager.Caught.reset().then((_) => {
-          fisher.particleVectorLocations.clear();
-        });
-      }
       if((fisher.canBeReeled || fisher.fishingHook.isSubmerged) && !fisher.caughtByHook?.isValid()) onHookedItem(fisher);
     });
   }, 0);

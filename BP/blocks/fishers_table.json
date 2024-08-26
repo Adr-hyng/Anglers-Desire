@@ -5,8 +5,65 @@
 			"identifier": "yn:fishers_table",
 			"menu_category": {
 				"category": "items"
-			}
+			},
+			"traits": {
+        "minecraft:placement_direction": {
+          "enabled_states": [
+            "minecraft:cardinal_direction"
+          ]
+        }
+      }
 		},
+		"permutations": [
+      {
+        "condition": "q.block_state('minecraft:cardinal_direction') == 'north' ",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:cardinal_direction') == 'south' ",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              180,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:cardinal_direction') == 'east' ",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              270,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:cardinal_direction') == 'west' ",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              90,
+              0
+            ]
+          }
+        }
+      }
+    ],
 		"components": {
 			"minecraft:destructible_by_mining": {
 				"seconds_to_destroy": 2
@@ -16,7 +73,7 @@
       ],
 			"tag:wood": {},
       "minecraft:light_dampening": 0,
-      "minecraft:light_emission": 4,
+      "minecraft:light_emission": 0,
 
 			"minecraft:geometry": "geometry.fishers_table",
 			"minecraft:material_instances": {

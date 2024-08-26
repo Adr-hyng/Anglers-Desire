@@ -3,5 +3,7 @@ export enum MyCustomItemTypes {
   NautilusHook = "yn:nautilus_hook",
   PyroclasmHook = "yn:pyroclasm_hook",
   TempusHook = "yn:tempus_hook",
-  FermentedSpiderEyeHook = "yn:fermented_spider_eye_hook"
+  FermentedSpiderEyeHook = "yn:fermented_spider_eye_hook",
+
+  AddonConfiguration = "yn:addon_configuration",
 }

@@ -1,7 +1,7 @@
 import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemComponent, MolangVariableMap, } from "@minecraft/server";
 import { MinecraftEntityTypes } from "vanilla-types/index";
 import { Random } from "utils/Random/random";
-import { Logger, StateController, VectorContainer, } from "utils/index";
+import { Logger, StateController } from "utils/index";
 import { LootTable, FishingOutputBuilder, ConfigurationCollections_DB, cloneConfiguration } from "fishing_system/index";
 import { clientConfiguration } from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
@@ -21,14 +21,12 @@ class Fisher {
     constructor(player) {
         this._source = null;
         this.particleSpawner = null;
-        this.particleVectorLocations = null;
         this.fishingHook = null;
         this.caughtByHook = null;
         this.currentBiomeLootTable = Object.getOwnPropertyNames(LootTable).filter(prop => !['name', 'prototype', 'length', 'fishingModifier'].includes(prop));
         this.currentBiome = 0;
         this.canBeReeled = false;
         this._source = player;
-        this.particleVectorLocations = new VectorContainer(2);
         this._particleSplashMolang = new MolangVariableMap();
         this.clientConfiguration = cloneConfiguration(clientConfiguration);
         const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT"));

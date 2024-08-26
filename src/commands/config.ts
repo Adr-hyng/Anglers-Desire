@@ -45,14 +45,14 @@ const command: ICommandBase = {
                 }
             );
             if(isShow) {
-                system.run(() => player.Configuration.showMainScreen());
+                system.run(() => player.configuration.showFisherTableScreen());
             } 
             else {
                 const optionalParams: string[] = (`[${Object.values(OPTIONAL_PARAMETER).join('|')}]`).slice(1, -1).split('|').map(command => command.trim());
                 const selectedOptParam: string = args[1]?.toLowerCase();
                 let shouldResetClient: boolean = OPTIONAL_PARAMETER.CLIENT === selectedOptParam;
                 if(!optionalParams.includes(selectedOptParam)) shouldResetClient = true; 
-                if(shouldResetClient) player.Configuration.reset("CLIENT");
+                if(shouldResetClient) player.configuration.reset("CLIENT");
             }
         } 
     }

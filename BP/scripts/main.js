@@ -1,4 +1,4 @@
-import { world, system, Player, ScriptEventSource, WeatherType } from "@minecraft/server";
+import { world, system, Player, ScriptEventSource, WeatherType, EntityInventoryComponent, ItemTypes } from "@minecraft/server";
 import { ADDON_IDENTIFIER, db, fetchFisher, onCustomBlockInteractLogMap } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { overrideEverything } from "overrides/index";
@@ -6,6 +6,7 @@ import { onHookedItem } from "fishing_system/events/on_hook_item";
 import { Logger, SendMessageTo } from "utils/index";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
 import { MyCustomBlockTypes } from "fishing_system/blocks/custom_blocks";
+import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 overrideEverything();
 world.beforeEvents.worldInitialize.subscribe((e) => {
     e.blockComponentRegistry.registerCustomComponent('yn:on_interact_with_fisher_table', {
@@ -36,10 +37,27 @@ world.afterEvents.playerSpawn.subscribe((e) => {
             }
         ]
     });
+    const addonConfigItemType = ItemTypes.get(MyCustomItemTypes.AddonConfiguration);
+    e.player.runCommandAsync(`testfor @s[hasItem={item=${addonConfigItemType.id}}]`).then((result) => {
+        if (!result.successCount) {
+            const inventory = e.player.getComponent(EntityInventoryComponent.componentId).container.override(e.player);
+            inventory.giveItem(addonConfigItemType, 1);
+        }
+        else {
+            SendMessageTo(e.player, { rawtext: [
+                    {
+                        translate: "yn:fishing_got_reel.already_has_item",
+                        with: ["Reelz Configuration (Item)"]
+                    }
+                ] });
+        }
+    });
 });
 world.beforeEvents.itemUse.subscribe((event) => {
     const player = event.source;
     let fisher = fetchFisher(player);
+    if (event.itemStack.typeId === MyCustomItemTypes.AddonConfiguration)
+        return player.configuration.showConfigurationScreen();
     if (!fisher.fishingRod.isEquipped)
         return;
     system.run(() => {
@@ -55,11 +73,6 @@ world.beforeEvents.itemUse.subscribe((event) => {
             const removedEntity = removedEvent.typeId;
             if (removedEntity !== "minecraft:fishing_hook")
                 return;
-            if (fisher.particleVectorLocations.getVectors().length > 5) {
-                fisher.fishingOutputManager.Caught.reset().then((_) => {
-                    fisher.particleVectorLocations.clear();
-                });
-            }
             if ((fisher.canBeReeled || fisher.fishingHook.isSubmerged) && !fisher.caughtByHook?.isValid())
                 onHookedItem(fisher);
         });
