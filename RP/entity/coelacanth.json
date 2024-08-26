@@ -1,0 +1,32 @@
+{
+  "format_version": "1.8.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "yn:coelacanth",
+      "materials": { "default": "salmon" },
+      "textures": {
+        "default": "textures/entity/coelacanth"
+      },
+      "geometry": {
+        "default": "geometry.coelacanth"
+      },
+      "scripts": {
+        "pre_animation": [
+          "variable.zrot = !query.is_in_water ? Math.cos((query.time_stamp + query.frame_alpha) * 14.32) * 90 : 0.0;"
+        ]
+      },
+      "animations": {
+        "swim": "animation.coelacanth.swim",
+        "flop": "animation.coelacanth.flop"
+      },
+      "animation_controllers": [
+        { "general": "controller.animation.custom_fish.general" }
+      ],
+      "render_controllers": [ "controller.render.salmon" ],
+      "spawn_egg": {
+         "base_color": "#5e9ac6",
+        "overlay_color": "#b2cbdd"
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+	"format_version": "1.10.0",
+	"animation_controllers": {
+		"controller.animation.custom_fish.general": {
+			"initial_state": "flopping",
+			"states": {
+				"flopping": {
+					"animations": ["flop"],
+					"on_entry": [],
+					"transitions": [
+						{"swimming": "query.is_in_water || query.is_levitating"}
+					],
+					"blend_via_shortest_path": true
+				},
+				"swimming": {
+					"animations": ["swim"],
+					"transitions": [
+						{"flopping": "!query.is_in_water && !query.is_levitating"}
+					],
+					"blend_via_shortest_path": true
+				}
+			}
+		}
+	}
+}

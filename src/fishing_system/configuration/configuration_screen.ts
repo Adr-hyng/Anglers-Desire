@@ -102,38 +102,11 @@ export class Configuration {
   showUpgradeScreen() {
     const inventory = (this.player.getComponent(EntityInventoryComponent.componentId) as EntityInventoryComponent).container;
     let equippedFishingRod: ItemStack;
-    try {
-      if((equippedFishingRod = this.player.equippedTool(EquipmentSlot.Mainhand))?.typeId !== MinecraftItemTypes.FishingRod || (equippedFishingRod = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
-        throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested";
-      }
-    } catch (e) {
-      // Logic for when you cannot add anymore enchantments to this item, go next that you can add one.
-      let enchantments: ItemEnchantableComponent;
-      function isFull(item: ItemStack) {
-        enchantments = item.enchantment.override(item);
-        return enchantments.canAddCustomEnchantment();
-      }
-      // Currently when all is visited, it doesn't wanna visit that anymore even though you can still enchant stuffs.
-      const getFishingRodFromInventory = () => {
-        let itemSlot = 0
-        for(itemSlot = 0; itemSlot < inventory.size; itemSlot++) {
-          const item = inventory.getItem(itemSlot);
-          if(!item) continue;
-          if(item.typeId !== MinecraftItemTypes.FishingRod) continue;
-
-          // Detect for conflicts or possible cannot be enchanted anymore, then go next
-          // const temp = isFull(item);
-          // console.warn(temp, item.typeId, itemSlot);
-          // if(temp) continue;
-          break;
-        }
-        if(itemSlot >= inventory.size) return;
-        SendMessageTo(this.player);
-        return inventory.getItem(itemSlot);
-      };
-      equippedFishingRod = getFishingRodFromInventory() ?? null;
+    if(
+      (equippedFishingRod = this.player.equippedTool(EquipmentSlot.Mainhand))?.typeId !== MinecraftItemTypes.FishingRod || 
+      (equippedFishingRod = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
+      return;
     }
-    if(!equippedFishingRod) return; 
     if(!equippedFishingRod.hasComponent(ItemEnchantableComponent.componentId)) return;
     const allCustomEnchantments = CustomEnchantmentTypes.getAll();
     const enchantments = equippedFishingRod.enchantment.override(equippedFishingRod);

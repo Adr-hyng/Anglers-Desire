@@ -93,36 +93,10 @@ export class Configuration {
     showUpgradeScreen() {
         const inventory = this.player.getComponent(EntityInventoryComponent.componentId).container;
         let equippedFishingRod;
-        try {
-            if ((equippedFishingRod = this.player.equippedTool(EquipmentSlot.Mainhand))?.typeId !== MinecraftItemTypes.FishingRod || (equippedFishingRod = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
-                throw "Just throw this. This was used since container slot error is cannot be caught without try-catch, and idon't like nested";
-            }
-        }
-        catch (e) {
-            let enchantments;
-            function isFull(item) {
-                enchantments = item.enchantment.override(item);
-                return enchantments.canAddCustomEnchantment();
-            }
-            const getFishingRodFromInventory = () => {
-                let itemSlot = 0;
-                for (itemSlot = 0; itemSlot < inventory.size; itemSlot++) {
-                    const item = inventory.getItem(itemSlot);
-                    if (!item)
-                        continue;
-                    if (item.typeId !== MinecraftItemTypes.FishingRod)
-                        continue;
-                    break;
-                }
-                if (itemSlot >= inventory.size)
-                    return;
-                SendMessageTo(this.player);
-                return inventory.getItem(itemSlot);
-            };
-            equippedFishingRod = getFishingRodFromInventory() ?? null;
-        }
-        if (!equippedFishingRod)
+        if ((equippedFishingRod = this.player.equippedTool(EquipmentSlot.Mainhand))?.typeId !== MinecraftItemTypes.FishingRod ||
+            (equippedFishingRod = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
             return;
+        }
         if (!equippedFishingRod.hasComponent(ItemEnchantableComponent.componentId))
             return;
         const allCustomEnchantments = CustomEnchantmentTypes.getAll();

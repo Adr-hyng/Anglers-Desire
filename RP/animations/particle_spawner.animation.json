@@ -1,0 +1,25 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.particle_spawner.fish_caught": {
+			"loop": true,
+			"animation_length": 1,
+			"particle_effects": {
+				"0.0": {
+					"effect": "show_fish_caught",
+					"locator": "show_fish_caught"
+				}
+			}
+		},
+		"animation.particle_spawner.fish_escaped": {
+			"loop": true,
+			"animation_length": 1,
+			"particle_effects": {
+				"0.0": {
+					"effect": "show_fish_escaped",
+					"locator": "show_fish_escaped"
+				}
+			}
+		}
+	}
+}
