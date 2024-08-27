@@ -1,4 +1,4 @@
-import { ContainerSlot, EntityInventoryComponent, EquipmentSlot, ItemEnchantableComponent, ItemStack, ItemTypes, Player, system } from "@minecraft/server";
+import { EntityInventoryComponent, EquipmentSlot, ItemEnchantableComponent, ItemStack, ItemTypes, Player, system } from "@minecraft/server";
 import { ActionFormData, ActionFormResponse, FormCancelationReason, MessageFormData, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
 import { cloneConfiguration, ConfigurationCollections_DB, ConfigurationTypes} from "./configuration_handler";
 import {ADDON_NAME, db, localFishersCache, fetchFisher} from "constant";
@@ -100,16 +100,16 @@ export class Configuration {
     });
   }
   showUpgradeScreen() {
-    const inventory = (this.player.getComponent(EntityInventoryComponent.componentId) as EntityInventoryComponent).container;
-    let equippedFishingRod: ItemStack;
-    if(
-      (equippedFishingRod = this.player.equippedTool(EquipmentSlot.Mainhand))?.typeId !== MinecraftItemTypes.FishingRod || 
-      (equippedFishingRod = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
+    let equippedFishingRod = this.player.equippedTool(EquipmentSlot.Mainhand);
+    if(!equippedFishingRod) return;
+    if(equippedFishingRod?.typeId !== MinecraftItemTypes.FishingRod 
+    && (equippedFishingRod = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
       return;
     }
-    if(!equippedFishingRod.hasComponent(ItemEnchantableComponent.componentId)) return;
-    const allCustomEnchantments = CustomEnchantmentTypes.getAll();
+    
     const enchantments = equippedFishingRod.enchantment.override(equippedFishingRod);
+    const inventory = (this.player.getComponent(EntityInventoryComponent.componentId) as EntityInventoryComponent).container;
+    const allCustomEnchantments = CustomEnchantmentTypes.getAll();
     const availableEnchantments: Map<string, boolean> = new Map();
     
     const form = new ModalFormData();
@@ -153,13 +153,12 @@ export class Configuration {
     // Must be either offhand or mainhand to remove hook
     let equippedItem = this.player.equippedTool(EquipmentSlot.Mainhand);
     if(!equippedItem) return;
-    if(!equippedItem.hasComponent(ItemEnchantableComponent.componentId)) return;
-    const enchantments = equippedItem.enchantment.override(equippedItem);
     if(equippedItem?.typeId !== MinecraftItemTypes.FishingRod 
-    && (equippedItem = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod
-    || (!enchantments.hasCustomEnchantments())) {
+    && (equippedItem = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
       return;
     }
+    const enchantments = equippedItem.enchantment.override(equippedItem);
+    if(!enchantments.hasCustomEnchantments()) return;
     const form = new ModalFormData();
     const allCustomEnchantments = new Set([...CustomEnchantmentTypes.getAll(), ...enchantments.getCustomEnchantments()]);
 
@@ -197,14 +196,12 @@ export class Configuration {
   showEnhancementInfoScreen() {
     let equippedItem = this.player.equippedTool(EquipmentSlot.Mainhand);
     if(!equippedItem) return;
-    if(!equippedItem.hasComponent(ItemEnchantableComponent.componentId)) return;
-    const enchantments = equippedItem.enchantment.override(equippedItem);
     if(equippedItem?.typeId !== MinecraftItemTypes.FishingRod 
-    && (equippedItem = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod
-    || (!enchantments.hasCustomEnchantments())) {
-      return SendMessageTo(this.player);
+    && (equippedItem = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
+      return;
     }
-
+    const enchantments = equippedItem.enchantment.override(equippedItem);
+    if(!enchantments.hasCustomEnchantments()) return;
     const form = new ActionFormData()
     .title("Choose enhancement to inspect");
 

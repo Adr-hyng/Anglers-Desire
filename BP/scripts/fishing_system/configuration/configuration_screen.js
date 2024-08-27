@@ -1,4 +1,4 @@
-import { EntityInventoryComponent, EquipmentSlot, ItemEnchantableComponent, ItemTypes, system } from "@minecraft/server";
+import { EntityInventoryComponent, EquipmentSlot, ItemTypes, system } from "@minecraft/server";
 import { ActionFormData, FormCancelationReason, MessageFormData, ModalFormData } from "@minecraft/server-ui";
 import { cloneConfiguration, ConfigurationCollections_DB } from "./configuration_handler";
 import { ADDON_NAME, db, localFishersCache, fetchFisher } from "constant";
@@ -91,16 +91,16 @@ export class Configuration {
         });
     }
     showUpgradeScreen() {
-        const inventory = this.player.getComponent(EntityInventoryComponent.componentId).container;
-        let equippedFishingRod;
-        if ((equippedFishingRod = this.player.equippedTool(EquipmentSlot.Mainhand))?.typeId !== MinecraftItemTypes.FishingRod ||
-            (equippedFishingRod = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
+        let equippedFishingRod = this.player.equippedTool(EquipmentSlot.Mainhand);
+        if (!equippedFishingRod)
+            return;
+        if (equippedFishingRod?.typeId !== MinecraftItemTypes.FishingRod
+            && (equippedFishingRod = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
             return;
         }
-        if (!equippedFishingRod.hasComponent(ItemEnchantableComponent.componentId))
-            return;
-        const allCustomEnchantments = CustomEnchantmentTypes.getAll();
         const enchantments = equippedFishingRod.enchantment.override(equippedFishingRod);
+        const inventory = this.player.getComponent(EntityInventoryComponent.componentId).container;
+        const allCustomEnchantments = CustomEnchantmentTypes.getAll();
         const availableEnchantments = new Map();
         const form = new ModalFormData();
         form.title("Choose enhancement to add");
@@ -147,14 +147,13 @@ export class Configuration {
         let equippedItem = this.player.equippedTool(EquipmentSlot.Mainhand);
         if (!equippedItem)
             return;
-        if (!equippedItem.hasComponent(ItemEnchantableComponent.componentId))
-            return;
-        const enchantments = equippedItem.enchantment.override(equippedItem);
         if (equippedItem?.typeId !== MinecraftItemTypes.FishingRod
-            && (equippedItem = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod
-            || (!enchantments.hasCustomEnchantments())) {
+            && (equippedItem = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
             return;
         }
+        const enchantments = equippedItem.enchantment.override(equippedItem);
+        if (!enchantments.hasCustomEnchantments())
+            return;
         const form = new ModalFormData();
         const allCustomEnchantments = new Set([...CustomEnchantmentTypes.getAll(), ...enchantments.getCustomEnchantments()]);
         const availableEnchantments = new Map();
@@ -197,14 +196,13 @@ export class Configuration {
         let equippedItem = this.player.equippedTool(EquipmentSlot.Mainhand);
         if (!equippedItem)
             return;
-        if (!equippedItem.hasComponent(ItemEnchantableComponent.componentId))
-            return;
-        const enchantments = equippedItem.enchantment.override(equippedItem);
         if (equippedItem?.typeId !== MinecraftItemTypes.FishingRod
-            && (equippedItem = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod
-            || (!enchantments.hasCustomEnchantments())) {
-            return SendMessageTo(this.player);
+            && (equippedItem = this.player.equippedTool(EquipmentSlot.Offhand))?.typeId !== MinecraftItemTypes.FishingRod) {
+            return;
         }
+        const enchantments = equippedItem.enchantment.override(equippedItem);
+        if (!enchantments.hasCustomEnchantments())
+            return;
         const form = new ActionFormData()
             .title("Choose enhancement to inspect");
         const AvailableCustomEnchantments = enchantments.getCustomEnchantments();
