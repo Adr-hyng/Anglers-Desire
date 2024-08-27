@@ -35,6 +35,25 @@ export class JungleCatch {
         "toEntity": MinecraftEntityTypes.Squid
       },
     ];
+    else if(IsRainingChanceModifier && this.upgrade.has("Luminous")) {
+      return [
+        {
+          "item": MinecraftItemTypes.InkSac,
+          "weight": 24,
+          "toEntity": MinecraftEntityTypes.Squid
+        },
+        {
+          "item": MinecraftItemTypes.Air,
+          "weight": 9,
+          "toEntity": MinecraftEntityTypes.GlowSquid
+        },
+        {
+          "item": MinecraftItemTypes.Air,
+          "weight": 2,
+          "toEntity": MinecraftEntityTypes.Axolotl
+        },
+      ];
+    }
     return [
       {
         "item": MinecraftItemTypes.InkSac,

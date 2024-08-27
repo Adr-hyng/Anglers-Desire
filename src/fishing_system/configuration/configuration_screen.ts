@@ -150,7 +150,6 @@ export class Configuration {
     });
   }
   showDisenchantingScreen() {
-    // Must be either offhand or mainhand to remove hook
     let equippedItem = this.player.equippedTool(EquipmentSlot.Mainhand);
     if(!equippedItem) return;
     if(equippedItem?.typeId !== MinecraftItemTypes.FishingRod 
@@ -284,16 +283,16 @@ export class Configuration {
   }
   showCreditsScreen() {
     const form = new MessageFormData();
-    form.title(" Credits / Shoutout ")
+    form.title(" Special Thanks ")
     .button2("BACK")
     .button1("EXIT")
     .body(
       `
   Here are the people who really made this all possible:
 
-   Dal4y - Made all the textures (GOAT). Follow this talented artist in Twitter: @DaL4ydobeballin.
+   Dal4y - Created most of the textures. Follow this talented artist's Twitter: @DaL4ydobeballin.
 
-   BAO - Minecraft Bedrock-Addons peps (scripts, and technical).
+   BAO - Minecraft Bedrock-Addon Community for scripts, and technical guides.
 
    Big Chungus - Splash Particle Template for VFX.
 
@@ -308,13 +307,7 @@ export class Configuration {
       if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
         return;
       }
-      switch(response.selection) {
-        case 0: return;
-        case 1:
-          return this.showFisherTableScreen();
-        default:
-          break;
-      }
+      if(response.selection === 1) return this.showConfigurationScreen();
       return;
     });
   }

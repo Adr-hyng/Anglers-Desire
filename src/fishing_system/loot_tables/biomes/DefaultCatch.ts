@@ -30,6 +30,20 @@ export class DefaultCatch {
         "toEntity": MinecraftEntityTypes.Squid
       }
     ];
+    else if(IsRainingChanceModifier && this.upgrade.has("Luminous")) {
+      return [
+        {
+          "item": MinecraftItemTypes.Air,
+          "weight": 9,
+          "toEntity": MinecraftEntityTypes.GlowSquid
+        },
+        {
+          "item": MinecraftItemTypes.Air,
+          "weight": 21,
+          "toEntity": MinecraftEntityTypes.Squid
+        }
+      ];
+    }
     return [
       {
         "item": MinecraftItemTypes.Air,
