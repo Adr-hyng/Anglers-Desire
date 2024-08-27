@@ -280,6 +280,88 @@ export class Configuration {
         });
     }
     showGuideScreen() {
+        const mainForm = new ActionFormData();
+        mainForm.title("Addon Guide")
+            .button("What to expect?")
+            .button("Fisher's Table")
+            .button("Fisher's Caught List")
+            .button("Hook Enhancements")
+            .button("Back");
+        let form;
+        mainForm.show(this.player).then((response) => {
+            if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
+                return;
+            switch (response.selection) {
+                case 0:
+                    form = new MessageFormData();
+                    form.title("What to expect?");
+                    form.body(`
+            Lorem Ipsum
+            `);
+                    form.button2("EXIT");
+                    form.button1("BACK");
+                    form.show(this.player).then((descriptionResponse) => {
+                        if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy)
+                            return;
+                        if (descriptionResponse.selection === 0)
+                            return this.showGuideScreen();
+                        return;
+                    });
+                    break;
+                case 1:
+                    form = new MessageFormData();
+                    form.title("Fisher's Table");
+                    form.body(`
+            Lorem Ipsum
+            `);
+                    form.button2("EXIT");
+                    form.button1("BACK");
+                    form.show(this.player).then((descriptionResponse) => {
+                        if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy)
+                            return;
+                        if (descriptionResponse.selection === 0)
+                            return this.showGuideScreen();
+                        return;
+                    });
+                    break;
+                case 2:
+                    form = new MessageFormData();
+                    form.title("Fisher's Caught List");
+                    form.body(`
+            Lorem Ipsum
+            `);
+                    form.button2("EXIT");
+                    form.button1("BACK");
+                    form.show(this.player).then((descriptionResponse) => {
+                        if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy)
+                            return;
+                        if (descriptionResponse.selection === 0)
+                            return this.showGuideScreen();
+                        return;
+                    });
+                    break;
+                case 3:
+                    form = new MessageFormData();
+                    form.title("Hook Enhancements");
+                    form.body(`
+            Lorem Ipsum
+            `);
+                    form.button2("EXIT");
+                    form.button1("BACK");
+                    form.show(this.player).then((descriptionResponse) => {
+                        if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy)
+                            return;
+                        if (descriptionResponse.selection === 0)
+                            return this.showGuideScreen();
+                        return;
+                    });
+                    break;
+                case 4:
+                    return this.showConfigurationScreen();
+                default:
+                    break;
+            }
+        });
         return SendMessageTo(this.player);
     }
     showCreditsScreen() {
