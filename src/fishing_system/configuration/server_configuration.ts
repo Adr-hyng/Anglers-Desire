@@ -3,6 +3,10 @@ import { cloneConfiguration } from "./configuration_handler";
 
 export const serverConfiguration = {
   /**
+   * (Required: Caught Fish Despawns Toggle) Number of seconds before the fish despawns after being reeled.
+   */
+  caughtFishDespawnTimer: new FormBuilder("Caught Fish Despawn Timer").createTextField("30"),
+  /**
    * Number of seconds before cancelling the fishing system.
    */
   expirationTimer: new FormBuilder("Expiration Timer").createTextField("300"),
@@ -10,6 +14,10 @@ export const serverConfiguration = {
    * The locator for when will be caught entity be placed or reeled
    */
   CatchingPlacement: new FormBuilder("Caught Direction").createDropdown(['CURRENT', 'BACK', 'FRONT'], "CURRENT"),
+  /**
+   * Makes the caught fish despawn after an x amount of seconds being reeled-in.
+   */
+  caughtFishDespawns: new FormBuilder("Caught Fish Despawns").createToggle(false),
   /**
    * Shows the script initialization message log upon player joining, default is true.
    */

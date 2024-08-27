@@ -1,7 +1,7 @@
-import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemComponent, MolangVariableMap, } from "@minecraft/server";
+import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemComponent, MolangVariableMap, TicksPerSecond, } from "@minecraft/server";
 import { MinecraftEntityTypes } from "vanilla-types/index";
 import { Random } from "utils/Random/random";
-import { Logger, StateController } from "utils/index";
+import { Logger, StateController, Timer } from "utils/index";
 import { LootTable, FishingOutputBuilder, ConfigurationCollections_DB, cloneConfiguration } from "fishing_system/index";
 import { clientConfiguration } from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
@@ -114,6 +114,18 @@ class Fisher {
                             this.source.dimension.spawnParticle("yn:water_splash", stablizedLocation, this._particleSplashMolang);
                             if (this.fishingRod.upgrade.has("Pyroclasm"))
                                 currentEntityCaughtByHook.setOnFire(5, true);
+                            if (serverConfigurationCopy.caughtFishDespawns.defaultValue) {
+                                const fishDespawnTimer = new Timer(parseInt(serverConfigurationCopy.caughtFishDespawnTimer.defaultValue + "") * TicksPerSecond);
+                                const StartDespawnEventInterval = system.runInterval(() => {
+                                    if (!serverConfigurationCopy.caughtFishDespawns.defaultValue)
+                                        system.clearRun(StartDespawnEventInterval);
+                                    if (fishDespawnTimer.isDone()) {
+                                        currentEntityCaughtByHook.teleport({ x: 0, y: -70, z: 0 });
+                                        system.clearRun(StartDespawnEventInterval);
+                                    }
+                                    fishDespawnTimer.update();
+                                });
+                            }
                         });
                     }
                     this.source.playSound('entity.generic.splash');

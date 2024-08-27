@@ -1,4 +1,9 @@
 {
+  "caughtFishDespawnTimer": {
+    "description": "(Required: Caught Fish Despawns Toggle) Number of seconds before the fish despawns after being reeled.",
+    "name": "Caught Fish Despawn Timer",
+    "default": 30
+  },
   "expirationTimer": {
     "description": "Number of seconds before cancelling the fishing system.",
     "name": "Expiration Timer",
@@ -12,6 +17,11 @@
       "BACK", 
       "FRONT"
     ]
+  },
+  "caughtFishDespawns": {
+    "description": "Makes the caught fish despawn after an x amount of seconds being reeled-in.",
+    "name": "Caught Fish Despawns",
+    "default": false 
   },
   "ShowMessageUponJoin": {
     "description": "Shows the script initialization message log upon player joining, default is true.",

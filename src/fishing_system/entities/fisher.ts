@@ -7,6 +7,8 @@ import {
     EntityEquippableComponent,
     EntityItemComponent,
     MolangVariableMap,
+    world,
+    TicksPerSecond,
 } from "@minecraft/server";
 
 import {MinecraftEntityTypes} from "vanilla-types/index";
@@ -17,7 +19,8 @@ import {
 
 import {
     Logger,
-    StateController
+    StateController,
+    Timer
 } from "utils/index";
 import { LootTable, FishingOutputBuilder, ConfigurationCollections_DB, cloneConfiguration } from "fishing_system/index";
 import { clientConfiguration} from "../configuration/client_configuration";
@@ -36,8 +39,8 @@ export type FishingStateTypes = {
 }
 
 const CatchingLocalPosition = new Map([
-    [serverConfigurationCopy.CatchingPlacement.values[0], 2], // Back
-    [serverConfigurationCopy.CatchingPlacement.values[1], 1], // Default 
+    [serverConfigurationCopy.CatchingPlacement.values[0], 2], // Default 
+    [serverConfigurationCopy.CatchingPlacement.values[1], 1], // Back
     [serverConfigurationCopy.CatchingPlacement.values[2], 0], // Front
 ]);
 
@@ -63,7 +66,6 @@ class Fisher {
         this._particleSplashMolang = new MolangVariableMap();
         this.clientConfiguration = cloneConfiguration(clientConfiguration);
         const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT")); // unserialized data, need to be serialized
-        // Copy only the values, if there's a configuration already.
         if(configuration) {
             Object.entries(configuration).forEach(([key, value]) => {
                 this.clientConfiguration[key] = <FormBuilder<any>>(value);
@@ -155,9 +157,19 @@ class Fisher {
                         this._particleSplashMolang.setFloat("min_splashes", 20);
                         this._particleSplashMolang.setFloat("max_splashes", 35);
                         system.waitTicks(3).then(() => {
-                            // Upgrade Effect - Use State Controller next time with custom made event system listener
                             this.source.dimension.spawnParticle("yn:water_splash", stablizedLocation, this._particleSplashMolang);
                             if(this.fishingRod.upgrade.has("Pyroclasm")) currentEntityCaughtByHook.setOnFire(5, true);
+                            if(serverConfigurationCopy.caughtFishDespawns.defaultValue) {
+                                const fishDespawnTimer = new Timer(parseInt(serverConfigurationCopy.caughtFishDespawnTimer.defaultValue + "") * TicksPerSecond);
+                                const StartDespawnEventInterval = system.runInterval(() => {
+                                    if(!serverConfigurationCopy.caughtFishDespawns.defaultValue) system.clearRun(StartDespawnEventInterval);
+                                    if(fishDespawnTimer.isDone()) {
+                                        currentEntityCaughtByHook.teleport({x: 0, y: -70, z: 0});
+                                        system.clearRun(StartDespawnEventInterval);
+                                    }
+                                    fishDespawnTimer.update();
+                                });
+                            }
                         });
                         
                     }
