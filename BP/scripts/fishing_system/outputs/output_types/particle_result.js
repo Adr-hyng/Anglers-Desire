@@ -29,10 +29,6 @@ export class ParticleResult {
             system.run(() => {
                 if (!this.fisher.particleSpawner?.isValid()) {
                     this.fisher.particleSpawner = this.fisher.source.dimension.spawnEntity("yn:particle_spawner", { x, y, z });
-                    console.warn("NEW: ", this.fisher.particleSpawner.id);
-                }
-                else {
-                    console.warn("EXISTING: ", this.fisher.particleSpawner.id);
                 }
                 this.fisher.particleSpawner.triggerEvent(this.particleState);
             });

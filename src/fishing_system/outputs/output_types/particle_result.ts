@@ -40,12 +40,6 @@ export class ParticleResult implements IFishingOutput {
       system.run(() => {
         if(!this.fisher.particleSpawner?.isValid()) {
           this.fisher.particleSpawner = this.fisher.source.dimension.spawnEntity("yn:particle_spawner", {x, y, z});
-          console.warn("NEW: ", this.fisher.particleSpawner.id);
-        }
-        else {
-          // IF it is already existing then just change the particle to another particle state
-          console.warn("EXISTING: ", this.fisher.particleSpawner.id);
-          // this.fisher.particleSpawner.triggerEvent('show_fish_reset_particle');
         }
         this.fisher.particleSpawner.triggerEvent(this.particleState);
       });

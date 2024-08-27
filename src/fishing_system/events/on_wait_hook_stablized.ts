@@ -1,7 +1,7 @@
 import { Player, TicksPerSecond, system, BlockTypes} from "@minecraft/server";
-import { onHookLandedCallingLogMap, fetchFisher, localFishersCache, onCaughtParticleLogMap, onLostParticleLogMap } from "constant";
+import { onHookLandedCallingLogMap, fetchFisher, localFishersCache, onCaughtParticleLogMap} from "constant";
 import { Fisher } from "fishing_system/entities/fisher";
-import { Logger, StateController, Timer } from "utils/index";
+import { Logger, SendMessageTo, StateController, Timer } from "utils/index";
 
 import {overrideEverything} from "overrides/index";
 import { MinecraftBlockTypes } from "vanilla-types/index";
@@ -73,9 +73,8 @@ export async function onHookLanded(player: Player): Promise<void> {
         if(!delayTimer.isDone()) {
           delayTimer.update();
         } else {
-          const oldLog = onLostParticleLogMap.get(player.id) as number;
-          onLostParticleLogMap.set(player.id, Date.now());
-          if ((oldLog + 150) >= Date.now()) return;
+          const oldLog = onCaughtParticleLogMap.get(player.id) as number;
+          if ((oldLog + 300) >= Date.now()) return;
 
           FishingStateIndicator.Escaped.run();
           fisher.canBeReeled = false;
@@ -99,7 +98,15 @@ export async function onHookLanded(player: Player): Promise<void> {
 
       if(expirationTimer.isDone()){
         fisher.reset(true);
-        player.runCommandAsync(`tellraw ${player.name} {"rawtext":[{"translate":"yn.fishing_got_reel.on_afk_detected"}]}`);
+        player
+        SendMessageTo(player, {
+          rawtext: [
+            {
+              translate: 'yn.fishing_got_reel.on_afk_detected',
+              with: [player.name]
+            }
+          ]
+        });
         throw new Error("AFK Fishing detected");
       }
     } catch (e){
@@ -119,7 +126,7 @@ export async function onHookLanded(player: Player): Promise<void> {
       if(hookSubmergeState.getCurrentValue()) {
         const oldLog = onCaughtParticleLogMap.get(player.id) as number;
         onCaughtParticleLogMap.set(player.id, Date.now());
-        if ((oldLog + 150) >= Date.now()) return;
+        if ((oldLog + 300) >= Date.now()) return;
         
         FishingStateIndicator.Caught.run();
         if(fisher.clientConfiguration.OnSubmergeSE.defaultValue) player.playSound('note.chime');

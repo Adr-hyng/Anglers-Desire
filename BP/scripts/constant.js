@@ -7,7 +7,6 @@ export const db = new JsonDatabase(ADDON_NAME);
 export const localFishersCache = new Map();
 export const spawnedLogMap = new Map();
 export const onCaughtParticleLogMap = new Map();
-export const onLostParticleLogMap = new Map();
 export const onHookLandedCallingLogMap = new Map();
 export const onCustomBlockInteractLogMap = new Map();
 export function fetchFisher(player) {

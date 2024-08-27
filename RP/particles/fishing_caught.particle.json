@@ -31,8 +31,8 @@
 				"offset": [0, 0.3, 0]
 			},
 			"minecraft:particle_lifetime_expression": {
-				"max_lifetime": 3,
-				"expiration_expression": "!q.is_on_screen || q.property('yn:particle_state') == 0 ? 1 : 0"
+				"max_lifetime": 1,
+				"expiration_expression": "!q.is_on_screen || q.property('yn:particle_state') != 1 ? 1 : 0"
 			},
 			"minecraft:particle_expire_if_in_blocks": ["minecraft:water", "minecraft:flowing_water"],
 			"minecraft:particle_motion_parametric": {
@@ -44,7 +44,7 @@
 				"uv": {
 					"texture_width": 1,
 					"texture_height": 10,
-					"uv": [0, "t.max_frame = 10;t.frame = math.floor(v.particle_age*16);return t.frame >= 6 ? t.max_frame - t.frame : t.frame;"],
+					"uv": [0, "t.max_frame = 14;t.last_frame = 10;t.frame = math.floor(v.particle_age*15);(t.frame <= 5) ? {  return t.frame;};(t.frame >= 6 && t.frame <= t.last_frame) ? { return 6;};return t.frame > t.last_frame ? t.max_frame - t.frame : t.frame;"],
 					"uv_size": [1, 1]
 				}
 			}

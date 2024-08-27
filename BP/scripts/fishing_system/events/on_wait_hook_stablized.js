@@ -1,6 +1,6 @@
 import { TicksPerSecond, system, BlockTypes } from "@minecraft/server";
-import { onHookLandedCallingLogMap, fetchFisher, localFishersCache, onCaughtParticleLogMap, onLostParticleLogMap } from "constant";
-import { Logger, StateController, Timer } from "utils/index";
+import { onHookLandedCallingLogMap, fetchFisher, localFishersCache, onCaughtParticleLogMap } from "constant";
+import { Logger, SendMessageTo, StateController, Timer } from "utils/index";
 import { overrideEverything } from "overrides/index";
 import { MinecraftBlockTypes } from "vanilla-types/index";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
@@ -67,9 +67,8 @@ export async function onHookLanded(player) {
                     delayTimer.update();
                 }
                 else {
-                    const oldLog = onLostParticleLogMap.get(player.id);
-                    onLostParticleLogMap.set(player.id, Date.now());
-                    if ((oldLog + 150) >= Date.now())
+                    const oldLog = onCaughtParticleLogMap.get(player.id);
+                    if ((oldLog + 300) >= Date.now())
                         return;
                     FishingStateIndicator.Escaped.run();
                     fisher.canBeReeled = false;
@@ -91,7 +90,15 @@ export async function onHookLanded(player) {
             HookOnSubmergedForItemFishing();
             if (expirationTimer.isDone()) {
                 fisher.reset(true);
-                player.runCommandAsync(`tellraw ${player.name} {"rawtext":[{"translate":"yn.fishing_got_reel.on_afk_detected"}]}`);
+                player;
+                SendMessageTo(player, {
+                    rawtext: [
+                        {
+                            translate: 'yn.fishing_got_reel.on_afk_detected',
+                            with: [player.name]
+                        }
+                    ]
+                });
                 throw new Error("AFK Fishing detected");
             }
         }
@@ -112,7 +119,7 @@ export async function onHookLanded(player) {
             if (hookSubmergeState.getCurrentValue()) {
                 const oldLog = onCaughtParticleLogMap.get(player.id);
                 onCaughtParticleLogMap.set(player.id, Date.now());
-                if ((oldLog + 150) >= Date.now())
+                if ((oldLog + 300) >= Date.now())
                     return;
                 FishingStateIndicator.Caught.run();
                 if (fisher.clientConfiguration.OnSubmergeSE.defaultValue)

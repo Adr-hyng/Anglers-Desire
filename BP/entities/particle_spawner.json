@@ -23,7 +23,7 @@
     "components": {
       "minecraft:timer": {
         "looping": true,
-        "time": 3,
+        "time": 1,
         "time_down_event": {
           "event": "despawn"
         }
@@ -63,13 +63,6 @@
       }
     },
     "events": {
-      "minecraft:entity_spawned": {
-        "queue_command": {
-          "command": [
-            "say SPAWNED"
-          ]
-        }
-      },
       "show_fish_reset_particle": {
         "set_property": {
           "yn:particle_state": 0
@@ -88,11 +81,6 @@
       "despawn": {
         "sequence": [
           {
-            "queue_command": {
-              "command": [
-                "say GONE"
-              ]
-            },
             "set_property": {
               "yn:particle_state": 0
             },
