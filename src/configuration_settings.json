@@ -1,17 +1,17 @@
 {
   "caughtFishDespawnTimer": {
-    "description": "(Required: Caught Fish Despawns Toggle) Number of seconds before the fish despawns after being reeled.",
-    "name": "Caught Fish Despawn Timer",
+    "description": "(Required: Caught Fish Despawns Toggle) Number of seconds before the fish despawns after being reeled. Note: Putting string instead of number just returns the default value",
+    "name": "yn:fishing_got_reel.configuration.server.caught_fish_despawn_timer",
     "default": 30
   },
   "expirationTimer": {
-    "description": "Number of seconds before cancelling the fishing system.",
-    "name": "Expiration Timer",
+    "description": "Number of seconds before cancelling the fishing system. Note: Putting string instead of number just returns the default value",
+    "name": "yn:fishing_got_reel.configuration.server.expiration_timer",
     "default": 300
   },
   "CatchingPlacement": {
     "description": "The locator for when will be caught entity be placed or reeled",
-    "name": "Caught Direction",
+    "name": "yn:fishing_got_reel.configuration.server.caught_direction",
     "default": [
       "CURRENT", 
       "BACK", 
@@ -20,12 +20,12 @@
   },
   "caughtFishDespawns": {
     "description": "Makes the caught fish despawn after an x amount of seconds being reeled-in.",
-    "name": "Caught Fish Despawns",
+    "name": "yn:fishing_got_reel.configuration.server.does_caught_fish_despawn",
     "default": false 
   },
   "ShowMessageUponJoin": {
     "description": "Shows the script initialization message log upon player joining, default is true.",
-    "name": "Show Message On Join ",
+    "name": "yn:fishing_got_reel.configuration.server.show_message_on_join",
     "default": true
   }
 }

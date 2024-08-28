@@ -56,12 +56,16 @@ export class Configuration {
   }
   showFisherTableScreen() {
     const form = new ActionFormData()
-    .title(" Fisher's Table ")
-    .button("Add Enhancements", "textures/gui/fishers_table/add_enhancement")
-    .button("Remove Enhancements", "textures/gui/fishers_table/remove_enhancement")
-    .button("View Enhancements", "textures/gui/fishers_table/view_enhancement")
-    .button("View Fishing Book", "textures/gui/fishers_table/view_book")
-    .button("Give Settings Item", "textures/gui/fishers_table/give_configuration");
+    .title({rawtext: [
+      {text: " "},
+      {translate: "yn:fishing_got_reel.configuration.fishers_table.title"},
+      {text: " "},
+    ]})
+    .button({rawtext: [{translate: "yn:fishing_got_reel.configuration.fishers_table.open_enchantment_option"}]}, "textures/gui/fishers_table/add_enhancement")
+    .button({rawtext: [{translate: "yn:fishing_got_reel.configuration.fishers_table.open_disenchant_option"}]}, "textures/gui/fishers_table/remove_enhancement")
+    .button({rawtext: [{translate: "yn:fishing_got_reel.configuration.fishers_table.view_enhancements_option"}]}, "textures/gui/fishers_table/view_enhancement")
+    .button({rawtext: [{translate: "yn:fishing_got_reel.configuration.fishers_table.view_fishing_book_option"}]}, "textures/gui/fishers_table/view_book")
+    .button({rawtext: [{translate: "yn:fishing_got_reel.configuration.fishers_table.get_settings_option"}]}, "textures/gui/fishers_table/give_configuration");
     form.show(this.player).then( (response: ActionFormResponse) => {
       if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) return;
       switch(response.selection) {
@@ -113,7 +117,7 @@ export class Configuration {
     const availableEnchantments: Map<string, boolean> = new Map();
     
     const form = new ModalFormData();
-    form.title("Choose enhancement to add");
+    form.title({rawtext: [{translate: "yn:fishing_got_reel.configuration.open_enchantment_screen.title"}]});
     for(const customEnchantment of allCustomEnchantments){
       let isAvailable = false;
       const result = this.player.runCommand(`testfor @s[hasItem={item=${customEnchantment.id}}]`);
@@ -123,8 +127,11 @@ export class Configuration {
       availableEnchantments.set(customEnchantment.name, isAvailable);
       form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name}`, false);
     }
-    form.submitButton("Add ");
-
+    form.submitButton({rawtext: [
+      {translate: "yn:fishing_got_reel.configuration.general.add_enchantment"},
+      {text: " "}
+    ]});
+    
     form.show(this.player).then( (response) => {
       if (!response.formValues) return;
       if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
@@ -162,13 +169,16 @@ export class Configuration {
     const allCustomEnchantments = new Set([...CustomEnchantmentTypes.getAll(), ...enchantments.getCustomEnchantments()]);
 
     const availableEnchantments: Map<string, boolean> = new Map();
-    form.title("Choose enhancement to remove");
+    form.title({rawtext: [{translate: "yn:fishing_got_reel.configuration.open_disenchant_screen.title"}]});
     for(const customEnchantment of allCustomEnchantments) {
       const isAvailable = enchantments.hasCustomEnchantment(customEnchantment);
       availableEnchantments.set(customEnchantment.name, isAvailable);
       form.toggle(`${(!isAvailable ? "§c" : "§a")}${customEnchantment.name}`, false);
     }
-    form.submitButton("Remove ");
+    form.submitButton({rawtext: [
+      {translate: "yn:fishing_got_reel.configuration.general.remove_enchantment"},
+      {text: " "}
+    ]});
     form.show(this.player).then( (response) => {
       if (!response.formValues) return;
       if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
@@ -202,13 +212,22 @@ export class Configuration {
     const enchantments = equippedItem.enchantment.override(equippedItem);
     if(!enchantments.hasCustomEnchantments()) return;
     const form = new ActionFormData()
-    .title("Choose enhancement to inspect");
+    .title({rawtext: [{translate: "yn:fishing_got_reel.configuration.view_enhancement_screen.title"}]});
 
     const AvailableCustomEnchantments = enchantments.getCustomEnchantments();
     for(const customEnchantment of AvailableCustomEnchantments) {
-      form.button(`Usage: ${customEnchantment.usage} / ${customEnchantment.maxUsage}`, customEnchantment.icon);
+      form.button({
+        rawtext: [
+          {
+            translate: "yn:fishing_got_reel.configuration.general.usage"
+          },
+          {
+            text: `: ${customEnchantment.usage} / ${customEnchantment.maxUsage}`
+          }
+        ]
+      }, customEnchantment.icon);
     }
-    form.button("BACK", "textures/ui/arrow_left");
+    form.button({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]}, "textures/ui/arrow_left");
 
     form.show(this.player).then( (response: ActionFormResponse) => {
       if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) return;
@@ -217,16 +236,38 @@ export class Configuration {
       const descriptionForm = new MessageFormData();
       const selectedCustomEnchantment = AvailableCustomEnchantments[index];
       descriptionForm.title(selectedCustomEnchantment.name);
-      descriptionForm.body( 
-      `
-§lDescription:§r
-  ${selectedCustomEnchantment.description}.
-
-§lLore:§r
-  §o${selectedCustomEnchantment.lore}
-      `);
-      descriptionForm.button2("EXIT");
-      descriptionForm.button1("BACK");
+      descriptionForm.body({
+        rawtext: [
+          {
+            text: "\n"
+          },
+          {
+            translate: "yn:fishing_got_reel.enchantments.description_text",
+          },
+          {
+            text: "\n    "
+          },
+          {
+            translate: selectedCustomEnchantment.description,
+            with: []
+          },
+          {
+            text: "\n\n"
+          },
+          {
+            translate: "yn:fishing_got_reel.enchantments.lore_text"
+          },
+          {
+            text: "\n    "
+          },
+          {
+            translate: selectedCustomEnchantment.lore,
+            with: []
+          },
+        ]
+      });
+      descriptionForm.button2({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.exit"}]});
+      descriptionForm.button1({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]});
       descriptionForm.show(this.player).then((descriptionResponse) => {
         if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy) return;
         if(descriptionResponse.selection === 0) return this.showEnhancementInfoScreen();
@@ -245,13 +286,21 @@ export class Configuration {
       this.isConfigurationSettingsOpen = true;
       const parsedAddonTitle = ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
       const form = new ActionFormData()
-      .title(parsedAddonTitle + " Settings")
-      .button("Client Options", "textures/gui/configurations/client_status"); //"C:\Users\Adrian Abaigar\Downloads\Compressed\bedrock-samples-1.21.0.3\bedrock-samples-1.21.0.3\resource_pack\textures\ui\deop.png"
-
-      form.button("Server Options", "textures/gui/configurations/operator_status"); // IF player is operator
-
-      form.button("Addon Guide", "textures/gui/configurations/guide")
-      .button("Special Thanks", "textures/gui/configurations/credits");
+      .title({rawtext: [
+        {translate: "yn:fishing_got_reel.configuration.addon_options.title", with: [parsedAddonTitle]}
+      ]})
+      .button({rawtext: [
+        {translate: "yn:fishing_got_reel.configuration.addon_options.client"}
+      ]}, "textures/gui/configurations/client_status");
+      form.button({rawtext: [
+        {translate: "yn:fishing_got_reel.configuration.addon_options.server"}
+      ]}, "textures/gui/configurations/operator_status"); // IF player is operator
+      form.button({rawtext: [
+        {translate: "yn:fishing_got_reel.configuration.addon_options.guide"}
+      ]}, "textures/gui/configurations/guide")
+      .button({rawtext: [
+        {translate: "yn:fishing_got_reel.configuration.addon_options.credits"}
+      ]}, "textures/gui/configurations/credits");
       form.show(this.player).then( (response: ActionFormResponse) => {
         if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
           this.isConfigurationSettingsOpen = false;
@@ -280,12 +329,12 @@ export class Configuration {
   }
   showGuideScreen() {
     const mainForm = new ActionFormData();
-    mainForm.title("Addon Guide")
-    .button("What to expect?")
-    .button("Fisher's Table")
-    .button("Fisher's Caught List")
-    .button("Hook Enhancements")
-    .button("Back");
+    mainForm.title({rawtext: [{translate: "yn:fishing_got_reel.configuration.addon_guide.title"}]})
+    .button({rawtext: [{translate: "yn:fishing_got_reel.configuration.addon_guide.introduction_section"}]})
+    .button({rawtext: [{translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_table_section"}]})
+    .button({rawtext: [{translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_book_section"}]})
+    .button({rawtext: [{translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancements_section"}]})
+    .button({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]}, "textures/ui/arrow_left");
 
     let form: MessageFormData;
     mainForm.show(this.player).then((response) => {
@@ -293,12 +342,17 @@ export class Configuration {
       switch(response.selection) {
         case 0:
           form = new MessageFormData();
-          form.title("What to expect?");
-          form.body(
-            "\n    This addon completely overhauls the vanilla fishing experience, replacing the simple reeling of fish items with a dynamic system where you catch real entities. \n\n    Similar to the fishing mechanics in games like Harvest Moon Series, Stardew Valley and Animal Crossing, you’ll now reel entities or items up into the sky. \n\n    As well as adding more practical uses for amethyst shard, glowing ink sacs, nautilus shell, and more to enhance your fishing experience."
-          );
-          form.button2("EXIT");
-          form.button1("BACK");
+          form.title({rawtext: [{translate: "yn:fishing_got_reel.configuration.addon_guide.introduction_section"}]});
+          form.body({
+            rawtext: [
+              {
+                translate: "yn:fishing_got_reel.configuration.addon_guide.introduction_guide.content",
+                with: ["\n    ", "\n\n    "]
+              }
+            ]
+          });
+          form.button2({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.exit"}]});
+          form.button1({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]});
           form.show(this.player).then((descriptionResponse) => {
             if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy) return;
             if(descriptionResponse.selection === 0) return this.showGuideScreen();
@@ -307,22 +361,17 @@ export class Configuration {
           break;
         case 1:
           form = new MessageFormData();
-          form.title("Fisher's Table");
-          form.body(`
-    The Fisher's Table is a new useful block that functions similarly to the Smithing Table. While it doesn’t replace the barrel for the fisherman villager yet, it allows players to enhance fishing rod hooks, view available enhancements, and access the list of catchable fish.
-    
-    To craft one, you need the following materials and in a crafting table, follow this pattern:
-    | A B |
-    | X X | 
-    | X X |
-
-    Materials:
-    A = Stick
-    B = Any vanilla fish
-    X = Any vanilla planks
-    `);
-          form.button2("EXIT");
-          form.button1("BACK");
+          form.title({rawtext: [{translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_table_section"}]});
+          form.body({
+            rawtext: [
+              {
+                translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_table_guide.content",
+                with: ["\n    ", "\n"]
+              }
+            ]
+          })
+          form.button2({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.exit"}]});
+          form.button1({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]});
           form.show(this.player).then((descriptionResponse) => {
             if(descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy) return;
             if(descriptionResponse.selection === 0) return this.showGuideScreen();
@@ -331,14 +380,16 @@ export class Configuration {
           break;
         case 2:
           form = new MessageFormData();
-          form.title("Fisher's Caught List");
-          form.body(
-            `
-    A detailed list of all catchable fish in the addon, including lore, obtainability, and catch rates. This feature enriches the fishing experience by giving players more insight into what they can catch.
-            `
-          );
-          form.button2("EXIT");
-          form.button1("BACK");
+          form.title({rawtext: [{translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_book_section"}]});
+          form.body({rawtext: [
+            {text: "\n"},
+            {
+              translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_book_guide.content",
+              with: ["\n    "]
+            }
+          ]});
+          form.button2({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.exit"}]});
+          form.button1({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]});
           form.show(this.player).then((descriptionResponse) => {
             if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy) return;
             if(descriptionResponse.selection === 0) return this.showGuideScreen();
@@ -348,14 +399,14 @@ export class Configuration {
         case 3:
           const HookSectionView = () => {
             const mainForm = new ActionFormData();
-            mainForm.title("Hooks");
-            mainForm.button("Iron Hook", "textures/items/normal_hook");
-            mainForm.button("Nautilus Hook", FishingCustomEnchantmentType.Nautilus.icon);
-            mainForm.button("Luminous Hook", FishingCustomEnchantmentType.Luminous.icon);
-            mainForm.button("Pyroclasm Hook", FishingCustomEnchantmentType.Pyroclasm.icon);
-            mainForm.button("Tempus Hook", FishingCustomEnchantmentType.Tempus.icon);
-            mainForm.button("Ferm. Spider Eye Hook", FishingCustomEnchantmentType.FermentedEye.icon);
-            mainForm.button("Back");
+            mainForm.title({rawtext: [{translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancements_section"}]});
+            mainForm.button({rawtext: [{translate: "item.yn:fishing_got_reel:normal_hook"}]}, "textures/items/normal_hook");
+            mainForm.button({rawtext: [{translate: "item.yn:fishing_got_reel:nautilus_hook"}]}, FishingCustomEnchantmentType.Nautilus.icon);
+            mainForm.button({rawtext: [{translate: "item.yn:fishing_got_reel:luminous_siren_hook"}]}, FishingCustomEnchantmentType.Luminous.icon);
+            mainForm.button({rawtext: [{translate: "item.yn:fishing_got_reel:pyroclasm_hook"}]}, FishingCustomEnchantmentType.Pyroclasm.icon);
+            mainForm.button({rawtext: [{translate: "item.yn:fishing_got_reel:tempus_hook"}]}, FishingCustomEnchantmentType.Tempus.icon);
+            mainForm.button({rawtext: [{translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermentedEye"}]}, FishingCustomEnchantmentType.FermentedEye.icon);
+            mainForm.button({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]}, "textures/ui/arrow_left");
 
             let hookForm: MessageFormData;
             mainForm.show(this.player).then((response) => {
@@ -363,20 +414,16 @@ export class Configuration {
               switch(response.selection) {
                 case 0:
                   hookForm = new MessageFormData();
-                  hookForm.title("Iron Hook");
-                  hookForm.body(
-                  `
-    Crafting Type: Crafting Table
-    Crafting Recipe:
-    |      X |
-    | X   X |
-    |   X    |
-
-    Material:
-    X = Iron Nugget
-                  `);
-                  hookForm.button2("EXIT");
-                  hookForm.button1("BACK");
+                  hookForm.title({rawtext: [{translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancements_section"}]});
+                  
+                  hookForm.body({rawtext: [
+                    { 
+                      translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.iron_hook_recipe",
+                      with: ["\n"]
+                    }
+                  ]});
+                  hookForm.button2({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.exit"}]});
+                  hookForm.button1({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]});
                   hookForm.show(this.player).then((descriptionResponse) => {
                     if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy) return;
                     if(descriptionResponse.selection === 0) return HookSectionView();
@@ -385,19 +432,15 @@ export class Configuration {
                   break;
                 case 1:
                   hookForm = new MessageFormData();
-                  hookForm.title("Nautilus Hook");
-                  hookForm.body(
-                  `
-    Crafting Type: Any
-    Crafting Recipe:
-    | A B |
-
-    Materials:
-    A = Nautilus Shell
-    B = Iron Hook
-                  `);
-                  hookForm.button2("EXIT");
-                  hookForm.button1("BACK");
+                  hookForm.title({rawtext: [{translate: "item.yn:fishing_got_reel:nautilus_hook"}]});
+                  hookForm.body({rawtext: [
+                    { 
+                      translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.nautilus_hook_recipe",
+                      with: ["\n"]
+                    }
+                  ]});
+                  hookForm.button2({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.exit"}]});
+                  hookForm.button1({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]});
                   hookForm.show(this.player).then((descriptionResponse) => {
                     if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy) return;
                     if(descriptionResponse.selection === 0) return HookSectionView();
@@ -406,19 +449,15 @@ export class Configuration {
                   break;
                 case 2:
                   hookForm = new MessageFormData();
-                  hookForm.title("Luminous Hook");
-                  hookForm.body(
-                  `
-    Crafting Type: Any
-    Crafting Recipe:
-    | A B |
-
-    Materials:
-    A = Glow Ink Sac
-    B = Iron Hook
-                  `);
-                  hookForm.button2("EXIT");
-                  hookForm.button1("BACK");
+                  hookForm.title({rawtext: [{translate: "item.yn:fishing_got_reel:luminous_siren_hook"}]});
+                  hookForm.body({rawtext: [
+                    { 
+                      translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.luminous_hook_recipe",
+                      with: ["\n"]
+                    }
+                  ]});
+                  hookForm.button2({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.exit"}]});
+                  hookForm.button1({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]});
                   hookForm.show(this.player).then((descriptionResponse) => {
                     if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy) return;
                     if(descriptionResponse.selection === 0) return HookSectionView();
@@ -427,19 +466,15 @@ export class Configuration {
                   break;
                 case 3:
                   hookForm = new MessageFormData();
-                  hookForm.title("Pyroclasm Hook");
-                  hookForm.body(
-                  `
-    Crafting Type: any
-    Crafting Recipe:
-    | A B |
-
-    Materials:
-    A = Magma Cream
-    B = Iron Hook
-                  `);
-                  hookForm.button2("EXIT");
-                  hookForm.button1("BACK");
+                  hookForm.title({rawtext: [{translate: "item.yn:fishing_got_reel:pyroclasm_hook"}]});
+                  hookForm.body({rawtext: [
+                    { 
+                      translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.pyroclasm_hook_recipe",
+                      with: ["\n"]
+                    }
+                  ]});
+                  hookForm.button2({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.exit"}]});
+                  hookForm.button1({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]});
                   hookForm.show(this.player).then((descriptionResponse) => {
                     if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy) return;
                     if(descriptionResponse.selection === 0) return HookSectionView();
@@ -448,19 +483,15 @@ export class Configuration {
                   break;
                 case 4:
                   hookForm = new MessageFormData();
-                  hookForm.title("Tempus Hook");
-                  hookForm.body(
-                  `
-    Crafting Type: Any
-    Crafting Recipe:
-    | A B |
-
-    Materials:
-    A = Amethyst Shard
-    B = Iron Hook
-                  `);
-                  hookForm.button2("EXIT");
-                  hookForm.button1("BACK");
+                  hookForm.title({rawtext: [{translate: "item.yn:fishing_got_reel:tempus_hook"}]});
+                  hookForm.body({rawtext: [
+                    { 
+                      translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.tempus_hook_recipe",
+                      with: ["\n"]
+                    }
+                  ]});
+                  hookForm.button2({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.exit"}]});
+                  hookForm.button1({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]});
                   hookForm.show(this.player).then((descriptionResponse) => {
                     if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy) return;
                     if(descriptionResponse.selection === 0) return HookSectionView();
@@ -469,19 +500,15 @@ export class Configuration {
                   break;
                 case 5:
                   hookForm = new MessageFormData();
-                  hookForm.title("Fermented Spider Eye covered Hook");
-                  hookForm.body(
-                  `
-    Crafting Type: Any
-    Crafting Recipe:
-    | A B |
-
-    Materials:
-    A = Fermented Spider Eye
-    B = Iron Hook
-                  `);
-                  hookForm.button2("EXIT");
-                  hookForm.button1("BACK");
+                  hookForm.title({rawtext: [{translate: "item.yn:fishing_got_reel:fermented_spider_eye_hook"}]});
+                  hookForm.body({rawtext: [
+                    { 
+                      translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermeye_hook_recipe",
+                      with: ["\n"]
+                    }
+                  ]});
+                  hookForm.button2({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.exit"}]});
+                  hookForm.button1({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]});
                   hookForm.show(this.player).then((descriptionResponse) => {
                     if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy) return;
                     if(descriptionResponse.selection === 0) return HookSectionView();
@@ -503,9 +530,13 @@ export class Configuration {
   }
   showCreditsScreen() {
     const form = new MessageFormData();
-    form.title(" Special Thanks ")
-    .button2("BACK")
-    .button1("EXIT")
+    form.title({rawtext: [
+      {text: " "},
+      {translate: "yn:fishing_got_reel.configuration.addon_options.credits"},
+      {text: " "}
+    ]})
+    .button2({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.exit"}]})
+    .button1({rawtext: [{translate: "yn:fishing_got_reel.configuration.general.back"}]})
     .body(
       `
   Here are the people who really made this all possible:
@@ -549,15 +580,15 @@ export class Configuration {
       if (typeof builder.defaultValue === "string" && isArrayEmpty) {
         const currentValue = builder.values.indexOf(builder.defaultValue);
         cachedConfigurationValues[index] = currentValue !== -1 ? currentValue : parseInt(builder.defaultValue as string);
-        form.dropdown(builder.name, builder.values as string[], cachedConfigurationValues[index] as number);
+        form.dropdown({rawtext: [{translate: builder.name}]}, builder.values as string[], cachedConfigurationValues[index] as number);
       } 
       else if (typeof builder.defaultValue === "boolean") {
         cachedConfigurationValues[index] = builder.defaultValue;
-        form.toggle(builder.name, cachedConfigurationValues[index] as boolean);
+        form.toggle({rawtext: [{translate: builder.name}]}, cachedConfigurationValues[index] as boolean);
       } 
       else if (typeof builder.defaultValue === "string" && !isArrayEmpty) {
         cachedConfigurationValues[index] = builder.defaultValue;
-        form.textField(builder.name, cachedConfigurationValues[index], builder.defaultValue);
+        form.textField({rawtext: [{translate: builder.name}]}, cachedConfigurationValues[index], builder.defaultValue);
       }
     });
 
@@ -610,13 +641,13 @@ export class Configuration {
       if (typeof builder.defaultValue === "string" && isArrayEmpty) {
         const currentValue = builder.values.indexOf(builder.defaultValue);
         cachedConfigurationValues[index] = currentValue !== -1 ? currentValue : parseInt(builder.defaultValue as string);
-        form.dropdown(builder.name, builder.values as string[], cachedConfigurationValues[index] as number);
+        form.dropdown({rawtext: [{translate: builder.name}]}, builder.values as string[], cachedConfigurationValues[index] as number);
       } else if (typeof builder.defaultValue === "string" && !isArrayEmpty) {
         cachedConfigurationValues[index] = builder.defaultValue;
-        form.textField(builder.name, cachedConfigurationValues[index]);
+        form.textField({rawtext: [{translate: builder.name}]}, cachedConfigurationValues[index]);
       } else if (typeof builder.defaultValue === "boolean") {
         cachedConfigurationValues[index] = builder.defaultValue;
-        form.toggle(builder.name, cachedConfigurationValues[index] as boolean);
+        form.toggle({rawtext: [{translate: builder.name}]}, cachedConfigurationValues[index] as boolean);
       }
     });
 

@@ -5,23 +5,23 @@ export const serverConfiguration = {
   /**
    * (Required: Caught Fish Despawns Toggle) Number of seconds before the fish despawns after being reeled.
    */
-  caughtFishDespawnTimer: new FormBuilder("Caught Fish Despawn Timer").createTextField("30"),
+  caughtFishDespawnTimer: new FormBuilder("yn:fishing_got_reel.configuration.server.caught_fish_despawn_timer").createTextField("30"),
   /**
    * Number of seconds before cancelling the fishing system.
    */
-  expirationTimer: new FormBuilder("Expiration Timer").createTextField("300"),
+  expirationTimer: new FormBuilder("yn:fishing_got_reel.configuration.server.expiration_timer").createTextField("300"),
   /**
    * The locator for when will be caught entity be placed or reeled
    */
-  CatchingPlacement: new FormBuilder("Caught Direction").createDropdown(['CURRENT', 'BACK', 'FRONT'], "CURRENT"),
+  CatchingPlacement: new FormBuilder("yn:fishing_got_reel.configuration.server.caught_direction").createDropdown(['CURRENT', 'BACK', 'FRONT'], "CURRENT"),
   /**
    * Makes the caught fish despawn after an x amount of seconds being reeled-in.
    */
-  caughtFishDespawns: new FormBuilder("Caught Fish Despawns").createToggle(false),
+  caughtFishDespawns: new FormBuilder("yn:fishing_got_reel.configuration.server.does_caught_fish_despawn").createToggle(false),
   /**
    * Shows the script initialization message log upon player joining, default is true.
    */
-  ShowMessageUponJoin: new FormBuilder("Show Message On Join ").createToggle(true),
+  ShowMessageUponJoin: new FormBuilder("yn:fishing_got_reel.configuration.server.show_message_on_join").createToggle(true),
   /**
    * Enables debug messages to content logs.
    */

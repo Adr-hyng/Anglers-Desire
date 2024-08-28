@@ -38,8 +38,8 @@ export type FishingStateTypes = {
 }
 
 const CatchingLocalPosition = new Map([
-    [serverConfigurationCopy.CatchingPlacement.values[0], 2], // Default 
-    [serverConfigurationCopy.CatchingPlacement.values[1], 1], // Back
+    [serverConfigurationCopy.CatchingPlacement.values[0], 1], // Default 
+    [serverConfigurationCopy.CatchingPlacement.values[1], 2], // Back
     [serverConfigurationCopy.CatchingPlacement.values[2], 0], // Front
 ]);
 
@@ -121,7 +121,7 @@ class Fisher {
         
         const endPoint: Vec3 = new Vec3(x - CatchingPosition * viewX, y, z - CatchingPosition * viewZ); // 2nd point
         const magnitude: number = endPoint.distance(startPoint);
-        const controlPoint = new Vec3( 
+          const controlPoint = new Vec3( 
             (startPoint.x + endPoint.x) / 2,
             startPoint.y + (magnitude * 1.35),
             (startPoint.z + endPoint.z) / 2

@@ -11,8 +11,8 @@ import { serverConfigurationCopy } from "fishing_system/configuration/server_con
 import { overrideEverything } from "overrides/index";
 overrideEverything();
 const CatchingLocalPosition = new Map([
-    [serverConfigurationCopy.CatchingPlacement.values[0], 2],
-    [serverConfigurationCopy.CatchingPlacement.values[1], 1],
+    [serverConfigurationCopy.CatchingPlacement.values[0], 1],
+    [serverConfigurationCopy.CatchingPlacement.values[1], 2],
     [serverConfigurationCopy.CatchingPlacement.values[2], 0],
 ]);
 const ReelingCompleteProcess = 0.96;
