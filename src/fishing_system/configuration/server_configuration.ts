@@ -3,11 +3,11 @@ import { cloneConfiguration } from "./configuration_handler";
 
 export const serverConfiguration = {
   /**
-   * (Required: Caught Fish Despawns Toggle) Number of seconds before the fish despawns after being reeled.
+   * (Required: Caught Fish Despawns Toggle) Number of seconds before the fish despawns after being reeled. Note: Putting string instead of number just returns the default value
    */
   caughtFishDespawnTimer: new FormBuilder("yn:fishing_got_reel.configuration.server.caught_fish_despawn_timer").createTextField("30"),
   /**
-   * Number of seconds before cancelling the fishing system.
+   * Number of seconds before cancelling the fishing system. Note: Putting string instead of number just returns the default value
    */
   expirationTimer: new FormBuilder("yn:fishing_got_reel.configuration.server.expiration_timer").createTextField("300"),
   /**

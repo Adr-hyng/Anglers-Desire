@@ -7,6 +7,8 @@ export class HookUpgrades {
         this.source = source;
     }
     has(customEnchant) {
+        if (!this.source)
+            return;
         return this.source.getComponent(ItemEnchantableComponent.componentId)
             .override(this.source).hasCustomEnchantment(FishingCustomEnchantmentType[customEnchant]);
     }

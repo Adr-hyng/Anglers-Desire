@@ -1,4 +1,4 @@
-import { RawMessage, system, Vector3 } from "@minecraft/server";
+import { system, Vector3 } from "@minecraft/server";
 import { Fisher } from "fishing_system/entities/fisher";
 import { Logger } from "utils/logger";
 import { generateUUID16, SendMessageTo } from "utils/utilities";
@@ -36,9 +36,8 @@ export class BothResult implements IFishingOutput {
       system.run(() => {
         if(!this.fisher.particleSpawner?.isValid()) {
           this.fisher.particleSpawner = this.fisher.source.dimension.spawnEntity("yn:particle_spawner", {x, y, z});
-        }
-        else {
-          this.fisher.particleSpawner.triggerEvent('despawn');
+        } else {
+          this.fisher.particleSpawner.triggerEvent("despawn");
           this.fisher.particleSpawner = this.fisher.source.dimension.spawnEntity("yn:particle_spawner", {x, y, z});
         }
         this.fisher.particleSpawner.triggerEvent(this.particleState);

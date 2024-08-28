@@ -14,17 +14,23 @@ OverTakes(EntityEquippableComponent.prototype, {
         return (this.equipment?.typeId === MinecraftItemTypes.FishingRod);
     },
     getLuckOfSea() {
+        if (!this.equipment)
+            return;
         const enchantments = this.equipment.getComponent(ItemComponentTypes.Enchantable);
         return enchantments.hasEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) : undefined;
     },
     getLure() {
+        if (!this.equipment)
+            return;
         const enchantments = this.equipment.getComponent(ItemComponentTypes.Enchantable);
         return enchantments.hasEnchantment(MinecraftEnchantmentTypes.Lure) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.Lure) : undefined;
     },
     damageDurability(damageApplied) {
         const equipmentToDamage = this.getEquipment(EquipmentSlot.Mainhand);
+        if (!equipmentToDamage)
+            return false;
         const player = this.entity;
-        if (!player.isSurvival)
+        if (!player.isSurvival())
             return false;
         if (!equipmentToDamage?.hasComponent(ItemComponentTypes.Durability))
             throw "Item doesn't have durability to damage with";

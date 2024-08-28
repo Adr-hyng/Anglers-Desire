@@ -117,6 +117,8 @@ class Fisher {
                             if (serverConfigurationCopy.caughtFishDespawns.defaultValue) {
                                 const fishDespawnTimer = new Timer(parseInt(serverConfigurationCopy.caughtFishDespawnTimer.defaultValue + "") * TicksPerSecond);
                                 const StartDespawnEventInterval = system.runInterval(() => {
+                                    if (!currentEntityCaughtByHook || !currentEntityCaughtByHook?.isValid())
+                                        system.clearRun(StartDespawnEventInterval);
                                     if (!serverConfigurationCopy.caughtFishDespawns.defaultValue)
                                         system.clearRun(StartDespawnEventInterval);
                                     if (fishDespawnTimer.isDone()) {

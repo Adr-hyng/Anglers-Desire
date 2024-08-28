@@ -30,6 +30,10 @@ export class ParticleResult {
                 if (!this.fisher.particleSpawner?.isValid()) {
                     this.fisher.particleSpawner = this.fisher.source.dimension.spawnEntity("yn:particle_spawner", { x, y, z });
                 }
+                else {
+                    this.fisher.particleSpawner.triggerEvent("despawn");
+                    this.fisher.particleSpawner = this.fisher.source.dimension.spawnEntity("yn:particle_spawner", { x, y, z });
+                }
                 this.fisher.particleSpawner.triggerEvent(this.particleState);
             });
         }

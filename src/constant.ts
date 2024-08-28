@@ -11,6 +11,7 @@ export const localFishersCache: Map<string, Fisher> = new Map();
 export const spawnedLogMap: Map<string, number> = new Map();
 
 export const onCaughtParticleLogMap: Map<string, number> = new Map();
+export const onLostParticleLogMap: Map<string, number> = new Map();
 
 export const onHookLandedCallingLogMap: Map<string, number> = new Map();
 export const onCustomBlockInteractLogMap: Map<string, number> = new Map();

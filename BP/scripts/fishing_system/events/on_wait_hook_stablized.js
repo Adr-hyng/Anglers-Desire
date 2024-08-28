@@ -1,5 +1,5 @@
 import { TicksPerSecond, system, BlockTypes } from "@minecraft/server";
-import { onHookLandedCallingLogMap, fetchFisher, localFishersCache, onCaughtParticleLogMap } from "constant";
+import { onHookLandedCallingLogMap, fetchFisher, localFishersCache, onCaughtParticleLogMap, onLostParticleLogMap } from "constant";
 import { Logger, SendMessageTo, StateController, Timer } from "utils/index";
 import { overrideEverything } from "overrides/index";
 import { MinecraftBlockTypes } from "vanilla-types/index";
@@ -17,9 +17,6 @@ export async function onHookLanded(player) {
     const isInWater = await requestHookOnWater();
     async function requestHookOnWater() {
         return new Promise((resolve) => {
-            const isHookStabilized = (velX, velY, velZ) => Math.round(velX * 100) / 100 === -0.00 &&
-                Math.round(velY * 100) / 100 === -0.05 &&
-                Math.round(velZ * 100) / 100 === -0.00;
             const isBobberPositionValid = (currentFishingHook) => !fisher.fishingHook.stablizedLocation &&
                 currentFishingHook.dimension.getBlock(currentFishingHook.location).type !== BlockTypes.get(MinecraftBlockTypes.BubbleColumn);
             const isHookInGround = (velX, velY, velZ) => velX === 0 && velY === 0 && velZ === 0;
@@ -62,25 +59,29 @@ export async function onHookLanded(player) {
     const initialHookPosition = fisher.fishingHook.stablizedLocation;
     let tuggingEvent = system.runInterval(() => {
         try {
-            if (fisher.canBeReeled) {
-                if (!delayTimer.isDone()) {
-                    delayTimer.update();
-                }
-                else {
-                    const oldLog = onCaughtParticleLogMap.get(player.id);
-                    if ((oldLog + 300) >= Date.now())
-                        return;
-                    FishingStateIndicator.Escaped.run();
-                    fisher.canBeReeled = false;
-                    delayTimer.reset();
-                }
-            }
             const hookEntity = fisher.fishingHook;
             const caughtFish = fisher.caughtByHook;
             if (!hookEntity || !hookEntity?.isValid())
                 throw new Error("Fishing hook not found / undefined");
             if (caughtFish || caughtFish?.isValid())
                 throw new Error("A Fish is already caught");
+            if (fisher.canBeReeled) {
+                if (!delayTimer.isDone()) {
+                    delayTimer.update();
+                }
+                else if (delayTimer.isDone()) {
+                    let oldLog = onCaughtParticleLogMap.get(player.id);
+                    if ((oldLog + 20) >= system.currentTick)
+                        return;
+                    oldLog = onLostParticleLogMap.get(player.id);
+                    onLostParticleLogMap.set(player.id, system.currentTick);
+                    if ((oldLog + 20) >= system.currentTick)
+                        return;
+                    delayTimer.reset();
+                    FishingStateIndicator.Escaped.run();
+                    fisher.canBeReeled = false;
+                }
+            }
             fisher.fishingHook.isSubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_SUBMERGE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
             fisher.fishingHook.isDeeplySubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_TREASURE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
             hookSubmergeState.setValue(fisher.fishingHook.isSubmerged);
@@ -115,17 +116,18 @@ export async function onHookLanded(player) {
         }
     }, 1);
     function HookOnSubmergedForItemFishing() {
+        const hookEntityVelocity = fisher.fishingHook?.getVelocity();
         if (hookSubmergeState.hasChanged()) {
             if (hookSubmergeState.getCurrentValue()) {
                 const oldLog = onCaughtParticleLogMap.get(player.id);
-                onCaughtParticleLogMap.set(player.id, Date.now());
-                if ((oldLog + 300) >= Date.now())
+                onCaughtParticleLogMap.set(player.id, system.currentTick);
+                if ((oldLog + 20) >= system.currentTick)
                     return;
                 FishingStateIndicator.Caught.run();
                 if (fisher.clientConfiguration.OnSubmergeSE.defaultValue)
                     player.playSound('note.chime');
             }
-            else {
+            else if (!hookSubmergeState.getCurrentValue() && !isHookStabilized(hookEntityVelocity.x, hookEntityVelocity.y, hookEntityVelocity.z)) {
                 fisher.canBeReeled = true;
             }
         }
@@ -137,3 +139,9 @@ export async function onHookLanded(player) {
         }
     }
 }
+const isHookStabilized = (velX, velY, velZ) => {
+    const roundedY_Velocity = Math.round(velY * 100) / 100;
+    return Math.round(velX * 100) / 100 === -0.00 &&
+        (roundedY_Velocity >= -0.06 && roundedY_Velocity <= -0.04) &&
+        Math.round(velZ * 100) / 100 === -0.00;
+};

@@ -12,6 +12,7 @@ export class HookUpgrades {
     this.source = source;
   }
   has(customEnchant: AvailableCustomEnchantments): boolean {
+    if(!this.source) return;
     return (this.source.getComponent(ItemEnchantableComponent.componentId) as ItemEnchantableComponent)
     .override(this.source).hasCustomEnchantment(FishingCustomEnchantmentType[customEnchant]);
   }

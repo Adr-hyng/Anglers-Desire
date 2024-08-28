@@ -1,5 +1,5 @@
 import { Player, TicksPerSecond, system, BlockTypes} from "@minecraft/server";
-import { onHookLandedCallingLogMap, fetchFisher, localFishersCache, onCaughtParticleLogMap} from "constant";
+import { onHookLandedCallingLogMap, fetchFisher, localFishersCache, onCaughtParticleLogMap, onLostParticleLogMap} from "constant";
 import { Fisher } from "fishing_system/entities/fisher";
 import { Logger, SendMessageTo, StateController, Timer } from "utils/index";
 
@@ -24,10 +24,6 @@ export async function onHookLanded(player: Player): Promise<void> {
 
   async function requestHookOnWater(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      const isHookStabilized = (velX: number, velY: number, velZ: number): boolean =>
-        Math.round(velX * 100) / 100 === -0.00 &&
-        Math.round(velY * 100) / 100 === -0.05 &&
-        Math.round(velZ * 100) / 100 === -0.00;
       const isBobberPositionValid = (currentFishingHook: FishingHook): boolean =>
         !fisher.fishingHook.stablizedLocation &&
         currentFishingHook.dimension.getBlock(currentFishingHook.location).type !== BlockTypes.get(MinecraftBlockTypes.BubbleColumn);
@@ -68,23 +64,30 @@ export async function onHookLanded(player: Player): Promise<void> {
 
   let tuggingEvent: number = system.runInterval( () => {
     try { 
-      // Optimized this to be maintainable
-      if(fisher.canBeReeled) {
-        if(!delayTimer.isDone()) {
-          delayTimer.update();
-        } else {
-          const oldLog = onCaughtParticleLogMap.get(player.id) as number;
-          if ((oldLog + 300) >= Date.now()) return;
-
-          FishingStateIndicator.Escaped.run();
-          fisher.canBeReeled = false;
-          delayTimer.reset();
-        }
-      }
       const hookEntity = fisher.fishingHook;
       const caughtFish = fisher.caughtByHook;
       if(!hookEntity || !hookEntity?.isValid()) throw new Error("Fishing hook not found / undefined");
       if(caughtFish || caughtFish?.isValid()) throw new Error("A Fish is already caught");
+
+      //! Optimized this to be maintainable
+      if(fisher.canBeReeled) {
+        if(!delayTimer.isDone()) {
+          delayTimer.update();
+        } else if (delayTimer.isDone()) {
+          // Avoid overriding caught particle when the caught particle executes as fast as possible.
+          let oldLog = onCaughtParticleLogMap.get(player.id) as number;
+          if ((oldLog + 20) >= system.currentTick) return;
+
+          // Avoid duplicate execution when it already executed on lost particle, it will not execute again unless 1 real-world second passes by.
+          oldLog = onLostParticleLogMap.get(player.id) as number;
+          onLostParticleLogMap.set(player.id, system.currentTick);
+          if ((oldLog + 20) >= system.currentTick) return;
+
+          delayTimer.reset();
+          FishingStateIndicator.Escaped.run();
+          fisher.canBeReeled = false;
+        }
+      }
 
       fisher.fishingHook.isSubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_SUBMERGE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
       fisher.fishingHook.isDeeplySubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_TREASURE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
@@ -122,15 +125,15 @@ export async function onHookLanded(player: Player): Promise<void> {
   }, 1);
 
   function HookOnSubmergedForItemFishing(): void {
+    const hookEntityVelocity = fisher.fishingHook?.getVelocity();
     if(hookSubmergeState.hasChanged()) {
       if(hookSubmergeState.getCurrentValue()) {
         const oldLog = onCaughtParticleLogMap.get(player.id) as number;
-        onCaughtParticleLogMap.set(player.id, Date.now());
-        if ((oldLog + 300) >= Date.now()) return;
-        
+        onCaughtParticleLogMap.set(player.id, system.currentTick);
+        if ((oldLog + 20) >= system.currentTick) return;
         FishingStateIndicator.Caught.run();
         if(fisher.clientConfiguration.OnSubmergeSE.defaultValue) player.playSound('note.chime');
-      } else { 
+      } else if (!hookSubmergeState.getCurrentValue() && !isHookStabilized(hookEntityVelocity.x, hookEntityVelocity.y, hookEntityVelocity.z)) { 
         fisher.canBeReeled = true;
       }
     }
@@ -143,3 +146,9 @@ export async function onHookLanded(player: Player): Promise<void> {
   }
 }
 
+const isHookStabilized = (velX: number, velY: number, velZ: number): boolean => {
+  const roundedY_Velocity = Math.round(velY * 100) / 100;
+  return Math.round(velX * 100) / 100 === -0.00 &&
+  ( roundedY_Velocity >= -0.06 && roundedY_Velocity <= -0.04) &&
+  Math.round(velZ * 100) / 100 === -0.00;
+}

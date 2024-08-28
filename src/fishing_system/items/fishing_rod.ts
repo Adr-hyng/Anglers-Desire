@@ -33,18 +33,20 @@ OverTakes(EntityEquippableComponent.prototype, {
     return (this.equipment?.typeId === MinecraftItemTypes.FishingRod);
   },
   getLuckOfSea(): Enchantment | undefined {
+    if(!this.equipment) return;
     const enchantments = (this.equipment.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent);
     return enchantments.hasEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.LuckOfTheSea) : undefined;
   },
   getLure(): Enchantment | undefined {
+    if(!this.equipment) return;
     const enchantments = (this.equipment.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent);
     return enchantments.hasEnchantment(MinecraftEnchantmentTypes.Lure) ? enchantments.getEnchantment(MinecraftEnchantmentTypes.Lure) : undefined;
   },
   damageDurability(damageApplied: number): boolean {
-    // IDK IF THIS ERRORS with items that doesn't have enchanmtnets or unbreaking enchantment.
     const equipmentToDamage: ItemStack = this.getEquipment(EquipmentSlot.Mainhand) as ItemStack;
+    if(!equipmentToDamage) return false;
     const player = this.entity as Player;
-    if(!player.isSurvival) return false;
+    if(!player.isSurvival()) return false;
     if(!equipmentToDamage?.hasComponent(ItemComponentTypes.Durability)) throw "Item doesn't have durability to damage with";
     let level: number = 0;
     const itemDurability: ItemDurabilityComponent = (equipmentToDamage.getComponent(ItemComponentTypes.Durability) as ItemDurabilityComponent);
