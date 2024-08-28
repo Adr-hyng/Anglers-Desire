@@ -1,14 +1,36 @@
 import { FormBuilder } from "utils/form_builder";
 import { cloneConfiguration } from "./configuration_handler";
+
 export const serverConfiguration = {
-    caughtFishDespawnTimer: new FormBuilder("Caught Fish Despawn Timer").createTextField("30"),
-    expirationTimer: new FormBuilder("Expiration Timer").createTextField("300"),
-    CatchingPlacement: new FormBuilder("Caught Direction").createDropdown(['CURRENT', 'BACK', 'FRONT'], "CURRENT"),
-    caughtFishDespawns: new FormBuilder("Caught Fish Despawns").createToggle(false),
-    ShowMessageUponJoin: new FormBuilder("Show Message On Join ").createToggle(true),
-    debug: new FormBuilder("Debug Mode").createToggle(true),
+  /**
+   * (Required: Caught Fish Despawns Toggle) Number of seconds before the fish despawns after being reeled.
+   */
+  caughtFishDespawnTimer: new FormBuilder("Caught Fish Despawn Timer").createTextField("30"),
+  /**
+   * Number of seconds before cancelling the fishing system.
+   */
+  expirationTimer: new FormBuilder("Expiration Timer").createTextField("300"),
+  /**
+   * The locator for when will be caught entity be placed or reeled
+   */
+  CatchingPlacement: new FormBuilder("Caught Direction").createDropdown(['CURRENT', 'BACK', 'FRONT'], "CURRENT"),
+  /**
+   * Makes the caught fish despawn after an x amount of seconds being reeled-in.
+   */
+  caughtFishDespawns: new FormBuilder("Caught Fish Despawns").createToggle(false),
+  /**
+   * Shows the script initialization message log upon player joining, default is true.
+   */
+  ShowMessageUponJoin: new FormBuilder("Show Message On Join ").createToggle(true),
+  /**
+   * Enables debug messages to content logs.
+   */
+  debug: new FormBuilder("Debug Mode").createToggle(true),
 };
+
 export let serverConfigurationCopy = cloneConfiguration(serverConfiguration);
 export let setServerConfiguration = (newServerConfig) => serverConfigurationCopy = newServerConfig;
 export let resetServerConfiguration = () => serverConfigurationCopy = cloneConfiguration(serverConfiguration);
+
+// version (do not change)
 export const VERSION = "1.0.0";

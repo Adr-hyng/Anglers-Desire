@@ -1,9 +1,9 @@
-import { EntityInventoryComponent, EquipmentSlot, ItemTypes, MolangVariableMap } from "@minecraft/server";
+import { EnchantmentTypes, EntityComponentTypes, ItemComponentTypes, ItemStack, MolangVariableMap } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { SendMessageTo } from "utils/utilities";
 import { overrideEverything } from "overrides/index";
-import { fetchFisher } from "constant";
-import { MyCustomItemTypes } from "fishing_system/items/custom_items";
+import { MinecraftEnchantmentTypes, MinecraftItemTypes } from "vanilla-types/index";
+import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
 overrideEverything();
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
@@ -42,14 +42,18 @@ const command = {
         let fishingRod;
         switch (selectedReqParam) {
             case REQUIRED_PARAMETER.GET:
-                const fisher = fetchFisher(player);
-                fishingRod = fisher.fishingRod.getEquipment(EquipmentSlot.Mainhand);
-                console.warn(JSON.stringify(fishingRod.getDynamicPropertyIds()), fishingRod.getDynamicProperty(fishingRod.getDynamicPropertyIds()[0]));
+                fishingRod = new ItemStack(MinecraftItemTypes.FishingRod, 1);
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Lure), level: 3 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.LuckOfTheSea), level: 3 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).addEnchantment({ type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Mending), level: 1 });
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.FermentedEye);
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Luminous);
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Nautilus);
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Pyroclasm);
+                fishingRod.getComponent(ItemComponentTypes.Enchantable).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Tempus);
+                player.getComponent(EntityComponentTypes.Inventory).container.setItem(player.selectedSlotIndex, fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
-                const inventory = player.getComponent(EntityInventoryComponent.componentId).container.override(player);
-                console.warn(JSON.stringify(ItemTypes.get(MyCustomItemTypes.AddonConfiguration)));
-                inventory.giveItem(ItemTypes.get(MyCustomItemTypes.AddonConfiguration), 1);
                 break;
             case REQUIRED_PARAMETER.PARTICLE:
                 const molang = new MolangVariableMap();

@@ -6,7 +6,7 @@ import { clientConfiguration } from "./client_configuration";
 import { FishingOutputBuilder } from "fishing_system/outputs/output_builder";
 import { SendMessageTo } from "utils/index";
 import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
-import { CustomEnchantmentTypes } from "custom_enchantment/custom_enchantment_types";
+import { CustomEnchantmentTypes, FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
 import { CustomEnchantment } from "custom_enchantment/custom_enchantment";
 import { MinecraftItemTypes } from "vanilla-types/index";
 import { MyCustomItemTypes } from "fishing_system/items/custom_items";
@@ -295,9 +295,7 @@ export class Configuration {
                 case 0:
                     form = new MessageFormData();
                     form.title("What to expect?");
-                    form.body(`
-            Lorem Ipsum
-            `);
+                    form.body("\n    This addon completely overhauls the vanilla fishing experience, replacing the simple reeling of fish items with a dynamic system where you catch real entities. \n\n    Similar to the fishing mechanics in games like Harvest Moon Series, Stardew Valley and Animal Crossing, you’ll now reel entities or items up into the sky. \n\n    As well as adding more practical uses for amethyst shard, glowing ink sacs, nautilus shell, and more to enhance your fishing experience.");
                     form.button2("EXIT");
                     form.button1("BACK");
                     form.show(this.player).then((descriptionResponse) => {
@@ -312,8 +310,18 @@ export class Configuration {
                     form = new MessageFormData();
                     form.title("Fisher's Table");
                     form.body(`
-            Lorem Ipsum
-            `);
+    The Fisher's Table is a new useful block that functions similarly to the Smithing Table. While it doesn’t replace the barrel for the fisherman villager yet, it allows players to enhance fishing rod hooks, view available enhancements, and access the list of catchable fish.
+    
+    To craft one, you need the following materials and in a crafting table, follow this pattern:
+    | A B |
+    | X X | 
+    | X X |
+
+    Materials:
+    A = Stick
+    B = Any vanilla fish
+    X = Any vanilla planks
+    `);
                     form.button2("EXIT");
                     form.button1("BACK");
                     form.show(this.player).then((descriptionResponse) => {
@@ -328,7 +336,7 @@ export class Configuration {
                     form = new MessageFormData();
                     form.title("Fisher's Caught List");
                     form.body(`
-            Lorem Ipsum
+    A detailed list of all catchable fish in the addon, including lore, obtainability, and catch rates. This feature enriches the fishing experience by giving players more insight into what they can catch.
             `);
                     form.button2("EXIT");
                     form.button1("BACK");
@@ -341,20 +349,159 @@ export class Configuration {
                     });
                     break;
                 case 3:
-                    form = new MessageFormData();
-                    form.title("Hook Enhancements");
-                    form.body(`
-            Lorem Ipsum
-            `);
-                    form.button2("EXIT");
-                    form.button1("BACK");
-                    form.show(this.player).then((descriptionResponse) => {
-                        if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy)
-                            return;
-                        if (descriptionResponse.selection === 0)
-                            return this.showGuideScreen();
-                        return;
-                    });
+                    const HookSectionView = () => {
+                        const mainForm = new ActionFormData();
+                        mainForm.title("Hooks");
+                        mainForm.button("Iron Hook", "textures/items/normal_hook");
+                        mainForm.button("Nautilus Hook", FishingCustomEnchantmentType.Nautilus.icon);
+                        mainForm.button("Luminous Hook", FishingCustomEnchantmentType.Luminous.icon);
+                        mainForm.button("Pyroclasm Hook", FishingCustomEnchantmentType.Pyroclasm.icon);
+                        mainForm.button("Tempus Hook", FishingCustomEnchantmentType.Tempus.icon);
+                        mainForm.button("Ferm. Spider Eye Hook", FishingCustomEnchantmentType.FermentedEye.icon);
+                        mainForm.button("Back");
+                        let hookForm;
+                        mainForm.show(this.player).then((response) => {
+                            if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy)
+                                return;
+                            switch (response.selection) {
+                                case 0:
+                                    hookForm = new MessageFormData();
+                                    hookForm.title("Iron Hook");
+                                    hookForm.body(`
+    Crafting Type: Crafting Table
+    Crafting Recipe:
+    |      X |
+    | X   X |
+    |   X    |
+
+    Material:
+    X = Iron Nugget
+                  `);
+                                    hookForm.button2("EXIT");
+                                    hookForm.button1("BACK");
+                                    hookForm.show(this.player).then((descriptionResponse) => {
+                                        if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy)
+                                            return;
+                                        if (descriptionResponse.selection === 0)
+                                            return HookSectionView();
+                                        return;
+                                    });
+                                    break;
+                                case 1:
+                                    hookForm = new MessageFormData();
+                                    hookForm.title("Nautilus Hook");
+                                    hookForm.body(`
+    Crafting Type: Any
+    Crafting Recipe:
+    | A B |
+
+    Materials:
+    A = Nautilus Shell
+    B = Iron Hook
+                  `);
+                                    hookForm.button2("EXIT");
+                                    hookForm.button1("BACK");
+                                    hookForm.show(this.player).then((descriptionResponse) => {
+                                        if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy)
+                                            return;
+                                        if (descriptionResponse.selection === 0)
+                                            return HookSectionView();
+                                        return;
+                                    });
+                                    break;
+                                case 2:
+                                    hookForm = new MessageFormData();
+                                    hookForm.title("Luminous Hook");
+                                    hookForm.body(`
+    Crafting Type: Any
+    Crafting Recipe:
+    | A B |
+
+    Materials:
+    A = Glow Ink Sac
+    B = Iron Hook
+                  `);
+                                    hookForm.button2("EXIT");
+                                    hookForm.button1("BACK");
+                                    hookForm.show(this.player).then((descriptionResponse) => {
+                                        if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy)
+                                            return;
+                                        if (descriptionResponse.selection === 0)
+                                            return HookSectionView();
+                                        return;
+                                    });
+                                    break;
+                                case 3:
+                                    hookForm = new MessageFormData();
+                                    hookForm.title("Pyroclasm Hook");
+                                    hookForm.body(`
+    Crafting Type: any
+    Crafting Recipe:
+    | A B |
+
+    Materials:
+    A = Magma Cream
+    B = Iron Hook
+                  `);
+                                    hookForm.button2("EXIT");
+                                    hookForm.button1("BACK");
+                                    hookForm.show(this.player).then((descriptionResponse) => {
+                                        if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy)
+                                            return;
+                                        if (descriptionResponse.selection === 0)
+                                            return HookSectionView();
+                                        return;
+                                    });
+                                    break;
+                                case 4:
+                                    hookForm = new MessageFormData();
+                                    hookForm.title("Tempus Hook");
+                                    hookForm.body(`
+    Crafting Type: Any
+    Crafting Recipe:
+    | A B |
+
+    Materials:
+    A = Amethyst Shard
+    B = Iron Hook
+                  `);
+                                    hookForm.button2("EXIT");
+                                    hookForm.button1("BACK");
+                                    hookForm.show(this.player).then((descriptionResponse) => {
+                                        if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy)
+                                            return;
+                                        if (descriptionResponse.selection === 0)
+                                            return HookSectionView();
+                                        return;
+                                    });
+                                    break;
+                                case 5:
+                                    hookForm = new MessageFormData();
+                                    hookForm.title("Fermented Spider Eye covered Hook");
+                                    hookForm.body(`
+    Crafting Type: Any
+    Crafting Recipe:
+    | A B |
+
+    Materials:
+    A = Fermented Spider Eye
+    B = Iron Hook
+                  `);
+                                    hookForm.button2("EXIT");
+                                    hookForm.button1("BACK");
+                                    hookForm.show(this.player).then((descriptionResponse) => {
+                                        if (descriptionResponse.canceled || descriptionResponse.cancelationReason === FormCancelationReason.UserClosed || descriptionResponse.cancelationReason === FormCancelationReason.UserBusy)
+                                            return;
+                                        if (descriptionResponse.selection === 0)
+                                            return HookSectionView();
+                                        return;
+                                    });
+                                    break;
+                                default: return this.showGuideScreen();
+                            }
+                        });
+                    };
+                    HookSectionView();
                     break;
                 case 4:
                     return this.showConfigurationScreen();
@@ -362,7 +509,6 @@ export class Configuration {
                     break;
             }
         });
-        return SendMessageTo(this.player);
     }
     showCreditsScreen() {
         const form = new MessageFormData();

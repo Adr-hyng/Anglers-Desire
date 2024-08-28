@@ -35,14 +35,9 @@ OverTakes(EntityEquippableComponent.prototype, {
             if (enchantment.hasEnchantment(MinecraftEnchantmentTypes.Unbreaking))
                 level = enchantment.getEnchantment(MinecraftEnchantmentTypes.Unbreaking).level;
         }
-        try {
-            for (const customEnchantment of equipmentToDamage.enchantment.override(equipmentToDamage).getCustomEnchantments()) {
-                if (customEnchantment.damageUsage())
-                    player.playSound("random.break", { volume: 0.5, pitch: 0.7 });
-            }
-        }
-        catch (e) {
-            console.warn(e, e.stack);
+        for (const customEnchantment of equipmentToDamage.enchantment.override(equipmentToDamage).getCustomEnchantments()) {
+            if (customEnchantment.damageUsage())
+                player.playSound("random.break", { volume: 0.5, pitch: 0.7 });
         }
         const unbreakingMultiplier = (100 / (level + 1)) / 100;
         const unbreakingDamage = damageApplied * unbreakingMultiplier;

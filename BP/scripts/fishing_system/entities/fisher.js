@@ -53,7 +53,7 @@ class Fisher {
     }
     async gainExperience() {
         const experience_gained = Random.randomInt(1, 6);
-        return await new Promise((resolve) => {
+        return new Promise((resolve) => {
             for (let i = 0; i < experience_gained; i++) {
                 system.run(() => {
                     this.source.dimension.spawnEntity(MinecraftEntityTypes.XpOrb, this.source.location);

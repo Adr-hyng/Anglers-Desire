@@ -13,8 +13,6 @@ export type TCustomEnchantment = {
   lore?: string;
 }
 
-// To make it efficient, use caching to not get dynamic property always, just use it if it did change the mainhand equipment.
-
 export class CustomEnchantment {
   id?: string;
   private source: ItemStack;

@@ -72,7 +72,7 @@ OverTakes(ItemEnchantableComponent.prototype, {
   hasConflicts(enchantmentName: string): boolean {
     return this.getCustomEnchantments().some(enchant => enchant.conflicts?.includes(enchantmentName));
   },
-  // I think this is useless?? IDK. I think the better implementation for this is in the upgrade section of screen configuration.
+  // This doesn't work properly at the moment. It cannot consider full correctly.
   canAddCustomEnchantment(): boolean {
     let canBeEnchanted = false;
     const ImplementedCustomEnchantments: Set<string> = new Set();

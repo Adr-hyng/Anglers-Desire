@@ -1,6 +1,5 @@
 export * from "overrides/dimension_override";
 export * from "overrides/enchantment_type_override";
-export * from "overrides/entity_override";
 export * from "overrides/player_override";
 export * from "overrides/itemstack_override";
 export * from "overrides/world_override";

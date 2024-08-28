@@ -54,7 +54,6 @@ const command: ICommandBase = {
                     const player: Player = world.getEntity(t[1]) as Player;
                     collections += `${i++}. ${player.nameTag}: ${JSON.stringify(t)}\n`;
                 }
-                // I think this going to be buggy, and early version used replaceAll with all whitespaces
                 SendMessageTo(player, {
                     rawtext: [
                         {

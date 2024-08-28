@@ -7,7 +7,6 @@ import {
     EntityEquippableComponent,
     EntityItemComponent,
     MolangVariableMap,
-    world,
     TicksPerSecond,
 } from "@minecraft/server";
 
@@ -65,7 +64,7 @@ class Fisher {
         this._source = player;
         this._particleSplashMolang = new MolangVariableMap();
         this.clientConfiguration = cloneConfiguration(clientConfiguration);
-        const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT")); // unserialized data, need to be serialized
+        const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT"));
         if(configuration) {
             Object.entries(configuration).forEach(([key, value]) => {
                 this.clientConfiguration[key] = <FormBuilder<any>>(value);
@@ -92,7 +91,7 @@ class Fisher {
 
     private async gainExperience(): Promise<void> {
         const experience_gained = Random.randomInt(1, 6);
-        return await new Promise<void>((resolve) => {
+        return new Promise<void>((resolve) => {
             for(let i = 0; i < experience_gained; i++) {
                 system.run(() => {
                     this.source.dimension.spawnEntity(MinecraftEntityTypes.XpOrb, this.source.location);
@@ -128,7 +127,7 @@ class Fisher {
             (startPoint.z + endPoint.z) / 2
         );
 
-        const reeledEntityOnAir = new StateController(false); // state controller for when reeled entity goes into air after being in water then spawn particle
+        const reeledEntityOnAir = new StateController(false);
 
         let reelingEventInterval: number = system.runInterval( () => {
             Logger.info("REELING INTERVAL RUNNING. ID=", reelingEventInterval);

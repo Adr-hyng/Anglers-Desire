@@ -55,9 +55,6 @@ world.afterEvents.playerSpawn.subscribe((e) => {
   });
 });
 
-// world.beforeEvents.itemUseOn.subscribe((e) => {
-// });
-
 world.beforeEvents.itemUse.subscribe((event) => {
   const player: Player = event.source as Player;
   let fisher: Fisher = fetchFisher(player);

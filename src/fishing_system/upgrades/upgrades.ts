@@ -11,7 +11,6 @@ export class HookUpgrades {
   constructor(source: ItemStack) {
     this.source = source;
   }
-  // Checks if this itemEquipment has this custom upgrade
   has(customEnchant: AvailableCustomEnchantments): boolean {
     return (this.source.getComponent(ItemEnchantableComponent.componentId) as ItemEnchantableComponent)
     .override(this.source).hasCustomEnchantment(FishingCustomEnchantmentType[customEnchant]);
