@@ -1,7 +1,7 @@
-import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemComponent, MolangVariableMap, } from "@minecraft/server";
+import { EntityHealthComponent, system, EntityEquippableComponent, EntityItemComponent, MolangVariableMap, TicksPerSecond, } from "@minecraft/server";
 import { MinecraftEntityTypes } from "vanilla-types/index";
 import { Random } from "utils/Random/random";
-import { Logger, StateController, VectorContainer, } from "utils/index";
+import { Logger, StateController, Timer } from "utils/index";
 import { LootTable, FishingOutputBuilder, ConfigurationCollections_DB, cloneConfiguration } from "fishing_system/index";
 import { clientConfiguration } from "../configuration/client_configuration";
 import { Vec3 } from "utils/Vector/VectorUtils";
@@ -11,8 +11,8 @@ import { serverConfigurationCopy } from "fishing_system/configuration/server_con
 import { overrideEverything } from "overrides/index";
 overrideEverything();
 const CatchingLocalPosition = new Map([
-    [serverConfigurationCopy.CatchingPlacement.values[0], 2],
-    [serverConfigurationCopy.CatchingPlacement.values[1], 1],
+    [serverConfigurationCopy.CatchingPlacement.values[0], 1],
+    [serverConfigurationCopy.CatchingPlacement.values[1], 2],
     [serverConfigurationCopy.CatchingPlacement.values[2], 0],
 ]);
 const ReelingCompleteProcess = 0.96;
@@ -21,14 +21,12 @@ class Fisher {
     constructor(player) {
         this._source = null;
         this.particleSpawner = null;
-        this.particleVectorLocations = null;
         this.fishingHook = null;
         this.caughtByHook = null;
         this.currentBiomeLootTable = Object.getOwnPropertyNames(LootTable).filter(prop => !['name', 'prototype', 'length', 'fishingModifier'].includes(prop));
         this.currentBiome = 0;
         this.canBeReeled = false;
         this._source = player;
-        this.particleVectorLocations = new VectorContainer(2);
         this._particleSplashMolang = new MolangVariableMap();
         this.clientConfiguration = cloneConfiguration(clientConfiguration);
         const configuration = db.get(ConfigurationCollections_DB(player, "CLIENT"));
@@ -55,7 +53,7 @@ class Fisher {
     }
     async gainExperience() {
         const experience_gained = Random.randomInt(1, 6);
-        return await new Promise((resolve) => {
+        return new Promise((resolve) => {
             for (let i = 0; i < experience_gained; i++) {
                 system.run(() => {
                     this.source.dimension.spawnEntity(MinecraftEntityTypes.XpOrb, this.source.location);
@@ -116,6 +114,20 @@ class Fisher {
                             this.source.dimension.spawnParticle("yn:water_splash", stablizedLocation, this._particleSplashMolang);
                             if (this.fishingRod.upgrade.has("Pyroclasm"))
                                 currentEntityCaughtByHook.setOnFire(5, true);
+                            if (serverConfigurationCopy.caughtFishDespawns.defaultValue) {
+                                const fishDespawnTimer = new Timer(parseInt(serverConfigurationCopy.caughtFishDespawnTimer.defaultValue + "") * TicksPerSecond);
+                                const StartDespawnEventInterval = system.runInterval(() => {
+                                    if (!currentEntityCaughtByHook || !currentEntityCaughtByHook?.isValid())
+                                        system.clearRun(StartDespawnEventInterval);
+                                    if (!serverConfigurationCopy.caughtFishDespawns.defaultValue)
+                                        system.clearRun(StartDespawnEventInterval);
+                                    if (fishDespawnTimer.isDone()) {
+                                        currentEntityCaughtByHook.teleport({ x: 0, y: -70, z: 0 });
+                                        system.clearRun(StartDespawnEventInterval);
+                                    }
+                                    fishDespawnTimer.update();
+                                });
+                            }
                         });
                     }
                     this.source.playSound('entity.generic.splash');

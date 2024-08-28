@@ -556,12 +556,10 @@ export class Configuration {
                 { translate: "yn:fishing_got_reel.configuration.addon_options.credits" },
                 { text: " " }
             ] })
-            .button2({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.general.exit" }] })
-            .button1({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.general.back" }] })
             .body(`
   Here are the people who really made this all possible:
 
-   Dal4y - Created most of the textures. Follow this talented artist's Twitter: @DaL4ydobeballin.
+   Dal4y - Created most of the Textures. Follow on Twitter: @DaL4ydobeballin.
 
    BAO - Minecraft Bedrock-Addon Community for scripts, and technical guides.
 
@@ -572,12 +570,14 @@ export class Configuration {
            You reading this! 
       
               Enjoy fishing!
-      `);
+      `)
+            .button2({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.general.exit" }] })
+            .button1({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.general.back" }] });
         form.show(this.player).then((response) => {
             if (response.canceled || response.cancelationReason === FormCancelationReason.UserClosed || response.cancelationReason === FormCancelationReason.UserBusy) {
                 return;
             }
-            if (response.selection === 1)
+            if (response.selection === 0)
                 return this.showConfigurationScreen();
             return;
         });

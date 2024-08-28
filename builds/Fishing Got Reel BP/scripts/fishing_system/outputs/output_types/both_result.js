@@ -8,25 +8,10 @@ export class BothResult {
         this.fisher = fisher;
         this.id = generateUUID16();
     }
-    async reset() {
-        return new Promise((resolve) => {
-            system.run(() => {
-                try {
-                    const nearestNeighbor = this.fisher.particleVectorLocations.getNearby(this.fisher.particleSpawner.location, this.fisher.particleVectorLocations.distance);
-                    const nV = this.fisher.source.dimension.getEntities({ location: nearestNeighbor, closest: 30, maxDistance: this.fisher.particleVectorLocations.distance, type: "yn:particle_spawner" });
-                    if (nV.length)
-                        nV.forEach((e) => {
-                            this.fisher.particleVectorLocations.deleteVector(e.location);
-                            e.triggerEvent("despawn");
-                        });
-                    resolve();
-                }
-                catch (e) {
-                    Logger.error(e, e.stack);
-                    resolve();
-                }
-            });
-        });
+    reset() {
+        if (!this.fisher.particleSpawner || !this.fisher.particleSpawner?.isValid())
+            return;
+        this.fisher.particleSpawner.triggerEvent('despawn');
     }
     run(newPosition) {
         if (!this.fisher.source)
@@ -52,12 +37,15 @@ export class BothResult {
                 z = newZ;
             }
             y = y + 1.5;
-            this.reset().then(() => {
-                system.run(() => {
+            system.run(() => {
+                if (!this.fisher.particleSpawner?.isValid()) {
                     this.fisher.particleSpawner = this.fisher.source.dimension.spawnEntity("yn:particle_spawner", { x, y, z });
-                    this.fisher.particleSpawner.triggerEvent(this.particleState);
-                    this.fisher.particleVectorLocations.set({ x, y, z });
-                });
+                }
+                else {
+                    this.fisher.particleSpawner.triggerEvent("despawn");
+                    this.fisher.particleSpawner = this.fisher.source.dimension.spawnEntity("yn:particle_spawner", { x, y, z });
+                }
+                this.fisher.particleSpawner.triggerEvent(this.particleState);
             });
         }
         catch (e) {

@@ -42,7 +42,7 @@ const command = {
                     ]
                 });
             if (isShow) {
-                system.run(() => player.Configuration.showMainScreen());
+                system.run(() => player.configuration.showFisherTableScreen());
             }
             else {
                 const optionalParams = (`[${Object.values(OPTIONAL_PARAMETER).join('|')}]`).slice(1, -1).split('|').map(command => command.trim());
@@ -51,7 +51,7 @@ const command = {
                 if (!optionalParams.includes(selectedOptParam))
                     shouldResetClient = true;
                 if (shouldResetClient)
-                    player.Configuration.reset("CLIENT");
+                    player.configuration.reset("CLIENT");
             }
         }
     }

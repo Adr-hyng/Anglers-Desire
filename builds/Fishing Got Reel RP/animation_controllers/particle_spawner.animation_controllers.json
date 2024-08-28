@@ -4,10 +4,43 @@
 		"controller.animation.particle_spawner.controller": {
 			"states": {
 				"default": {
-					"animations": [
-						{"fish_caught": "q.property('yn:particle_state') == 1"},
-						{"fish_escaped": "q.property('yn:particle_state') == 2"}
-					]
+					"particle_effects": [
+						{
+							"effect": "show_fish_caught",
+							"locator": "show_fish_caught"
+						}
+					],
+					"transitions": [
+						{"show_fish_caught": "q.property('yn:particle_state') == 1"},
+						{"show_fish_escape": "q.property('yn:particle_state') == 2"}
+					],
+					"blend_via_shortest_path": true
+				},
+				"show_fish_caught": {
+					"particle_effects": [
+						{
+							"effect": "show_fish_caught",
+							"locator": "show_fish_caught"
+						}
+					],
+					"transitions": [
+						{"default": "q.property('yn:particle_state') == 0"},
+						{"show_fish_escape": "q.property('yn:particle_state') == 2"}
+					],
+					"blend_via_shortest_path": true
+				},
+				"show_fish_escape": {
+					"particle_effects": [
+						{
+							"effect": "show_fish_escaped",
+							"locator": "show_fish_escaped"
+						}
+					],
+					"transitions": [
+						{"default": "q.property('yn:particle_state') == 0"},
+						{"show_fish_caught": "q.property('yn:particle_state') == 1"}
+					],
+					"blend_via_shortest_path": true
 				}
 			}
 		}

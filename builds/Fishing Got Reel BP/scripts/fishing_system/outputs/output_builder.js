@@ -2,7 +2,6 @@ import { FishingOutputHandler } from "types/index";
 import { TextResult, BothResult, DisabledResult, ParticleResult } from "./output_types/index";
 export class FishingOutputBuilder {
     static create(config, fisher) {
-        console.warn("Active Events:", JSON.stringify(this.activeEventCount()));
         const playerId = fisher.source.id;
         const keyName = this.extractKeyName(fisher, config);
         if (!this.isInParticleManager(keyName)) {
@@ -34,7 +33,7 @@ export class FishingOutputBuilder {
         }
     }
     static isInParticleManager(key) {
-        return Object.getOwnPropertyNames(FishingOutputHandler).includes(key);
+        return Object.getOwnPropertyNames(FishingOutputHandler).filter(prop => !(['length', 'name', 'prototype'].includes(prop))).includes(key);
     }
     static activeEventCount() {
         let textCount = 0;

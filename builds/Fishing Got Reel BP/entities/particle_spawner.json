@@ -11,7 +11,7 @@
           "type": "int",
           "client_sync": true,
           "range": [0, 2],
-          "default": 1
+          "default": 0
         }
       }
     },
@@ -22,7 +22,7 @@
     },
     "components": {
       "minecraft:timer": {
-        "looping": false,
+        "looping": true,
         "time": 1,
         "time_down_event": {
           "event": "despawn"
@@ -63,6 +63,11 @@
       }
     },
     "events": {
+      "show_fish_reset_particle": {
+        "set_property": {
+          "yn:particle_state": 0
+        }
+      },
       "show_fish_caught_particle": {
         "set_property": {
           "yn:particle_state": 1
