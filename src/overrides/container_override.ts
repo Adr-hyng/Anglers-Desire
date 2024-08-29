@@ -14,11 +14,18 @@ type ContainerItemContent = {
   item: ItemStack;
   slot: number;
 }
+
+export type ItemStackOptions = {
+  canDestroyOn: string[];
+  canPlaceOn: string[];
+  lore: string[];
+}
+
 declare module "@minecraft/server" {
   interface Container {
     source: Player;
     override(sourceEntity: Player): Container;
-    giveItem(itemType: ItemType, amount: number): void;
+    giveItem(itemType: ItemType, amount: number, options?: ItemStackOptions): void;
     clearItem(itemId: string, decrement: number): boolean;
     getInventoryItems(): Generator<ContainerItemContent, any, unknown>;
   }
@@ -38,10 +45,13 @@ OverTakes(Container.prototype, {
     if(!this.source) throw "No Entity source found";
     return this;
   },
-  giveItem(itemType: ItemType, amount: number): void {
+  giveItem(itemType: ItemType, amount: number, options?: ItemStackOptions): void {
     if(!this.source) throw "No Entity source found";
     if(!amount) return;
     const item = new ItemStack(itemType);
+    item.setCanDestroy(options.canDestroyOn);
+    item.setCanPlaceOn(options.canPlaceOn);
+    item.setLore(options.lore);
     let exceededAmount: number = 0;
     if(amount > item.maxAmount){
         const groupStacks = stackDistribution(amount, item.maxAmount);

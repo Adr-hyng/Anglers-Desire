@@ -57,7 +57,7 @@ export async function onHookLanded(player) {
     const hookSubmergeState = new StateController(fisher.fishingHook.isSubmerged);
     const hookTreasureFoundState = new StateController(fisher.fishingHook.isDeeplySubmerged);
     const initialHookPosition = fisher.fishingHook.stablizedLocation;
-    let tuggingEvent = system.runInterval(() => {
+    let StartFishingInterval = system.runInterval(() => {
         try {
             const hookEntity = fisher.fishingHook;
             const caughtFish = fisher.caughtByHook;
@@ -82,16 +82,20 @@ export async function onHookLanded(player) {
                     fisher.canBeReeled = false;
                 }
             }
+            else {
+                delayTimer.reset();
+            }
             fisher.fishingHook.isSubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_SUBMERGE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
             fisher.fishingHook.isDeeplySubmerged = (parseFloat(initialHookPosition.y.toFixed(2)) - HOOK_TREASURE_OFFSET >= parseFloat(hookEntity.location.y.toFixed(2)));
             hookSubmergeState.setValue(fisher.fishingHook.isSubmerged);
             hookTreasureFoundState.setValue(fisher.fishingHook.isDeeplySubmerged);
             expirationTimer.update();
-            Logger.info("FINDING INTERVAL RUNNING. ID=", tuggingEvent);
+            Logger.info("FINDING INTERVAL RUNNING. ID=", StartFishingInterval);
             HookOnSubmergedForItemFishing();
             if (expirationTimer.isDone()) {
                 fisher.reset(true);
-                player;
+                fisher.canBeReeled = false;
+                delayTimer.reset();
                 SendMessageTo(player, {
                     rawtext: [
                         {
@@ -107,12 +111,12 @@ export async function onHookLanded(player) {
             if ((fisher.canBeReeled || fisher.fishingHook.isSubmerged) && !fisher.caughtByHook?.isValid())
                 onHookedItem(fisher);
             Logger.error(e, e.stack);
-            system.clearRun(tuggingEvent);
+            system.clearRun(StartFishingInterval);
+            delayTimer.reset();
             fisher.fishingHook.isSubmerged = false;
             fisher.canBeReeled = false;
             localFishersCache.set(player.id, fisher);
             FishingStateIndicator.Escaped.reset();
-            return;
         }
     }, 1);
     function HookOnSubmergedForItemFishing() {
@@ -123,6 +127,7 @@ export async function onHookLanded(player) {
                 onCaughtParticleLogMap.set(player.id, system.currentTick);
                 if ((oldLog + 20) >= system.currentTick)
                     return;
+                fisher.canBeReeled = false;
                 FishingStateIndicator.Caught.run();
                 if (fisher.clientConfiguration.OnSubmergeSE.defaultValue)
                     player.playSound('note.chime');

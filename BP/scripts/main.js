@@ -1,5 +1,5 @@
 import { world, system, Player, ScriptEventSource, WeatherType, EntityInventoryComponent, ItemTypes } from "@minecraft/server";
-import { ADDON_IDENTIFIER, db, fetchFisher, onCustomBlockInteractLogMap } from "./constant";
+import { ADDON_IDENTIFIER, ADDON_NAME, db, fetchFisher, onCustomBlockInteractLogMap } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { overrideEverything } from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
@@ -20,8 +20,7 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
             onCustomBlockInteractLogMap.set(player.id, Date.now());
             if ((oldLog + 500) >= Date.now())
                 return;
-            const { default: CommandObject } = await import(`./commands/config.js`);
-            CommandObject.execute(player, ['show']);
+            player.configuration.showFisherTableScreen();
         }
     });
 });
@@ -41,7 +40,11 @@ world.afterEvents.playerSpawn.subscribe((e) => {
     e.player.runCommandAsync(`testfor @s[hasItem={item=${addonConfigItemType.id}}]`).then((result) => {
         if (!result.successCount) {
             const inventory = e.player.getComponent(EntityInventoryComponent.componentId).container.override(e.player);
-            inventory.giveItem(addonConfigItemType, 1);
+            inventory.giveItem(addonConfigItemType, 1, {
+                lore: [
+                    `§l${ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}`
+                ]
+            });
         }
         else {
             SendMessageTo(e.player, { rawtext: [

@@ -57,13 +57,12 @@ const command = {
                 break;
             case REQUIRED_PARAMETER.PARTICLE:
                 const molang = new MolangVariableMap();
-                molang.setFloat("max_height", parseFloat(args[1]) ?? 2);
-                molang.setFloat("splash_spread", parseFloat(args[2]) ?? 5);
-                molang.setFloat("splash_radius", parseFloat(args[3]) ?? 3);
-                molang.setFloat("min_splashes", parseFloat(args[4]) ?? 30);
-                molang.setFloat("max_splashes", parseFloat(args[5]) ?? 50);
-                molang.setFloat("max_splashes", parseFloat(args[5]) ?? 50);
-                player.dimension.spawnParticle("yn:water_splash", { x: player.location.x + parseFloat(args[6]), y: player.location.y + parseFloat(args[7]), z: player.location.z + parseFloat(args[8]) }, molang);
+                molang.setFloat("max_height", 2.3);
+                molang.setFloat("splash_spread", 3);
+                molang.setFloat("splash_radius", 2.8);
+                molang.setFloat("min_splashes", 60);
+                molang.setFloat("max_splashes", 100);
+                player.dimension.spawnParticle("yn:water_splash", { x: parseFloat(args[1]), y: parseFloat(args[2]), z: parseFloat(args[3]) }, molang);
                 break;
             default:
                 break;

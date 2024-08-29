@@ -15,12 +15,15 @@ OverTakes(Container.prototype, {
             throw "No Entity source found";
         return this;
     },
-    giveItem(itemType, amount) {
+    giveItem(itemType, amount, options) {
         if (!this.source)
             throw "No Entity source found";
         if (!amount)
             return;
         const item = new ItemStack(itemType);
+        item.setCanDestroy(options.canDestroyOn);
+        item.setCanPlaceOn(options.canPlaceOn);
+        item.setLore(options.lore);
         let exceededAmount = 0;
         if (amount > item.maxAmount) {
             const groupStacks = stackDistribution(amount, item.maxAmount);

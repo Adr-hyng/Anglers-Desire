@@ -42,7 +42,7 @@ const command = {
                     ]
                 });
             if (isShow) {
-                system.run(() => player.configuration.showFisherTableScreen());
+                system.run(() => player.configuration.showConfigurationScreen());
             }
             else {
                 const optionalParams = (`[${Object.values(OPTIONAL_PARAMETER).join('|')}]`).slice(1, -1).split('|').map(command => command.trim());

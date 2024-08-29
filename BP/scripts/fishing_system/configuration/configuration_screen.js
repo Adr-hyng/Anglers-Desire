@@ -76,7 +76,11 @@ export class Configuration {
                     this.player.runCommandAsync(`testfor @s[hasItem={item=${addonConfigItemType.id}}]`).then((result) => {
                         if (!result.successCount) {
                             const inventory = this.player.getComponent(EntityInventoryComponent.componentId).container.override(this.player);
-                            inventory.giveItem(addonConfigItemType, 1);
+                            inventory.giveItem(addonConfigItemType, 1, {
+                                lore: [
+                                    `§l${ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}`
+                                ]
+                            });
                         }
                         else {
                             SendMessageTo(this.player, { rawtext: [
@@ -296,9 +300,11 @@ export class Configuration {
                 .button({ rawtext: [
                     { translate: "yn:fishing_got_reel.configuration.addon_options.client" }
                 ] }, "textures/gui/configurations/client_status");
-            form.button({ rawtext: [
-                    { translate: "yn:fishing_got_reel.configuration.addon_options.server" }
-                ] }, "textures/gui/configurations/operator_status");
+            if (this.player.hasTag("isOperator")) {
+                form.button({ rawtext: [
+                        { translate: "yn:fishing_got_reel.configuration.addon_options.server" }
+                    ] }, "textures/gui/configurations/operator_status");
+            }
             form.button({ rawtext: [
                     { translate: "yn:fishing_got_reel.configuration.addon_options.guide" }
                 ] }, "textures/gui/configurations/guide")
@@ -334,10 +340,10 @@ export class Configuration {
     showGuideScreen() {
         const mainForm = new ActionFormData();
         mainForm.title({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.addon_guide.title" }] })
-            .button({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.addon_guide.introduction_section" }] })
-            .button({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_table_section" }] })
-            .button({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_book_section" }] })
-            .button({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancements_section" }] })
+            .button({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.addon_guide.introduction_section" }] }, "textures/gui/addon_guide/info")
+            .button({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_table_section" }] }, "textures/gui/addon_guide/fishers_table")
+            .button({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_book_section" }] }, "textures/gui/addon_guide/fishers_book")
+            .button({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancements_section" }] }, "textures/gui/addon_guide/hooks")
             .button({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.general.back" }] }, "textures/ui/arrow_left");
         let form;
         mainForm.show(this.player).then((response) => {
@@ -390,7 +396,6 @@ export class Configuration {
                     form = new MessageFormData();
                     form.title({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_book_section" }] });
                     form.body({ rawtext: [
-                            { text: "\n" },
                             {
                                 translate: "yn:fishing_got_reel.configuration.addon_guide.fishers_book_guide.content",
                                 with: ["\n    "]
@@ -427,6 +432,15 @@ export class Configuration {
                                     hookForm.title({ rawtext: [{ translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancements_section" }] });
                                     hookForm.body({ rawtext: [
                                             {
+                                                "text": "\n"
+                                            },
+                                            {
+                                                translate: "yn:fishing_got_reel.enchantments.iron_hook.description"
+                                            },
+                                            {
+                                                "text": "\n"
+                                            },
+                                            {
                                                 translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.iron_hook_recipe",
                                                 with: ["\n"]
                                             }
@@ -445,6 +459,15 @@ export class Configuration {
                                     hookForm = new MessageFormData();
                                     hookForm.title({ rawtext: [{ translate: "item.yn:fishing_got_reel:nautilus_hook" }] });
                                     hookForm.body({ rawtext: [
+                                            {
+                                                "text": "\n"
+                                            },
+                                            {
+                                                translate: "yn:fishing_got_reel.enchantments.nautilus.description"
+                                            },
+                                            {
+                                                "text": "\n"
+                                            },
                                             {
                                                 translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.nautilus_hook_recipe",
                                                 with: ["\n"]
@@ -465,6 +488,15 @@ export class Configuration {
                                     hookForm.title({ rawtext: [{ translate: "item.yn:fishing_got_reel:luminous_siren_hook" }] });
                                     hookForm.body({ rawtext: [
                                             {
+                                                "text": "\n"
+                                            },
+                                            {
+                                                translate: "yn:fishing_got_reel.enchantments.luminous.description"
+                                            },
+                                            {
+                                                "text": "\n"
+                                            },
+                                            {
                                                 translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.luminous_hook_recipe",
                                                 with: ["\n"]
                                             }
@@ -483,6 +515,15 @@ export class Configuration {
                                     hookForm = new MessageFormData();
                                     hookForm.title({ rawtext: [{ translate: "item.yn:fishing_got_reel:pyroclasm_hook" }] });
                                     hookForm.body({ rawtext: [
+                                            {
+                                                "text": "\n"
+                                            },
+                                            {
+                                                translate: "yn:fishing_got_reel.enchantments.pyroclasm.description"
+                                            },
+                                            {
+                                                "text": "\n"
+                                            },
                                             {
                                                 translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.pyroclasm_hook_recipe",
                                                 with: ["\n"]
@@ -503,6 +544,15 @@ export class Configuration {
                                     hookForm.title({ rawtext: [{ translate: "item.yn:fishing_got_reel:tempus_hook" }] });
                                     hookForm.body({ rawtext: [
                                             {
+                                                "text": "\n"
+                                            },
+                                            {
+                                                translate: "yn:fishing_got_reel.enchantments.tempus.description"
+                                            },
+                                            {
+                                                "text": "\n"
+                                            },
+                                            {
                                                 translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.tempus_hook_recipe",
                                                 with: ["\n"]
                                             }
@@ -521,6 +571,15 @@ export class Configuration {
                                     hookForm = new MessageFormData();
                                     hookForm.title({ rawtext: [{ translate: "item.yn:fishing_got_reel:fermented_spider_eye_hook" }] });
                                     hookForm.body({ rawtext: [
+                                            {
+                                                "text": "\n"
+                                            },
+                                            {
+                                                translate: "yn:fishing_got_reel.enchantments.fermentedeye.description"
+                                            },
+                                            {
+                                                "text": "\n"
+                                            },
                                             {
                                                 translate: "yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermeye_hook_recipe",
                                                 with: ["\n"]

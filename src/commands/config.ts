@@ -45,7 +45,7 @@ const command: ICommandBase = {
                 }
             );
             if(isShow) {
-                system.run(() => player.configuration.showFisherTableScreen());
+                system.run(() => player.configuration.showConfigurationScreen());
             } 
             else {
                 const optionalParams: string[] = (`[${Object.values(OPTIONAL_PARAMETER).join('|')}]`).slice(1, -1).split('|').map(command => command.trim());

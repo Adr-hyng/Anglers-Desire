@@ -1,9 +1,9 @@
 import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource, WeatherType, EntityInventoryComponent, EquipmentSlot, ItemTypes} from "@minecraft/server";
-import { ADDON_IDENTIFIER, db, fetchFisher, onCustomBlockInteractLogMap } from "./constant";
+import { ADDON_IDENTIFIER, ADDON_NAME, db, fetchFisher, onCustomBlockInteractLogMap } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { Fisher } from "./fishing_system/entities/fisher";
 
-import {overrideEverything} from "overrides/index";
+import {ItemStackOptions, overrideEverything} from "overrides/index";
 import { onHookedItem } from "fishing_system/events/on_hook_item";
 import { Logger, SendMessageTo } from "utils/index";
 import { serverConfigurationCopy } from "fishing_system/configuration/server_configuration";
@@ -21,10 +21,7 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
       const oldLog = onCustomBlockInteractLogMap.get(player.id) as number;
       onCustomBlockInteractLogMap.set(player.id, Date.now());
       if ((oldLog + 500) >= Date.now()) return;
-      const {
-        default: CommandObject
-      } = await import(`./commands/config.js`);
-      CommandObject.execute(player as Player, ['show']);
+      player.configuration.showFisherTableScreen();
     }
   });
 });
@@ -43,7 +40,11 @@ world.afterEvents.playerSpawn.subscribe((e) => {
   e.player.runCommandAsync(`testfor @s[hasItem={item=${addonConfigItemType.id}}]`).then((result) => {
     if(!result.successCount) {
       const inventory = (e.player.getComponent(EntityInventoryComponent.componentId) as EntityInventoryComponent).container.override(e.player);
-      inventory.giveItem(addonConfigItemType, 1);
+      inventory.giveItem(addonConfigItemType, 1, {
+        lore: [
+          `§l${ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}`
+        ]
+      } as ItemStackOptions);
     } else {
       SendMessageTo(e.player, {rawtext: [
         {
