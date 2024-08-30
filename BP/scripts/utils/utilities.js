@@ -17,7 +17,7 @@ export function generateUUID16() {
 export function ExecuteAtGivenTick(tick) {
     return (system.currentTick % tick) === 0;
 }
-export function SendMessageTo(executor, rawMessage = { rawtext: [{ text: "Not Localized Yet" }] }) {
+export function SendMessageTo(executor, rawMessage = { rawtext: [{ text: "Not Implemented Yet" }] }) {
     const formattedRawMessage = JSON.stringify(rawMessage);
     executor.runCommandAsync(`tellraw ${executor.name} ` + formattedRawMessage);
 }

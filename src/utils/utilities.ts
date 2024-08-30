@@ -38,7 +38,7 @@ export function ExecuteAtGivenTick(tick: number) {
   return (system.currentTick % tick) === 0;
 }
 
-export function SendMessageTo(executor: Player, rawMessage: RawMessage = { rawtext: [ {text: "Not Localized Yet"} ] }) {
+export function SendMessageTo(executor: Player, rawMessage: RawMessage = { rawtext: [ {text: "Not Implemented Yet"} ] }) {
   const formattedRawMessage = JSON.stringify(rawMessage);
   executor.runCommandAsync(`tellraw ${executor.name} ` + formattedRawMessage);
 }

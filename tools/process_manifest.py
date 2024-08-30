@@ -53,7 +53,7 @@ def processJsonElement(element, bp_element, rp_element):
             i = i + 1
 
 # load base manifest
-with open('setup/mc_manifest.json', 'r') as file:
+with open('setup/mc_manifest.json', 'r', encoding='utf-8') as file:
     manifest = json.load(file)
     processJsonElement(manifest, bp_manifest, rp_manifest)
 
@@ -79,8 +79,8 @@ if args.init:
     shutil.copy('setup/pack_icon.png', 'RP/')
 
 version = manifest['header']['version']
-bp_manifest['header']['name'] += ' ' + '.'.join(map(str, version))
-rp_manifest['header']['name'] += ' ' + '.'.join(map(str, version))
+bp_manifest['header']['name'] += ' §8(' + '.'.join(map(str, version)) + ')'
+rp_manifest['header']['name'] += ' §8(' + '.'.join(map(str, version)) + ')'
 
 if not type(version) is str:
     version = version[:3]
@@ -99,7 +99,7 @@ if args.target == 'debug':
     rp_manifest['header']['name'] += ' [DEBUG]'
 
 # export behaviour and resource manifests
-with open('BP/manifest.json', 'w') as file:
-    json.dump(bp_manifest, file, indent=4)
-with open('RP/manifest.json', 'w') as file:
-    json.dump(rp_manifest, file, indent=4)
+with open('BP/manifest.json', 'w', encoding='utf-8') as file:
+    json.dump(bp_manifest, file, indent=4, ensure_ascii=False)
+with open('RP/manifest.json', 'w', encoding='utf-8') as file:
+    json.dump(rp_manifest, file, indent=4, ensure_ascii=False)
