@@ -13,7 +13,7 @@
 					"rotation": [0, "-math.cos((v.current_anim_time - v.last_anim_time) * 180) * -20.5", 0]
 				},
 				"head": {
-					"rotation": [0, "return -math.cos((v.last_anim_time - v.current_anim_time) * 180) * 7.5;", 0]
+					"rotation": [0, "-math.cos((v.last_anim_time - v.current_anim_time) * 180) * 7.5;", 0]
 				},
 				"lateral_fin1": {
 					"rotation": [0, "math.cos((q.anim_time + q.modified_distance_moved)* 170) * 5", 0]
@@ -29,6 +29,9 @@
 				},
 				"lateral_fin3": {
 					"rotation": [0, "math.cos((q.anim_time + q.modified_distance_moved)* 189) * 5", 0]
+				},
+				"root": {
+					"rotation": [0, 0, 0]
 				}
 			}
 		},
@@ -36,7 +39,16 @@
 			"loop": true,
 			"bones": {
 				"root": {
-					"rotation": [0, 0, "variable.zrot"]
+					"rotation": [0, "math.cos(variable.animationamountblend * 45.0) * 4.0", "variable.zrot"]
+				},
+				"body": {
+					"rotation": [0, "math.cos(variable.animationamountblend * 45.0) * -5.5", 0]
+				},
+				"tail": {
+					"rotation": [0, "math.cos(variable.animationamountblend * 45.0) * -12.0", 0]
+				},
+				"bone2": {
+					"rotation": [0, "math.cos(variable.animationamountblend * 45.0) * -15.0", 0]
 				}
 			}
 		}

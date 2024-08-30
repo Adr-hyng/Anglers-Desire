@@ -14,7 +14,8 @@
         "pre_animation": [
           "variable.current_anim_time = q.modified_distance_moved;",
           "variable.last_anim_time = ((v.current_anim_time - v.last_anim_time >= 2) ? v.current_anim_time : v.last_anim_time);",
-          "variable.zrot = !query.is_in_water ? Math.cos((query.time_stamp + query.frame_alpha) * 14.32) * 90 : 0.0;"
+          "variable.zrot = !query.is_in_water ? Math.cos((query.time_stamp + query.frame_alpha) * 14.32) * 90 : 0.0;",
+          "variable.animationamountblend = Math.lerp(variable.AnimationAmountPrev, variable.AnimationAmount, query.frame_alpha);"
         ]
       },
       "animations": {

@@ -321,10 +321,20 @@ export class Configuration {
                         this.showClientScreen();
                         break;
                     case 1:
-                        this.showServerScreen();
+                        if (this.player.hasTag("isOperator")) {
+                            this.showServerScreen();
+                        }
+                        else {
+                            this.showGuideScreen();
+                        }
                         break;
                     case 2:
-                        this.showGuideScreen();
+                        if (this.player.hasTag("isOperator")) {
+                            this.showGuideScreen();
+                        }
+                        else {
+                            this.showCreditsScreen();
+                        }
                         break;
                     case 3:
                         this.showCreditsScreen();

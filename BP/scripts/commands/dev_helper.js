@@ -4,6 +4,9 @@ import { SendMessageTo } from "utils/utilities";
 import { overrideEverything } from "overrides/index";
 import { MinecraftEnchantmentTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
+import { world } from "@minecraft/server";
+import { system } from "@minecraft/server";
+import { Vec3 } from "utils/Vector/VectorUtils";
 overrideEverything();
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
@@ -54,6 +57,19 @@ const command = {
                 player.getComponent(EntityComponentTypes.Inventory).container.setItem(player.selectedSlotIndex, fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
+                let count = 0;
+                const t = system.runInterval(() => {
+                    if (count >= 100)
+                        system.clearRun(t);
+                    count++;
+                    world.getDimension(player.dimension.id).getEntities({
+                        closest: 1,
+                        type: "yn:coelacanth",
+                    }).forEach((e) => {
+                        player.dimension.spawnParticle("minecraft:villager_happy", new Vec3(e.location).add(e.getViewDirection()));
+                        console.warn("Dir: ", e.getViewDirection().y);
+                    });
+                });
                 break;
             case REQUIRED_PARAMETER.PARTICLE:
                 const molang = new MolangVariableMap();

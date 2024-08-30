@@ -29,8 +29,7 @@
 		},
 		"components": {
 			"minecraft:emitter_initialization": {
-				"creation_expression": "temp.ripple_reduced = 0.01;temp.ripple_initial_size = 0.2;",
-				"per_update_expression": "temp.ripple_initial_size;"
+				"creation_expression": "temp.ripple_reduced = 0.01;temp.ripple_initial_size = 0.2;"
 			},
 			"minecraft:emitter_rate_instant": {
 				"num_particles": 1
