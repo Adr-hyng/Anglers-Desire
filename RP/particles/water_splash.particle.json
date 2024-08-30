@@ -32,7 +32,6 @@
 			},
 			"splash_foam_test": {
 				"sequence": [
-					{},
 					{
 						"particle_effect": {
 							"effect": "sp:splashfoam",
@@ -71,7 +70,7 @@
 			},
 			"minecraft:particle_expire_if_in_blocks": ["minecraft:water", "minecraft:flowing_water"],
 			"minecraft:particle_lifetime_events": {
-				"expiration_event": ["splash_foam_test", "ripple"]
+				"expiration_event": ["ripple", "splash_foam_test"]
 			},
 			"minecraft:particle_initial_spin": {
 				"rotation": "math.random(-180, 180)"

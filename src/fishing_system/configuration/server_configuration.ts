@@ -25,7 +25,7 @@ export const serverConfiguration = {
   /**
    * Enables debug messages to content logs.
    */
-  debug: new FormBuilder("Debug Mode").createToggle(false),
+  debug: new FormBuilder("Debug Mode").createToggle(true),
 };
 
 export let serverConfigurationCopy = cloneConfiguration(serverConfiguration);

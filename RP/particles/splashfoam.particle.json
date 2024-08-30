@@ -17,6 +17,20 @@
 			}
 		},
 		"events": {
+			"ripple_fix": {
+				"sequence": [
+					{
+						"expression": "variable.bounce_count = variable.bounce_count + 1;\ntemp.ripple_initial_size = temp.ripple_initial_size - temp.ripple_reduced;"
+					},
+					{
+						"particle_effect": {
+							"effect": "sp:ripple",
+							"type": "emitter",
+							"pre_effect_expression": "variable.rand_size = temp.ripple_initial_size;"
+						}
+					}
+				]
+			},
 			"ripple": {
 				"particle_effect": {
 					"effect": "sp:ripple",
@@ -24,8 +38,7 @@
 					"pre_effect_expression": "variable.rand_size = temp.ripple_initial_size;"
 				},
 				"expression": "variable.bounce_count = variable.bounce_count + 1;\ntemp.ripple_initial_size = temp.ripple_initial_size - temp.ripple_reduced;"
-			},
-			"event": {}
+			}
 		},
 		"components": {
 			"minecraft:emitter_initialization": {
@@ -47,7 +60,7 @@
 			},
 			"minecraft:particle_expire_if_in_blocks": ["minecraft:water", "minecraft:flowing_water"],
 			"minecraft:particle_lifetime_events": {
-				"expiration_event": "ripple"
+				"expiration_event": "ripple_fix"
 			},
 			"minecraft:particle_initial_speed": "math.random(v.min_lifetime, v.max_lifetime)",
 			"minecraft:particle_motion_dynamic": {
@@ -67,12 +80,7 @@
 				"collision_drag": 4,
 				"coefficient_of_restitution": 0.9,
 				"collision_radius": 0.1,
-				"events": [
-					{
-						"event": "ripple",
-						"min_speed": 0
-					}
-				]
+				"expire_on_contact": true
 			},
 			"minecraft:particle_appearance_lighting": {}
 		}
