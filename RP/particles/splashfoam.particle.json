@@ -19,14 +19,12 @@
 		"events": {
 			"ripple_fix": {
 				"sequence": [
-					{
-						"expression": "variable.bounce_count = variable.bounce_count + 1;\ntemp.ripple_initial_size = temp.ripple_initial_size - temp.ripple_reduced;"
-					},
+					{},
 					{
 						"particle_effect": {
 							"effect": "sp:ripple",
 							"type": "emitter",
-							"pre_effect_expression": "variable.rand_size = temp.ripple_initial_size;"
+							"pre_effect_expression": "variable.rand_size = Math.random(0.13, 0.24);"
 						}
 					}
 				]
@@ -41,9 +39,6 @@
 			}
 		},
 		"components": {
-			"minecraft:emitter_initialization": {
-				"creation_expression": "temp.ripple_reduced = 0.01;temp.ripple_initial_size = 0.2;"
-			},
 			"minecraft:emitter_rate_instant": {
 				"num_particles": 1
 			},
@@ -55,8 +50,7 @@
 				"direction": ["variable.direction_x", 1, "variable.direction_z"]
 			},
 			"minecraft:particle_lifetime_expression": {
-				"max_lifetime": 1,
-				"expiration_expression": "variable.bounce_range <= variable.bounce_count || variable.bounce_count == v.min_bounce_range"
+				"max_lifetime": 1
 			},
 			"minecraft:particle_expire_if_in_blocks": ["minecraft:water", "minecraft:flowing_water"],
 			"minecraft:particle_lifetime_events": {

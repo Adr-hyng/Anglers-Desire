@@ -11,13 +11,8 @@ export class JungleCatch {
     return [
       {
         "item": MinecraftItemTypes.Air,
-        "weight": 5,
-        "toEntity": MinecraftEntityTypes.GlowSquid
-      },
-      {
-        "item": MinecraftItemTypes.Air,
         "weight": 2,
-        "toEntity": MinecraftEntityTypes.Guardian
+        "toEntity": MinecraftEntityTypes.GlowSquid
       },
       {
         "item": MinecraftItemTypes.Air,
@@ -31,7 +26,7 @@ export class JungleCatch {
     if(!IsRainingChanceModifier) return [
       {
         "item": MinecraftItemTypes.InkSac,
-        "weight": 12,
+        "weight": 5,
         "toEntity": MinecraftEntityTypes.Squid
       },
     ];
@@ -39,12 +34,12 @@ export class JungleCatch {
       return [
         {
           "item": MinecraftItemTypes.InkSac,
-          "weight": 24,
+          "weight": 16,
           "toEntity": MinecraftEntityTypes.Squid
         },
         {
           "item": MinecraftItemTypes.Air,
-          "weight": 9,
+          "weight": 3,
           "toEntity": MinecraftEntityTypes.GlowSquid
         },
         {
@@ -57,7 +52,7 @@ export class JungleCatch {
     return [
       {
         "item": MinecraftItemTypes.InkSac,
-        "weight": 21,
+        "weight": 7,
         "toEntity": MinecraftEntityTypes.Squid
       },
     ];

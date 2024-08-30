@@ -51,7 +51,7 @@ export async function onHookLanded(player) {
     if (!isInWater)
         return;
     const expirationTimer = new Timer(parseInt(serverConfigurationCopy.expirationTimer.defaultValue) * TicksPerSecond);
-    const delayValue = (fisher.fishingRod.upgrade.has("Tempus") ? 0.5 : 0.1);
+    const delayValue = (fisher.fishingRod.upgrade.has("Tempus") ? 1.5 : 0.5);
     const delayTimer = new Timer(delayValue * TicksPerSecond);
     const FishingStateIndicator = fisher.fishingOutputManager;
     const hookSubmergeState = new StateController(fisher.fishingHook.isSubmerged);

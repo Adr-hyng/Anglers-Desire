@@ -7,13 +7,8 @@ export class DefaultCatch {
         return [
             {
                 "item": MinecraftItemTypes.Air,
-                "weight": 5,
-                "toEntity": MinecraftEntityTypes.GlowSquid
-            },
-            {
-                "item": MinecraftItemTypes.Air,
                 "weight": 2,
-                "toEntity": MinecraftEntityTypes.Guardian
+                "toEntity": MinecraftEntityTypes.GlowSquid
             }
         ];
     }
@@ -23,7 +18,7 @@ export class DefaultCatch {
             return [
                 {
                     "item": MinecraftItemTypes.Air,
-                    "weight": 10,
+                    "weight": 5,
                     "toEntity": MinecraftEntityTypes.Squid
                 }
             ];
@@ -31,12 +26,12 @@ export class DefaultCatch {
             return [
                 {
                     "item": MinecraftItemTypes.Air,
-                    "weight": 9,
+                    "weight": 3,
                     "toEntity": MinecraftEntityTypes.GlowSquid
                 },
                 {
                     "item": MinecraftItemTypes.Air,
-                    "weight": 21,
+                    "weight": 16,
                     "toEntity": MinecraftEntityTypes.Squid
                 }
             ];
@@ -44,7 +39,7 @@ export class DefaultCatch {
         return [
             {
                 "item": MinecraftItemTypes.Air,
-                "weight": 18,
+                "weight": 7,
                 "toEntity": MinecraftEntityTypes.Squid
             }
         ];
