@@ -23,7 +23,7 @@ item.yn:fishing_got_reel:pyroclasm_hook=Pyroclasm Hook
 item.yn:fishing_got_reel:tempus_hook=Tempus Hook
 item.yn:fishing_got_reel:normal_hook=Iron Hook
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Hook with Fermented Spider Eye
-item.yn:fishing_got_reel:addon_configuration=Add-On Configuration
+item.yn:fishing_got_reel:addon_configuration=Reelz Configuration
 
 ## General Configuration Stuffs
 yn:fishing_got_reel.configuration.general.back=Back
@@ -38,7 +38,7 @@ yn:fishing_got_reel.configuration.fishers_table.open_enchantment_option=Add Enha
 yn:fishing_got_reel.configuration.fishers_table.open_disenchant_option=Remove Enhancements
 yn:fishing_got_reel.configuration.fishers_table.view_enhancements_option=View Enhancements
 yn:fishing_got_reel.configuration.fishers_table.view_fishing_book_option=View Fishing Book
-yn:fishing_got_reel.configuration.fishers_table.get_settings_option=Give Settings Item
+yn:fishing_got_reel.configuration.fishers_table.get_settings_option=Give Configuration Item
 
 ## Fisher's Table Options Title
 yn:fishing_got_reel.configuration.view_enhancement_screen.title=Choose enhancement to inspect

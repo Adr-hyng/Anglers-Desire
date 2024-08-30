@@ -6,7 +6,9 @@
 			"states": {
 				"flopping": {
 					"animations": ["flop"],
-					"on_entry": [],
+					"on_entry": [
+						"v.last_anim_time = 0;"
+					],
 					"transitions": [
 						{"swimming": "query.is_in_water || query.is_levitating"}
 					],
@@ -14,6 +16,9 @@
 				},
 				"swimming": {
 					"animations": ["swim"],
+					"on_entry": [
+						"v.last_anim_time = 0;"
+					],
 					"transitions": [
 						{"flopping": "!query.is_in_water && !query.is_levitating"}
 					],
