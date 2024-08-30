@@ -84,8 +84,8 @@ export async function onHookLanded(player: Player): Promise<void> {
           if ((oldLog + 20) >= system.currentTick) return;
 
           delayTimer.reset();
-          FishingStateIndicator.Escaped.run();
           fisher.canBeReeled = false;
+          FishingStateIndicator.Escaped.run();
         }
       } else {
         delayTimer.reset();

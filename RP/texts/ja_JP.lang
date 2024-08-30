@@ -1,0 +1,95 @@
+## Note
+## All localization files excluding English (en_US) is generated with GPT 4o, feel free to correct the grammar through contributing in the github repository.
+
+yn.fishing_got_reel.on_load_message=§a§lReelz Addon§r §aが正常に読み込まれました。作成者: Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn.fishing_got_reel.on_caught_message=%s: 釣り針に何かが引っかかっている...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn.fishing_got_reel.on_drop_hook=%s: 逃げられた...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn.fishing_got_reel.on_afk_detected=%s: 放置が検出されました。釣りシステムがキャンセルされました。	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn:fishing_got_reel.on_caught_invalid_command=§c無効な使用形式です。%1	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_database_empty=§4データベースに構成レコードが見つかりませんでした。§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.on_database_reset=§aデータベースがリセットされました。§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.show_database=データベースID: §e%1§r%2%3	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+### yn:fishing_got_reel.show_help_message=-> 実装されていません	###
+yn:fishing_got_reel.on_caught_command_404=§c%1 コマンドの取得中にエラーが発生しました: %2	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_caught_main_command_not_found=§c無効なコマンド: §l%1§r%2§cコマンドが実際に存在するか確認してください。/scriptevent %3 help を使用してください	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_client_reset=§aクライアントの設定がリセットされました。§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.already_has_item=§cすでにインベントリに %1 が入っています。インベントリを確認してください。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+item.yn:fishing_got_reel:nautilus_hook=ノーチラスフック	###
+item.yn:fishing_got_reel:luminous_siren_hook=ルミナスフック	###
+item.yn:fishing_got_reel:pyroclasm_hook=パイロクラズムフック	###
+item.yn:fishing_got_reel:tempus_hook=テンパスフック	###
+item.yn:fishing_got_reel:normal_hook=アイアンフック	###
+item.yn:fishing_got_reel:fermented_spider_eye_hook=発酵したクモの目付きフック	###
+item.yn:fishing_got_reel:addon_configuration=Reelz構成	###
+
+yn:fishing_got_reel.configuration.general.back=戻る	###
+yn:fishing_got_reel.configuration.general.exit=終了	###
+yn:fishing_got_reel.configuration.general.usage=使用法	###
+yn:fishing_got_reel.configuration.general.remove_enchantment=エンチャントを削除	###
+yn:fishing_got_reel.configuration.general.add_enchantment=エンチャントを追加	###
+
+yn:fishing_got_reel.configuration.fishers_table.title=フィッシャーズテーブル	###
+yn:fishing_got_reel.configuration.fishers_table.open_enchantment_option=強化を追加	###
+yn:fishing_got_reel.configuration.fishers_table.open_disenchant_option=強化を削除	###
+yn:fishing_got_reel.configuration.fishers_table.view_enhancements_option=強化を表示	###
+yn:fishing_got_reel.configuration.fishers_table.view_fishing_book_option=釣りブックを表示	###
+yn:fishing_got_reel.configuration.fishers_table.get_settings_option=構成アイテムを取得	###
+
+yn:fishing_got_reel.configuration.view_enhancement_screen.title=調査する強化を選択	###
+yn:fishing_got_reel.configuration.open_disenchant_screen.title=削除する強化を選択	###
+yn:fishing_got_reel.configuration.open_enchantment_screen.title=追加する強化を選択	###
+
+yn:fishing_got_reel.configuration.addon_options.title=%1 設定	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_options.client=クライアントオプション	###
+yn:fishing_got_reel.configuration.addon_options.server=サーバーオプション	###
+yn:fishing_got_reel.configuration.addon_options.guide=アドオンガイド	###
+yn:fishing_got_reel.configuration.addon_options.credits=特別な感謝	###
+
+yn:fishing_got_reel.configuration.client.caught_output=釣り上げ時の出力オプション	###
+yn:fishing_got_reel.configuration.client.escape_output=逃げたときの出力オプション	###
+yn:fishing_got_reel.configuration.client.on_submerged_sound_effect=水没音を有効にする	###
+yn:fishing_got_reel.configuration.client.on_deep_submerged_sound_effect=深く水没した音を有効にする	###
+
+yn:fishing_got_reel.configuration.server.caught_fish_despawn_timer=釣った魚の消滅タイマー	###
+yn:fishing_got_reel.configuration.server.expiration_timer=有効期限タイマー	###
+yn:fishing_got_reel.configuration.server.caught_direction=釣り上げる方向	###
+yn:fishing_got_reel.configuration.server.does_caught_fish_despawn=釣った魚の消滅	###
+yn:fishing_got_reel.configuration.server.show_message_on_join=参加時にメッセージを表示	###
+
+yn:fishing_got_reel.configuration.addon_guide.title=アドオンガイド	###
+yn:fishing_got_reel.configuration.addon_guide.introduction_section=イントロダクション	###
+yn:fishing_got_reel.configuration.addon_guide.fishers_table_section=フィッシャーズテーブル	###
+yn:fishing_got_reel.configuration.addon_guide.fishers_book_section=釣りブック	###
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancements_section=フック	###
+
+yn:fishing_got_reel.configuration.addon_guide.introduction_guide.content=%1このアドオンは、バニラの釣り体験を完全に改善し、魚アイテムの単純なリールを、実際のエンティティを釣るダイナミックなシステムに置き換えます。%2Harvest Moonシリーズ、Stardew Valley、Animal Crossingなどのゲームの釣りの仕組みに似ており、今ではエンティティやアイテムを空中に巻き上げます。%2アメジストの欠片、発光インクサック、ノーチラスの殻などを釣り体験を向上させるためのより実用的な用途も追加されます。	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.fishers_table_guide.content=%1フィッシャーズテーブルは、新しい便利なブロックで、鍛冶台と同様に機能します。漁師の村人の樽の代わりにはなりませんが、釣り竿のフックを強化したり、利用可能な強化を表示したり、釣れる魚のリストにアクセスしたりできます。%2%1これをクラフトするには、次の材料が必要で、作業台でこのパターンに従います:%2| A B |%2| X X | %2| X X |%2%2材料:%2A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.fishers_book_guide.content=%1アドオン内のすべての釣れる魚の詳細なリストで、ロア、取得可能性、キャッチ率を含みます。この機能は、釣り体験を豊かにし、プレイヤーに何が釣れるかについてのさらなる洞察を与えます。%1%1    作業中、次のアップデートで登場予定...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermentedEye=発酵したクモの目フック	###
+
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.iron_hook_recipe=%1クラフトタイプ: 作業台%1クラフトレシピ:%1|      X |%1| X   X |%1|   X    |%1%1材料:%1X	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.nautilus_hook_recipe=%1クラフトタイプ: どれでも%1クラフトレシピ:%1| A B |%1%1材料:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.luminous_hook_recipe=%1クラフトタイプ: どれでも%1クラフトレシピ:%1| A B |%1%1材料:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.pyroclasm_hook_recipe=%1クラフトタイプ: どれでも%1クラフトレシピ:%1| A B |%1%1材料:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.tempus_hook_recipe=%1クラフトタイプ: どれでも%1クラフトレシピ:%1| A B |%1%1材料:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermeye_hook_recipe=%1クラフトタイプ: どれでも%1クラフトレシピ:%1| A B |%1%1材料:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn:fishing_got_reel.enchantments.description_text=§l説明:§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.lore_text=§lロア:§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.iron_hook.description=基本的なタスクのために設計された、鋭い曲がった先端を持つシンプルなフックです。耐久性と機能性を向上させるために、より強力な材料でアップグレードすることができます。	###
+yn:fishing_got_reel.enchantments.nautilus.description=通常の魚よりもレアなアイテムや宝物を釣り上げる確率を高めます。	###
+yn:fishing_got_reel.enchantments.nautilus.lore=§o伝説によると、深海の守護者であるノーチラスは、海の最も貴重な宝物をその螺旋状の殻の中に蓄えています。このフックを使う漁師は、ノーチラスの古代の使命を引き受け、波の下に隠された富へと導かれると言われています。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.luminous.description=一般的な魚よりもレアな海の生き物に出会う可能性を高めます。	###
+yn:fishing_got_reel.enchantments.luminous.lore=§o発光イカの輝くインクから鍛えられたルミナスフックは、深海の神秘的で珍しい生き物を誘う微かな光を放ちます。これらの生き物は、この光を月光と間違え、暗い深海を導くものとして、この光に引き寄せられると言われています。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.pyroclasm.description=釣り上げた魚が炎に包まれるようにします。	###
+yn:fishing_got_reel.enchantments.pyroclasm.lore=§oパイロクラズムフックは、永遠の炎と灰の領域で生まれた生物の炎のエッセンスから鍛えられたと言われています。これらの生物は極端な熱に耐える能力で知られており、フックはその燃える怒りを釣り上げる魚に向けて放ちます。まるでこれらの地獄の生物の息で焼かれたかのように。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.tempus.description=成功するための時間枠を広げ、キャッチが失われる前にもっと時間を与えます。	###
+yn:fishing_got_reel.enchantments.tempus.lore=§oテンパスフックは、古代のアメジストの破片に絡みついており、時間の砂に触れたと言われています。このフックは時間の流れそのものを操り、釣り人がキャッチを確保するために必要な貴重な追加の瞬間を提供するために、時間をわずかに遅らせます。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.fermentedeye.description=アイテムよりも海の生き物を捕まえる傾向が強まります。	###
+yn:fishing_got_reel.enchantments.fermentedeye.lore=§o発酵したクモの目のエッセンスに浸されたこのフックは、海を浸透する刺激的な香りを放ちます。海の生き物はその誘惑的な香りに耐えられず、蛾が炎に引き寄せられるようにフックに引き寄せられ、餌に食いつく可能性が高まります。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+
+entity.yn:particle_spawner.name=パーティクルビルダー	###
+tile.yn:fishers_table.name=フィッシャーズテーブル	###

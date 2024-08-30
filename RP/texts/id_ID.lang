@@ -1,0 +1,95 @@
+## Note
+## All localization files excluding English (en_US) is generated with GPT 4o, feel free to correct the grammar through contributing in the github repository.
+
+yn.fishing_got_reel.on_load_message=§a§lReelz Addon§r §atelah berhasil dimuat. Dibuat oleh Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn.fishing_got_reel.on_caught_message=%s: Ada sesuatu yang tertangkap oleh kail...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn.fishing_got_reel.on_drop_hook=%s: Itu lepas...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn.fishing_got_reel.on_afk_detected=%s: Terdeteksi AFK. Sistem memancing dibatalkan.	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn:fishing_got_reel.on_caught_invalid_command=§cFormat Penggunaan Tidak Valid. %1	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_database_empty=§4Tidak ada catatan konfigurasi yang ditemukan di database.§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.on_database_reset=§aDatabase telah direset.§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.show_database=ID Database: §e%1§r%2%3	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+### yn:fishing_got_reel.show_help_message=-> Belum Diimplementasikan	###
+yn:fishing_got_reel.on_caught_command_404=§cKesalahan saat mengambil perintah %1: %2	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_caught_main_command_not_found=§cPerintah Tidak Valid: §l%1§r%2§cPeriksa Apakah Perintah Benar-benar Ada. Gunakan /scriptevent %3 help	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_client_reset=§aKonfigurasi Klien telah direset.§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.already_has_item=§cKamu sudah memiliki %1 di inventarismu. Periksa inventarismu.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+item.yn:fishing_got_reel:nautilus_hook=Kail Nautilus	###
+item.yn:fishing_got_reel:luminous_siren_hook=Kail Luminous	###
+item.yn:fishing_got_reel:pyroclasm_hook=Kail Pyroclasm	###
+item.yn:fishing_got_reel:tempus_hook=Kail Tempus	###
+item.yn:fishing_got_reel:normal_hook=Kail Besi	###
+item.yn:fishing_got_reel:fermented_spider_eye_hook=Kail dengan Mata Laba-laba Fermentasi	###
+item.yn:fishing_got_reel:addon_configuration=Konfigurasi Reelz	###
+
+yn:fishing_got_reel.configuration.general.back=Kembali	###
+yn\fishing_got_reel.configuration.general.exit=Keluar	###
+yn\fishing_got_reel.configuration.general.usage=Penggunaan	###
+yn\fishing_got_reel.configuration.general.remove_enchantment=Hapus	###
+yn\fishing_got_reel.configuration.general.add_enchantment=Tambahkan	###
+
+yn\fishing_got_reel.configuration.fishers_table.title=Meja Pemancing	###
+yn\fishing_got_reel.configuration.fishers_table.open_enchantment_option=Tambahkan Peningkatan	###
+yn\fishing_got_reel.configuration.fishers_table.open_disenchant_option=Hapus Peningkatan	###
+yn\fishing_got_reel.configuration.fishers_table.view_enhancements_option=Lihat Peningkatan	###
+yn\fishing_got_reel.configuration.fishers_table.view_fishing_book_option=Lihat Buku Memancing	###
+yn\fishing_got_reel.configuration.fishers_table.get_settings_option=Berikan Item Konfigurasi	###
+
+yn\fishing_got_reel.configuration.view_enhancement_screen.title=Pilih peningkatan untuk diperiksa	###
+yn\fishing_got_reel.configuration.open_disenchant_screen.title=Pilih peningkatan untuk dihapus	###
+yn\fishing_got_reel.configuration.open_enchantment_screen.title=Pilih peningkatan untuk ditambahkan	###
+
+yn\fishing_got_reel.configuration.addon_options.title=Pengaturan %1	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_options.client=Opsi Klien	###
+yn\fishing_got_reel.configuration.addon_options.server=Opsi Server	###
+yn\fishing_got_reel.configuration.addon_options.guide=Panduan Add-On	###
+yn\fishing_got_reel.configuration.addon_options.credits=Ucapan Terima Kasih Khusus	###
+
+yn\fishing_got_reel.configuration.client.caught_output=Opsi Output Tangkapan	###
+yn\fishing_got_reel.configuration.client.escape_output=Opsi Output Pelarian	###
+yn\fishing_got_reel.configuration.client.on_submerged_sound_effect=Aktifkan Efek Suara Tenggelam	###
+yn\fishing_got_reel.configuration.client.on_deep_submerged_sound_effect=Aktifkan Efek Suara Tenggelam Dalam	###
+
+yn\fishing_got_reel.configuration.server.caught_fish_despawn_timer=Timer Penghilangan Ikan yang Tertangkap	###
+yn\fishing_got_reel.configuration.server.expiration_timer=Timer Kedaluwarsa	###
+yn\fishing_got_reel.configuration.server.caught_direction=Arah Tangkapan	###
+yn\fishing_got_reel.configuration.server.does_caught_fish_despawn=Ikan yang Tertangkap Menghilang	###
+yn\fishing_got_reel.configuration.server.show_message_on_join=Tampilkan Pesan Saat Bergabung	###
+
+yn\fishing_got_reel.configuration.addon_guide.title=Panduan Add-On	###
+yn\fishing_got_reel.configuration.addon_guide.introduction_section=Pendahuluan	###
+yn\fishing_got_reel.configuration.addon_guide.fishers_table_section=Meja Pemancing	###
+yn\fishing_got_reel.configuration.addon_guide.fishers_book_section=Buku Memancing	###
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancements_section=Kail	###
+
+yn\fishing_got_reel.configuration.addon_guide.introduction_guide.content=%1Add-on ini sepenuhnya meningkatkan pengalaman memancing di Minecraft, menggantikan proses sederhana menangkap item ikan dengan sistem dinamis di mana Anda menangkap entitas nyata. %2Mirip dengan mekanisme memancing dalam game seperti Seri Harvest Moon, Stardew Valley, dan Animal Crossing, Anda sekarang dapat menarik entitas atau item ke udara. %2Selain itu, add-on ini juga menambahkan kegunaan praktis untuk pecahan amethyst, kantung tinta bercahaya, cangkang nautilus, dan lainnya untuk meningkatkan pengalaman memancing Anda.	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.fishers_table_guide.content=%1Meja Pemancing adalah blok baru yang berguna yang berfungsi mirip dengan Meja Pandai Besi. Meskipun belum menggantikan barrel untuk nelayan desa, itu memungkinkan pemain untuk meningkatkan kail joran, melihat peningkatan yang tersedia, dan mengakses daftar ikan yang dapat ditangkap.%2%1Untuk membuatnya, Anda memerlukan bahan-bahan berikut dan di meja kerja, ikuti pola ini:%2| A B |%2| X X | %2| X X |%2%2Bahan:%2A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.fishers_book_guide.content=%1Daftar lengkap dari semua ikan yang dapat ditangkap dalam add-on, termasuk sejarah, cara mendapatkan, dan tingkat tangkapan. Fitur ini memperkaya pengalaman memancing dengan memberikan pemain lebih banyak wawasan tentang apa yang dapat mereka tangkap.%1%1    Sedang dalam pengerjaan, akan hadir di pembaruan berikutnya...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermentedEye=Kail dengan Mata Laba-laba Fermentasi	###
+
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.iron_hook_recipe=%1Tipe Pembuatan: Meja Kerja%1Resep Pembuatan:%1|      X |%1| X   X |%1|   X    |%1%1Bahan:%1X	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.nautilus_hook_recipe=%1Tipe Pembuatan: Bebas%1Resep Pembuatan:%1| A B |%1%1Bahan:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.luminous_hook_recipe=%1Tipe Pembuatan: Bebas%1Resep Pembuatan:%1| A B |%1%1Bahan:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.pyroclasm_hook_recipe=%1Tipe Pembuatan: Bebas%1Resep Pembuatan:%1| A B |%1%1Bahan:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.tempus_hook_recipe=%1Tipe Pembuatan: Bebas%1Resep Pembuatan:%1| A B |%1%1Bahan:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermeye_hook_recipe=%1Tipe Pembuatan: Bebas%1Resep Pembuatan:%1| A B |%1%1Bahan:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn\fishing_got_reel.enchantments.description_text=§lDeskripsi:§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.lore_text=§lSejarah:§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.iron_hook.description=Kail sederhana dengan ujung tajam dan melengkung, dirancang untuk tugas-tugas dasar. Dapat ditingkatkan dengan bahan yang lebih kuat untuk meningkatkan daya tahan dan fungsionalitas.	###
+yn\fishing_got_reel.enchantments.nautilus.description=Meningkatkan peluang menangkap barang dan harta karun langka daripada ikan biasa.	###
+yn\fishing_got_reel.enchantments.nautilus.lore=§oLegenda mengatakan bahwa Nautilus, penjaga laut dalam, menyimpan harta karun paling dicari di lautan dalam cangkang spiralnya. Para nelayan yang menggunakan kail ini dikatakan menarik kekayaan tersembunyi di bawah gelombang, dengan bimbingan tugas kuno Nautilus.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.luminous.description=Meningkatkan kemungkinan bertemu dengan makhluk laut langka daripada tangkapan biasa.	###
+yn\fishing_got_reel.enchantments.luminous.lore=§oDitempa dari tinta bercahaya cumi-cumi bioluminescent, Kail Luminous memancarkan cahaya lembut yang menarik makhluk langka dan misterius dari laut dalam. Dikabarkan bahwa makhluk-makhluk ini tak dapat menahan cahaya ini, mengiranya sebagai cahaya bulan yang memandu jalan mereka melalui jurang gelap.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.pyroclasm.description=Menyebabkan ikan yang tertangkap terbakar saat diangkat.	###
+yn\fishing_got_reel.enchantments.pyroclasm.lore=§oKail Pyroclasm dikatakan ditempa dari esensi berapi dari makhluk yang lahir di alam api dan abu abadi. Makhluk-makhluk ini dikenal karena kemampuan mereka untuk bertahan hidup dalam panas ekstrem, dan kail ini menyalurkan amarah mereka yang membara, membakar ikan apa pun yang berani ditangkap, seolah-olah dibakar oleh napas makhluk neraka ini.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.tempus.description=Menambah waktu untuk keberhasilan menangkap, memberi lebih banyak waktu sebelum tangkapan hilang.	###
+yn\fishing_got_reel.enchantments.tempus.lore=§oKail Tempus terjalin dengan pecahan amethyst kuno, yang dikabarkan telah disentuh oleh pasir waktu. Kail ini dikatakan dapat memanipulasi aliran waktu itu sendiri, memperlambatnya hanya cukup untuk memberi nelayan momen ekstra penting yang dibutuhkan untuk mengamankan tangkapan mereka.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.fermentedeye.description=Mengalihkan keseimbangan menuju penangkapan lebih banyak makhluk laut daripada barang.	###
+yn\fishing_got_reel.enchantments.fermentedeye.lore=§oDirendam dalam esensi mata laba-laba yang difermentasi, kail ini mengeluarkan aroma menyengat yang meresap ke dalam lautan. Makhluk laut, yang tak mampu menahan aroma menggoda ini, tertarik padanya seperti ngengat ke api, membuat mereka lebih mungkin menggigit umpan.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+
+entity.yn:particle_spawner.name=Pembangun Partikel	###
+tile.yn:fishers_table.name=Meja Pemancing	###

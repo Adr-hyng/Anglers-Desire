@@ -1,0 +1,95 @@
+## Note
+## All localization files excluding English (en_US) is generated with GPT 4o, feel free to correct the grammar through contributing in the github repository.
+
+yn.fishing_got_reel.on_load_message=§a§lReelz Addon§r §ase ha cargado correctamente. Creado por Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn.fishing_got_reel.on_caught_message=%s: Algo se ha enganchado en el anzuelo...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn.fishing_got_reel.on_drop_hook=%s: Se escapó...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn.fishing_got_reel.on_afk_detected=%s: Se detectó AFK. Se canceló el sistema de pesca.	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn:fishing_got_reel.on_caught_invalid_command=§cFormato de uso inválido. %1	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_database_empty=§4No se encontró ningún registro de configuración en la base de datos.§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.on_database_reset=§aLa base de datos ha sido restablecida.§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.show_database=ID de la base de datos: §e%1§r%2%3	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+### yn:fishing_got_reel.show_help_message=-> No Implementado	###
+yn:fishing_got_reel.on_caught_command_404=§cError al obtener el comando %1: %2	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_caught_main_command_not_found=§cComando Inválido: §l%1§r%2§cVerifica si el comando realmente existe. Usa /scriptevent %3 help	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_client_reset=§aLa configuración del cliente ha sido restablecida.§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.already_has_item=§cYa tienes %1 en tu inventario. Revisa tu inventario.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+item.yn:fishing_got_reel:nautilus_hook=Anzuelo Nautilus	###
+item.yn:fishing_got_reel:luminous_siren_hook=Anzuelo Luminoso	###
+item.yn:fishing_got_reel:pyroclasm_hook=Anzuelo Piroclásmico	###
+item.yn:fishing_got_reel:tempus_hook=Anzuelo Tempus	###
+item.yn:fishing_got_reel:normal_hook=Anzuelo de Hierro	###
+item.yn:fishing_got_reel:fermented_spider_eye_hook=Anzuelo con Ojo de Araña Fermentado	###
+item.yn:fishing_got_reel:addon_configuration=Configuración de Reelz	###
+
+yn:fishing_got_reel.configuration.general.back=Regresar	###
+yn\fishing_got_reel.configuration.general.exit=Salir	###
+yn\fishing_got_reel.configuration.general.usage=Uso	###
+yn\fishing_got_reel.configuration.general.remove_enchantment=Quitar	###
+yn\fishing_got_reel.configuration.general.add_enchantment=Añadir	###
+
+yn\fishing_got_reel.configuration.fishers_table.title=Mesa del Pescador	###
+yn\fishing_got_reel.configuration.fishers_table.open_enchantment_option=Añadir Mejoras	###
+yn\fishing_got_reel.configuration.fishers_table.open_disenchant_option=Quitar Mejoras	###
+yn\fishing_got_reel.configuration.fishers_table.view_enhancements_option=Ver Mejoras	###
+yn\fishing_got_reel.configuration.fishers_table.view_fishing_book_option=Ver Libro de Pesca	###
+yn\fishing_got_reel.configuration.fishers_table.get_settings_option=Obtener Elemento de Configuración	###
+
+yn\fishing_got_reel.configuration.view_enhancement_screen.title=Elige la mejora para inspeccionar	###
+yn\fishing_got_reel.configuration.open_disenchant_screen.title=Elige la mejora para quitar	###
+yn\fishing_got_reel.configuration.open_enchantment_screen.title=Elige la mejora para añadir	###
+
+yn\fishing_got_reel.configuration.addon_options.title=Configuración de %1	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_options.client=Opciones del Cliente	###
+yn\fishing_got_reel.configuration.addon_options.server=Opciones del Servidor	###
+yn\fishing_got_reel.configuration.addon_options.guide=Guía del Add-On	###
+yn\fishing_got_reel.configuration.addon_options.credits=Agradecimientos Especiales	###
+
+yn\fishing_got_reel.configuration.client.caught_output=Opción de Salida de Captura	###
+yn\fishing_got_reel.configuration.client.escape_output=Opción de Salida de Escapada	###
+yn\fishing_got_reel.configuration.client.on_submerged_sound_effect=Activar Sonido Submarino	###
+yn\fishing_got_reel.configuration.client.on_deep_submerged_sound_effect=Activar Sonido de Sumersión Profunda	###
+
+yn\fishing_got_reel.configuration.server.caught_fish_despawn_timer=Temporizador de Desaparición de Peces Capturados	###
+yn\fishing_got_reel.configuration.server.expiration_timer=Temporizador de Expiración	###
+yn\fishing_got_reel.configuration.server.caught_direction=Dirección de Captura	###
+yn\fishing_got_reel.configuration.server.does_caught_fish_despawn=Desaparición de Peces Capturados	###
+yn\fishing_got_reel.configuration.server.show_message_on_join=Mostrar Mensaje al Unirse	###
+
+yn\fishing_got_reel.configuration.addon_guide.title=Guía del Add-On	###
+yn\fishing_got_reel.configuration.addon_guide.introduction_section=Introducción	###
+yn\fishing_got_reel.configuration.addon_guide.fishers_table_section=Mesa del Pescador	###
+yn\fishing_got_reel.configuration.addon_guide.fishers_book_section=Libro de Pesca	###
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancements_section=Anzuelos	###
+
+yn\fishing_got_reel.configuration.addon_guide.introduction_guide.content=%1Este complemento mejora completamente la experiencia de pesca en el juego, reemplazando el simple enrollado de objetos de pesca por un sistema dinámico donde atrapas entidades reales. %2Similar a las mecánicas de pesca en juegos como Harvest Moon, Stardew Valley y Animal Crossing, ahora podrás sacar entidades o objetos hacia el cielo. %2También añade usos más prácticos para fragmentos de amatista, sacos de tinta luminosa, conchas de nautilus, y más para mejorar tu experiencia de pesca.	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.fishers_table_guide.content=%1La Mesa del Pescador es un nuevo bloque útil que funciona de manera similar a la Mesa de Herrería. Aunque aún no reemplaza el barril para el aldeano pescador, permite a los jugadores mejorar anzuelos de cañas de pescar, ver mejoras disponibles y acceder a la lista de peces capturables.%2%1Para fabricar una, necesitas los siguientes materiales y en una mesa de trabajo, sigue este patrón:%2| A B |%2| X X | %2| X X |%2%2Materiales:%2A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.fishers_book_guide.content=%1Una lista detallada de todos los peces capturables en el complemento, incluyendo historia, obtención y tasas de captura. Esta función enriquece la experiencia de pesca al proporcionar a los jugadores más información sobre lo que pueden capturar.%1%1    Trabajo en progreso, en la próxima actualización...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermentedEye=Anzuelo con Ojo de Araña Fermentado	###
+
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.iron_hook_recipe=%1Tipo de Fabricación: Mesa de Trabajo%1Receta de Fabricación:%1|      X |%1| X   X |%1|   X    |%1%1Material:%1X	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.nautilus_hook_recipe=%1Tipo de Fabricación: Cualquiera%1Receta de Fabricación:%1| A B |%1%1Material:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.luminous_hook_recipe=%1Tipo de Fabricación: Cualquiera%1Receta de Fabricación:%1| A B |%1%1Material:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.pyroclasm_hook_recipe=%1Tipo de Fabricación: Cualquiera%1Receta de Fabricación:%1| A B |%1%1Material:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.tempus_hook_recipe=%1Tipo de Fabricación: Cualquiera%1Receta de Fabricación:%1| A B |%1%1Material:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn\fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermeye_hook_recipe=%1Tipo de Fabricación: Cualquiera%1Receta de Fabricación:%1| A B |%1%1Material:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn\fishing_got_reel.enchantments.description_text=§lDescripción:§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.lore_text=§lHistoria:§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.iron_hook.description=Un anzuelo simple con una punta afilada y curva, diseñado para tareas básicas. Se puede mejorar con materiales más fuertes para aumentar la durabilidad y la funcionalidad.	###
+yn\fishing_got_reel.enchantments.nautilus.description=Aumenta las posibilidades de enganchar objetos raros y tesoros en lugar de peces comunes.	###
+yn\fishing_got_reel.enchantments.nautilus.lore=§oCuenta la leyenda que Nautilus, un guardián de las profundidades, guarda los tesoros más codiciados del océano dentro de su concha en espiral. Se dice que los pescadores que usan este anzuelo invocan el antiguo deber de Nautilus, guiando su línea hacia las riquezas ocultas bajo las olas.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.luminous.description=Aumenta la probabilidad de encontrar criaturas marinas raras en lugar de capturas comunes.	###
+yn\fishing_got_reel.enchantments.luminous.lore=§oForjado a partir de la tinta luminosa del calamar bioluminiscente, el Anzuelo Luminoso emite una luz sutil que atrae a las misteriosas y raras criaturas de las profundidades. Se dice que estas criaturas son irresistiblemente atraídas por esta luz, confundiéndola con la luz de la luna que guía su camino a través del oscuro abismo.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.pyroclasm.description=Hace que cualquier pez capturado se envuelva en llamas al ser enganchado.	###
+yn\fishing_got_reel.enchantments.pyroclasm.lore=§oSe dice que el Anzuelo Piroclásmico fue forjado a partir de la esencia ardiente de criaturas nacidas en reinos de llamas y cenizas eternas. Estas criaturas son conocidas por su capacidad para sobrevivir en el calor extremo, y el anzuelo canaliza su furia ardiente, incendiando cualquier pez que se atreva a ser capturado, como si hubiera sido quemado por el aliento de estas criaturas infernales.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.tempus.description=Aumenta la ventana de oportunidad para una captura exitosa, dando más tiempo antes de que se pierda una captura.	###
+yn\fishing_got_reel.enchantments.tempus.lore=§oEl Anzuelo Tempus está entrelazado con fragmentos de amatista antigua, que según se dice, han sido tocados por las arenas del tiempo. Se dice que este anzuelo manipula el flujo del tiempo, ralentizándolo lo suficiente para dar a los pescadores los momentos cruciales extra necesarios para asegurar su captura.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn\fishing_got_reel.enchantments.fermentedeye.description=Inclina el equilibrio hacia la captura de más criaturas marinas que objetos.	###
+yn\fishing_got_reel.enchantments.fermentedeye.lore=§oEmpapado en la esencia de un ojo de araña fermentado, este anzuelo exhala un olor penetrante que permea el océano. Las criaturas marinas, incapaces de resistir su tentador aroma, son atraídas hacia él como polillas a una llama, lo que las hace más propensas a morder el anzuelo.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+
+entity.yn:particle_spawner.name=Creador de Partículas	###
+tile.yn:fishers_table.name=Mesa del Pescador	###

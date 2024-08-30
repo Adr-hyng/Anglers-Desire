@@ -1,0 +1,95 @@
+## Note
+## All localization files excluding English (en_US) is generated with GPT 4o, feel free to correct the grammar through contributing in the github repository.
+
+yn.fishing_got_reel.on_load_message=§a§lReelz 插件§r §a已成功加载。由 Adr-hyng 创建。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn.fishing_got_reel.on_caught_message=%s: 有什么东西被钩住了……	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn.fishing_got_reel.on_drop_hook=%s: 它逃走了……	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn.fishing_got_reel.on_afk_detected=%s: 检测到挂机。取消了钓鱼系统。	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn:fishing_got_reel.on_caught_invalid_command=§c无效的使用格式。%1	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_database_empty=§4数据库中未找到配置记录。§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.on_database_reset=§a数据库已重置。§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.show_database=数据库ID: §e%1§r%2%3	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+### yn:fishing_got_reel.show_help_message=-> 未实现	###
+yn:fishing_got_reel.on_caught_command_404=§c获取 %1 命令时出错: %2	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_caught_main_command_not_found=§c无效的命令: §l%1§r%2§c请检查命令是否存在。使用 /scriptevent %3 help	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_client_reset=§a客户端配置已重置。§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.already_has_item=§c你已经在背包中有 %1 了。请检查你的背包。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+item.yn:fishing_got_reel:nautilus_hook=鹦鹉螺钩	###
+item.yn:fishing_got_reel:luminous_siren_hook=光辉钩	###
+item.yn:fishing_got_reel:pyroclasm_hook=火山爆发钩	###
+item.yn:fishing_got_reel:tempus_hook=时间钩	###
+item.yn:fishing_got_reel:normal_hook=铁钩	###
+item.yn:fishing_got_reel:fermented_spider_eye_hook=发酵蜘蛛眼钩	###
+item.yn:fishing_got_reel:addon_configuration=Reelz 配置	###
+
+yn:fishing_got_reel.configuration.general.back=返回	###
+yn:fishing_got_reel.configuration.general.exit=退出	###
+yn:fishing_got_reel.configuration.general.usage=用法	###
+yn:fishing_got_reel.configuration.general.remove_enchantment=移除	###
+yn:fishing_got_reel.configuration.general.add_enchantment=添加	###
+
+yn:fishing_got_reel.configuration.fishers_table.title=渔夫桌	###
+yn:fishing_got_reel.configuration.fishers_table.open_enchantment_option=添加强化	###
+yn:fishing_got_reel.configuration.fishers_table.open_disenchant_option=移除强化	###
+yn:fishing_got_reel.configuration.fishers_table.view_enhancements_option=查看强化	###
+yn:fishing_got_reel.configuration.fishers_table.view_fishing_book_option=查看钓鱼书	###
+yn:fishing_got_reel.configuration.fishers_table.get_settings_option=获取配置物品	###
+
+yn:fishing_got_reel.configuration.view_enhancement_screen.title=选择要检查的强化	###
+yn:fishing_got_reel.configuration.open_disenchant_screen.title=选择要移除的强化	###
+yn:fishing_got_reel.configuration.open_enchantment_screen.title=选择要添加的强化	###
+
+yn:fishing_got_reel.configuration.addon_options.title=%1 设置	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_options.client=客户端选项	###
+yn:fishing_got_reel.configuration.addon_options.server=服务器选项	###
+yn:fishing_got_reel.configuration.addon_options.guide=插件指南	###
+yn:fishing_got_reel.configuration.addon_options.credits=特别感谢	###
+
+yn:fishing_got_reel.configuration.client.caught_output=捕获输出选项	###
+yn:fishing_got_reel.configuration.client.escape_output=逃脱输出选项	###
+yn:fishing_got_reel.configuration.client.on_submerged_sound_effect=启用水下音效	###
+yn:fishing_got_reel.configuration.client.on_deep_submerged_sound_effect=启用深水下音效	###
+
+yn:fishing_got_reel.configuration.server.caught_fish_despawn_timer=捕获鱼的消失计时器	###
+yn:fishing_got_reel.configuration.server.expiration_timer=过期计时器	###
+yn:fishing_got_reel.configuration.server.caught_direction=捕获方向	###
+yn:fishing_got_reel.configuration.server.does_caught_fish_despawn=捕获的鱼是否消失	###
+yn:fishing_got_reel.configuration.server.show_message_on_join=加入时显示消息	###
+
+yn:fishing_got_reel.configuration.addon_guide.title=插件指南	###
+yn:fishing_got_reel.configuration.addon_guide.introduction_section=简介	###
+yn:fishing_got_reel.configuration.addon_guide.fishers_table_section=渔夫桌	###
+yn:fishing_got_reel.configuration.addon_guide.fishers_book_section=钓鱼书	###
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancements_section=钩子	###
+
+yn:fishing_got_reel.configuration.addon_guide.introduction_guide.content=%1这个插件完全改进了原版的钓鱼体验，将简单的鱼物品卷轴更换为一个动态系统，在这个系统中你可以钓到真实的实体。%2类似于《牧场物语》系列、《星露谷物语》和《动物森友会》中的钓鱼机制，你现在可以将实体或物品拉上天空。%2此外，增加了紫水晶碎片、发光墨囊、鹦鹉螺壳等更多实用用途，以增强你的钓鱼体验。	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.fishers_table_guide.content=%1渔夫桌是一个新型的实用方块，其功能类似于锻造台。虽然它还不能替代渔夫村民的桶，但它允许玩家强化鱼竿钩子，查看可用的强化选项，并访问可捕获鱼类的列表。%2%1要制作一个渔夫桌，你需要以下材料，并在工作台上按照以下图案操作:%2| A B |%2| X X | %2| X X |%2%2材料:%2A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.fishers_book_guide.content=%1插件中的所有可捕获鱼类的详细列表，包括背景故事、获得途径和捕获率。这个功能通过提供更多关于可以捕获的内容的信息，丰富了钓鱼体验。%1%1    正在开发中，将在下一次更新中推出……	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermentedEye=发酵蜘蛛眼钩	###
+
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.iron_hook_recipe=%1制作类型: 工作台%1制作配方:%1|      X |%1| X   X |%1|   X    |%1%1材料:%1X	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.nautilus_hook_recipe=%1制作类型: 任意%1制作配方:%1| A B |%1%1材料:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.luminous_hook_recipe=%1制作类型: 任意%1制作配方:%1| A B |%1%1材料:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.pyroclasm_hook_recipe=%1制作类型: 任意%1制作配方:%1| A B |%1%1材料:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.tempus_hook_recipe=%1制作类型: 任意%1制作配方:%1| A B |%1%1材料:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermeye_hook_recipe=%1制作类型: 任意%1制作配方:%1| A B |%1%1材料:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn:fishing_got_reel.enchantments.description_text=§l描述:§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.lore_text=§l背景故事:§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.iron_hook.description=一个简单的钩子，具有尖锐的弯曲尖端，设计用于基本任务。可以用更强的材料升级以增强耐用性和功能。	###
+yn:fishing_got_reel.enchantments.nautilus.description=提高钓到稀有物品和宝藏的几率，而不是普通的鱼类。	###
+yn:fishing_got_reel.enchantments.nautilus.lore=§o传说深海的守护者鹦鹉螺，将海洋中最珍贵的宝物藏在其螺旋壳内。据说，使用这个钩子的渔民能够继承鹦鹉螺的古老使命，指引他们的钓线走向隐藏在波浪下的财富。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.luminous.description=提高遇到稀有海洋生物的可能性，而不是普通的捕获物。	###
+yn:fishing_got_reel.enchantments.luminous.lore=§o由发光鱿鱼的光辉墨水锻造的光辉钩发出微弱的光芒，吸引着深海的神秘和稀有生物。据传，这些生物被这光芒所吸引，误以为是引导它们穿越黑暗深渊的月光。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.pyroclasm.description=在钓上来的鱼被卷上来时使其被火焰包围。	###
+yn:fishing_got_reel.enchantments.pyroclasm.lore=§o据说火山爆发钩是由永恒火焰和灰烬领域中的生物的火焰精华锻造而成的。这些生物因能够在极端高温下生存而闻名，钩子引导它们的燃烧愤怒，点燃任何敢于被捕的鱼类，仿佛被这些地狱生物的呼吸灼烧一般。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.tempus.description=延长成功钓到的时间窗口，在捕获丢失之前提供更多时间。	###
+yn:fishing_got_reel.enchantments.tempus.lore=§o时间钩与古代紫水晶碎片缠绕在一起，据说这些碎片曾被时间之砂触及。据说，这个钩子操纵时间的流动，将其稍稍放慢，以给予渔民在确保捕获时所需的关键额外时刻。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.fermentedeye.description=倾向于捕获更多的海洋生物而不是物品。	###
+yn:fishing_got_reel.enchantments.fermentedeye.lore=§o浸泡在发酵蜘蛛眼的精华中，这个钩子散发出一种渗透海洋的强烈气味。海洋生物无法抗拒其诱人的香气，像飞蛾扑火般被吸引，使它们更可能上钩。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+
+entity.yn:particle_spawner.name=粒子生成器	###
+tile.yn:fishers_table.name=渔夫桌	###

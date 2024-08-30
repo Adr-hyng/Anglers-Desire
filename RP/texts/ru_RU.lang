@@ -1,0 +1,95 @@
+## Note
+## All localization files excluding English (en_US) is generated with GPT 4o, feel free to correct the grammar through contributing in the github repository.
+
+yn.fishing_got_reel.on_load_message=§a§lReelz Addon§r §aуспешно загружен. Создано Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn.fishing_got_reel.on_caught_message=%s: Что-то попалось на крючок...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn.fishing_got_reel.on_drop_hook=%s: Оно сорвалось...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn.fishing_got_reel.on_afk_detected=%s: Обнаружено отсутствие активности. Система рыбалки отменена.	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn:fishing_got_reel.on_caught_invalid_command=§cНеверный формат использования. %1	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_database_empty=§4Запись конфигурации не найдена в базе данных.§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.on_database_reset=§aБаза данных была сброшена.§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.show_database=ID базы данных: §e%1§r%2%3	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+### yn:fishing_got_reel.show_help_message=-> Не реализовано	###
+yn:fishing_got_reel.on_caught_command_404=§cОшибка при получении команды %1: %2	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_caught_main_command_not_found=§cНеверная команда: §l%1§r%2§cПроверьте, существует ли команда. Используйте /scriptevent %3 help	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.on_client_reset=§aКонфигурация клиента была сброшена.§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.already_has_item=§cУ вас уже есть %1 в инвентаре. Проверьте ваш инвентарь.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!** **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+item.yn:fishing_got_reel:nautilus_hook=Крючок Наутилуса	###
+item.yn:fishing_got_reel:luminous_siren_hook=Светящийся Крючок	###
+item.yn:fishing_got_reel:pyroclasm_hook=Крючок Пироклазма	###
+item.yn:fishing_got_reel:tempus_hook=Крючок Темпус	###
+item.yn:fishing_got_reel:normal_hook=Железный Крючок	###
+item.yn:fishing_got_reel:fermented_spider_eye_hook=Крючок с ферментированным паучьим глазом	###
+item.yn:fishing_got_reel:addon_configuration=Конфигурация Reelz	###
+
+yn:fishing_got_reel.configuration.general.back=Назад	###
+yn:fishing_got_reel.configuration.general.exit=Выход	###
+yn:fishing_got_reel.configuration.general.usage=Использование	###
+yn:fishing_got_reel.configuration.general.remove_enchantment=Удалить	###
+yn:fishing_got_reel.configuration.general.add_enchantment=Добавить	###
+
+yn:fishing_got_reel.configuration.fishers_table.title=Стол Рыбака	###
+yn:fishing_got_reel.configuration.fishers_table.open_enchantment_option=Добавить Улучшения	###
+yn:fishing_got_reel.configuration.fishers_table.open_disenchant_option=Удалить Улучшения	###
+yn:fishing_got_reel.configuration.fishers_table.view_enhancements_option=Просмотр Улучшений	###
+yn:fishing_got_reel.configuration.fishers_table.view_fishing_book_option=Просмотр Книги Рыбалки	###
+yn:fishing_got_reel.configuration.fishers_table.get_settings_option=Получить Предмет Конфигурации	###
+
+yn:fishing_got_reel.configuration.view_enhancement_screen.title=Выберите улучшение для осмотра	###
+yn:fishing_got_reel.configuration.open_disenchant_screen.title=Выберите улучшение для удаления	###
+yn:fishing_got_reel.configuration.open_enchantment_screen.title=Выберите улучшение для добавления	###
+
+yn:fishing_got_reel.configuration.addon_options.title=Настройки %1	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_options.client=Настройки Клиента	###
+yn:fishing_got_reel.configuration.addon_options.server=Настройки Сервера	###
+yn:fishing_got_reel.configuration.addon_options.guide=Руководство по Дополнению	###
+yn:fishing_got_reel.configuration.addon_options.credits=Особая Благодарность	###
+
+yn:fishing_got_reel.configuration.client.caught_output=Настройка вывода пойманного	###
+yn:fishing_got_reel.configuration.client.escape_output=Настройка вывода сбежавшего	###
+yn:fishing_got_reel.configuration.client.on_submerged_sound_effect=Включить звук погружения	###
+yn:fishing_got_reel.configuration.client.on_deep_submerged_sound_effect=Включить звук глубокого погружения	###
+
+yn:fishing_got_reel.configuration.server.caught_fish_despawn_timer=Таймер исчезновения пойманной рыбы	###
+yn:fishing_got_reel.configuration.server.expiration_timer=Таймер истечения	###
+yn:fishing_got_reel.configuration.server.caught_direction=Направление пойманного	###
+yn:fishing_got_reel.configuration.server.does_caught_fish_despawn=Исчезновение пойманной рыбы	###
+yn:fishing_got_reel.configuration.server.show_message_on_join=Показать сообщение при входе	###
+
+yn:fishing_got_reel.configuration.addon_guide.title=Руководство по Дополнению	###
+yn:fishing_got_reel.configuration.addon_guide.introduction_section=Введение	###
+yn:fishing_got_reel.configuration.addon_guide.fishers_table_section=Стол Рыбака	###
+yn:fishing_got_reel.configuration.addon_guide.fishers_book_section=Книга Рыбалки	###
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancements_section=Крючки	###
+
+yn:fishing_got_reel.configuration.addon_guide.introduction_guide.content=%1Этот аддон полностью улучшает стандартную рыбалку, заменяя простое вылавливание предметов на динамическую систему, где вы ловите реальные сущности. %2Похоже на механику рыбалки в таких играх, как серия Harvest Moon, Stardew Valley и Animal Crossing, теперь вы будете вытаскивать сущности или предметы в небо. %2Также добавляются более практичные применения осколка аметиста, светящихся мешков с чернилами, раковины наутилуса и других предметов для улучшения вашего рыболовного опыта.	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.fishers_table_guide.content=%1Стол Рыбака — это новый полезный блок, который работает аналогично кузнечному столу. Хотя он еще не заменяет бочку для деревенского рыбака, он позволяет игрокам улучшать крючки удочек, просматривать доступные улучшения и получать доступ к списку ловимых рыб.%2%1Чтобы создать его, вам понадобятся следующие материалы, а в верстаке выполните этот шаблон:%2| A B |%2| X X | %2| X X |%2%2Материалы:%2A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.fishers_book_guide.content=%1Подробный список всех рыб, которые можно поймать в аддоне, включая историю, возможность получения и частоту улова. Эта функция обогащает рыболовный опыт, давая игрокам больше информации о том, что они могут поймать.%1%1    В разработке, будет доступно в следующем обновлении...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermentedEye=Крючок с Ферм. Паучьим Глазом	###
+
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.iron_hook_recipe=%1Тип крафта: Верстак%1Рецепт крафта:%1|      X |%1| X   X |%1|   X    |%1%1Материал:%1X	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.nautilus_hook_recipe=%1Тип крафта: Любой%1Рецепт крафта:%1| A B |%1%1Материал:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.luminous_hook_recipe=%1Тип крафта: Любой%1Рецепт крафта:%1| A B |%1%1Материал:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.pyroclasm_hook_recipe=%1Тип крафта: Любой%1Рецепт крафта:%1| A B |%1%1Материал:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.tempus_hook_recipe=%1Тип крафта: Любой%1Рецепт крафта:%1| A B |%1%1Материал:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermeye_hook_recipe=%1Тип крафта: Любой%1Рецепт крафта:%1| A B |%1%1Материал:%1A	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
+
+yn:fishing_got_reel.enchantments.description_text=§lОписание:§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.lore_text=§lИстория:§r	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.iron_hook.description=Простой крючок с острым, изогнутым наконечником, предназначенный для базовых задач. Может быть улучшен с использованием более прочных материалов для повышения долговечности и функциональности.	###
+yn:fishing_got_reel.enchantments.nautilus.description=Увеличивает шансы выловить редкие предметы и сокровища, а не обычную рыбу.	###
+yn:fishing_got_reel.enchantments.nautilus.lore=§oЛегенда гласит, что Наутилус, страж глубин, хранит самые ценные сокровища океана в своей спиральной раковине. Говорят, что рыбаки, использующие этот крючок, черпают древний долг Наутилуса, направляя свою леску к богатствам, скрытым под волнами.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.luminous.description=Повышает вероятность встретить редких морских существ вместо обычного улова.	###
+yn:fishing_got_reel.enchantments.luminous.lore=§oСкованный из светящейся чернильной жидкости светящегося кальмара, Светящийся Крючок излучает мягкий свет, который привлекает таинственных и редких существ глубин. Говорят, что эти существа не могут устоять перед этим светом, принимая его за лунный свет, который направляет их путь через темные глубины.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.pyroclasm.description=Заставляет любую пойманную рыбу вспыхивать пламенем при вытаскивании из воды.	###
+yn:fishing_got_reel.enchantments.pyroclasm.lore=§oГоворят, что Крючок Пироклазма был выкован из огненной сущности существ, рожденных в царствах вечного огня и пепла. Эти существа известны своей способностью выживать в экстремальной жаре, и крючок направляет их пылающую ярость, поджигая любую рыбу, осмелившуюся быть пойманной, как будто она была опалена дыханием этих адских существ.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.tempus.description=Увеличивает окно возможности для успешного вытаскивания, давая больше времени до того, как улов будет потерян.	###
+yn:fishing_got_reel.enchantments.tempus.lore=§oКрючок Темпус обвит осколками древнего аметиста, о котором ходят слухи, что он был затронут песками времени. Говорят, что этот крючок манипулирует самим потоком времени, замедляя его достаточно, чтобы дать рыбакам драгоценные дополнительные моменты, необходимые для успешного улова.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn:fishing_got_reel.enchantments.fermentedeye.description=Смещает баланс в сторону ловли большего количества морских существ, чем предметов.	###
+yn:fishing_got_reel.enchantments.fermentedeye.lore=§oПропитанный эссенцией ферментированного паучьего глаза, этот крючок источает резкий запах, который пронизывает океан. Морские существа, не в силах устоять перед его манящим ароматом, привлекаются к нему, как мотыльки к пламени, что делает их более склонными к поклевке.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+
+entity.yn:particle_spawner.name=Создатель Частиц	###
+tile.yn:fishers_table.name=Стол Рыбака	###
