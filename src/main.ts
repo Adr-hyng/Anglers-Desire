@@ -1,4 +1,4 @@
-import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource, WeatherType, EntityInventoryComponent, EquipmentSlot, ItemTypes} from "@minecraft/server";
+import { world, system, Player, ScriptEventCommandMessageAfterEvent, ScriptEventSource, WeatherType, EntityInventoryComponent, EquipmentSlot, ItemTypes, ItemStack} from "@minecraft/server";
 import { ADDON_IDENTIFIER, ADDON_NAME, db, fetchFisher, onCustomBlockInteractLogMap } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { Fisher } from "./fishing_system/entities/fisher";
@@ -65,6 +65,14 @@ world.beforeEvents.itemUse.subscribe((event) => {
   // ItemUseRegister.AddonConfiguration
 
   if(event.itemStack.typeId === MyCustomItemTypes.AddonConfiguration) return player.configuration.showConfigurationScreen();
+  if(event.itemStack.typeId === MyCustomItemTypes.MysteryBottle) {
+    const inventory = (player.getComponent(EntityInventoryComponent.componentId) as EntityInventoryComponent).container.override(player);
+    if(inventory.emptySlotsCount >= inventory.size) return;
+    system.run(() => {
+      inventory.setItem(player.selectedSlotIndex, undefined);
+      player.runCommandAsync(`loot give ${player.name} loot "gameplay/mystery_bottle"`);
+    });
+  }
   if(!fisher.fishingRod.isEquipped) return;
   system.run(() => {
     system.run(() => world.afterEvents.entitySpawn.unsubscribe(tt));

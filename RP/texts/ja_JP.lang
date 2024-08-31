@@ -23,6 +23,7 @@ item.yn:fishing_got_reel:tempus_hook=テンパスフック	###
 item.yn:fishing_got_reel:normal_hook=アイアンフック	###
 item.yn:fishing_got_reel:fermented_spider_eye_hook=発酵したクモの目付きフック	###
 item.yn:fishing_got_reel:addon_configuration=Reelz構成	###
+item.yn:fishing_got_reel:empty_map_bottle=謎のボトル
 
 yn:fishing_got_reel.configuration.general.back=戻る	###
 yn:fishing_got_reel.configuration.general.exit=終了	###

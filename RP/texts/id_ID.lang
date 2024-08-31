@@ -23,6 +23,7 @@ item.yn:fishing_got_reel:tempus_hook=Kail Tempus	###
 item.yn:fishing_got_reel:normal_hook=Kail Besi	###
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Kail dengan Mata Laba-laba Fermentasi	###
 item.yn:fishing_got_reel:addon_configuration=Konfigurasi Reelz	###
+item.yn:fishing_got_reel:empty_map_bottle=Botol Misteri
 
 yn:fishing_got_reel.configuration.general.back=Kembali	###
 yn\fishing_got_reel.configuration.general.exit=Keluar	###

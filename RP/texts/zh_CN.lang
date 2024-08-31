@@ -23,6 +23,7 @@ item.yn:fishing_got_reel:tempus_hook=时间钩	###
 item.yn:fishing_got_reel:normal_hook=铁钩	###
 item.yn:fishing_got_reel:fermented_spider_eye_hook=发酵蜘蛛眼钩	###
 item.yn:fishing_got_reel:addon_configuration=Reelz 配置	###
+item.yn:fishing_got_reel:empty_map_bottle=神秘瓶子
 
 yn:fishing_got_reel.configuration.general.back=返回	###
 yn:fishing_got_reel.configuration.general.exit=退出	###

@@ -3,9 +3,9 @@ import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { EntityLootResult, ModifierResult } from "./types";
 import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 import { world } from "@minecraft/server";
-import { Catch } from "../Catch";
+import { ParentCatchLoot } from "../ParentCatch";
 
-export class JungleCatch extends Catch{
+export class JungleCatch extends ParentCatchLoot{
   static Loot (modifier: ModifierResult, upgrade: HookUpgrades, entityLoots: EntityLootResult, RAIN_INCREASE: number = 150): LootTableContent {
     this.initializeAttributes(upgrade, RAIN_INCREASE, entityLoots);
     const fishWeight = ((85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5)) * (upgrade.has("Nautilus") ? 0 : 1);

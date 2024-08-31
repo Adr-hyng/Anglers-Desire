@@ -24,6 +24,7 @@ item.yn:fishing_got_reel:tempus_hook=Tempus Hook
 item.yn:fishing_got_reel:normal_hook=Iron Hook
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Hook with Fermented Spider Eye
 item.yn:fishing_got_reel:addon_configuration=Reelz Configuration
+item.yn:fishing_got_reel:empty_map_bottle=Mystery Bottle
 
 ## General Configuration Stuffs (Translateable) 
 yn:fishing_got_reel.configuration.general.back=Back

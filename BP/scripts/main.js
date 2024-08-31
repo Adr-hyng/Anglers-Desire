@@ -61,6 +61,15 @@ world.beforeEvents.itemUse.subscribe((event) => {
     let fisher = fetchFisher(player);
     if (event.itemStack.typeId === MyCustomItemTypes.AddonConfiguration)
         return player.configuration.showConfigurationScreen();
+    if (event.itemStack.typeId === MyCustomItemTypes.MysteryBottle) {
+        const inventory = player.getComponent(EntityInventoryComponent.componentId).container.override(player);
+        if (inventory.emptySlotsCount >= inventory.size)
+            return;
+        system.run(() => {
+            inventory.setItem(player.selectedSlotIndex, undefined);
+            player.runCommandAsync(`loot give ${player.name} loot "gameplay/mystery_bottle"`);
+        });
+    }
     if (!fisher.fishingRod.isEquipped)
         return;
     system.run(() => {

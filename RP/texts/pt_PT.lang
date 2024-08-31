@@ -23,6 +23,7 @@ item.yn:fishing_got_reel:tempus_hook=Anzol Tempus	###
 item.yn:fishing_got_reel:normal_hook=Anzol de Ferro	###
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Anzol com Olho de Aranha Fermentado	###
 item.yn:fishing_got_reel:addon_configuration=Configuração do Reelz	###
+item.yn:fishing_got_reel:empty_map_bottle=Garrafa Misteriosa
 
 yn:fishing_got_reel.configuration.general.back=Voltar	###
 yn:fishing_got_reel.configuration.general.exit=Sair	###

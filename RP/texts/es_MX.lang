@@ -23,6 +23,7 @@ item.yn:fishing_got_reel:tempus_hook=Anzuelo Tempus	###
 item.yn:fishing_got_reel:normal_hook=Anzuelo de Hierro	###
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Anzuelo con Ojo de Araña Fermentado	###
 item.yn:fishing_got_reel:addon_configuration=Configuración de Reelz	###
+item.yn:fishing_got_reel:empty_map_bottle=Botella Misteriosa
 
 yn:fishing_got_reel.configuration.general.back=Regresar	###
 yn\fishing_got_reel.configuration.general.exit=Salir	###

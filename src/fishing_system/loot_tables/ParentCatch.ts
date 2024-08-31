@@ -3,7 +3,7 @@ import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 import { EntryContent } from "types";
 import { EntityLootResult } from "./biomes/types";
 
-export class Catch {
+export class ParentCatchLoot {
   protected static upgrade: HookUpgrades;
   protected static RAIN_INCREASED_CHANCE: number = 150;
 

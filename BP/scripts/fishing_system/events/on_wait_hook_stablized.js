@@ -51,7 +51,7 @@ export async function onHookLanded(player) {
     if (!isInWater)
         return;
     const expirationTimer = new Timer(parseInt(serverConfigurationCopy.expirationTimer.defaultValue) * TicksPerSecond);
-    const delayValue = (fisher.fishingRod.upgrade.has("Tempus") ? 1.5 : 0.5);
+    const delayValue = (fisher.fishingRod.upgrade.has("Tempus") ? 1.0 : 0.25);
     const delayTimer = new Timer(delayValue * TicksPerSecond);
     const FishingStateIndicator = fisher.fishingOutputManager;
     const hookSubmergeState = new StateController(fisher.fishingHook.isSubmerged);
@@ -78,8 +78,8 @@ export async function onHookLanded(player) {
                     if ((oldLog + 20) >= system.currentTick)
                         return;
                     delayTimer.reset();
-                    FishingStateIndicator.Escaped.run();
                     fisher.canBeReeled = false;
+                    FishingStateIndicator.Escaped.run();
                 }
             }
             else {

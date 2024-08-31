@@ -6,4 +6,5 @@ export var MyCustomItemTypes;
     MyCustomItemTypes["TempusHook"] = "yn:tempus_hook";
     MyCustomItemTypes["FermentedSpiderEyeHook"] = "yn:fermented_spider_eye_hook";
     MyCustomItemTypes["AddonConfiguration"] = "yn:addon_configuration";
+    MyCustomItemTypes["MysteryBottle"] = "yn:empty_map_bottle";
 })(MyCustomItemTypes || (MyCustomItemTypes = {}));

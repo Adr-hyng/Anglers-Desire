@@ -1,0 +1,41 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:map",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "exploration_map",
+              "destination": "buriedtreasure"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:map",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "exploration_map",
+              "destination": "monument"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:empty_map",
+          "weight": 36
+        },
+        {
+          "type": "item",
+          "name": "minecraft:paper",
+          "weight": 60
+        }
+      ]
+    }
+  ]
+}

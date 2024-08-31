@@ -2,9 +2,10 @@ import { LootTableContent } from "types/loot_table_type";
 import { MinecraftItemTypes } from "vanilla-types/index";
 import { EntityLootResult, ModifierResult } from "./types";
 import { HookUpgrades } from "fishing_system/upgrades/upgrades";
-import { Catch } from "../Catch";
+import { ParentCatchLoot } from "../ParentCatch";
+import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 
-export class DefaultCatch extends Catch {
+export class DefaultCatch extends ParentCatchLoot {
   static Loot (modifier: ModifierResult, upgrade: HookUpgrades, entityLoots: EntityLootResult, RAIN_INCREASE: number = 150): LootTableContent {
     this.initializeAttributes(upgrade, RAIN_INCREASE, entityLoots);
     const fishWeight = ((85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5)) * (upgrade.has("Nautilus") ? 0 : 1);
@@ -81,6 +82,10 @@ export class DefaultCatch extends Catch {
           "rolls": 1,
           "weight": treasureWeight,
           "entries": [
+            {
+              "item": MyCustomItemTypes.MysteryBottle,
+              "weight": 5
+            },
             {
               "item": MinecraftItemTypes.NautilusShell,
               "weight": 5

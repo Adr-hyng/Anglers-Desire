@@ -23,6 +23,7 @@ item.yn:fishing_got_reel:tempus_hook=Крючок Темпус	###
 item.yn:fishing_got_reel:normal_hook=Железный Крючок	###
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Крючок с ферментированным паучьим глазом	###
 item.yn:fishing_got_reel:addon_configuration=Конфигурация Reelz	###
+item.yn:fishing_got_reel:empty_map_bottle=Загадочная Бутылка
 
 yn:fishing_got_reel.configuration.general.back=Назад	###
 yn:fishing_got_reel.configuration.general.exit=Выход	###

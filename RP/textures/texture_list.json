@@ -6,5 +6,6 @@
   "textures/items/tempus_hook",
   "textures/items/fermented_spider_eye_hook",
   "textures/items/normal_hook",
-  "textures/items/addon_configuration"
+  "textures/items/addon_configuration",
+  "textures/items/empty_map_bottle.png"
 ]

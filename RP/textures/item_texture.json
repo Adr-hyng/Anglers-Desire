@@ -22,6 +22,9 @@
     },
     "addon_configuration": {
       "textures": "textures/items/addon_configuration.png"
+    },
+    "empty_map_bottle": {
+      "textures": "textures/items/empty_map_bottle.png"
     }
   }
 }

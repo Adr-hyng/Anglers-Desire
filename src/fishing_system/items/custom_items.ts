@@ -6,4 +6,5 @@ export enum MyCustomItemTypes {
   FermentedSpiderEyeHook = "yn:fermented_spider_eye_hook",
 
   AddonConfiguration = "yn:addon_configuration",
+  MysteryBottle = "yn:empty_map_bottle"
 }
