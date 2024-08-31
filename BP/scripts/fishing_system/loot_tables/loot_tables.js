@@ -1,5 +1,6 @@
 import { JungleCatch, DefaultCatch } from "./index";
 import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
+import { OceanCatch } from "./biomes/OceanCatch";
 export class LootTable {
     static fishingModifier(LoTSLevel, isDeeplySubmerged = false) {
         const deepTreasureModifier = (isDeeplySubmerged ? 34.5 : 0);
@@ -116,7 +117,7 @@ export class LootTable {
         });
     }
     static DeepOcean(level, isDeeplySubmerged = false, upgrade) {
-        return DefaultCatch.Loot(this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+        return OceanCatch.Loot(this.fishingModifier(level, isDeeplySubmerged), upgrade, {
             GeneralLoots: [
                 {
                     "item": MinecraftItemTypes.Cod,
@@ -196,7 +197,7 @@ export class LootTable {
         });
     }
     static DeepFrozenOcean(level, isDeeplySubmerged = false, upgrade) {
-        return DefaultCatch.Loot(this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+        return OceanCatch.Loot(this.fishingModifier(level, isDeeplySubmerged), upgrade, {
             GeneralLoots: [
                 {
                     "item": MinecraftItemTypes.Cod,
@@ -276,7 +277,7 @@ export class LootTable {
         });
     }
     static DeepColdOcean(level, isDeeplySubmerged = false, upgrade) {
-        return DefaultCatch.Loot(this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+        return OceanCatch.Loot(this.fishingModifier(level, isDeeplySubmerged), upgrade, {
             GeneralLoots: [
                 {
                     "item": MinecraftItemTypes.Cod,
@@ -356,7 +357,7 @@ export class LootTable {
         });
     }
     static DeepLukewarm(level, isDeeplySubmerged = false, upgrade) {
-        return DefaultCatch.Loot(this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+        return OceanCatch.Loot(this.fishingModifier(level, isDeeplySubmerged), upgrade, {
             GeneralLoots: [
                 {
                     "item": MinecraftItemTypes.Cod,

@@ -3,7 +3,8 @@
   "minecraft:entity": {
     "description": {
       "identifier": "yn:coelacanth",
-      "is_spawnable": false,
+      "runtime_identifier": "minecraft:salmon",
+      "is_spawnable": true,
       "is_summonable": false,
       "is_experimental": false
     },
