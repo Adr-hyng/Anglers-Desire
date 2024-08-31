@@ -3,6 +3,7 @@ import { JungleCatch, DefaultCatch } from "./index";
 import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { OceanCatch } from "./biomes/OceanCatch";
+import { MyCustomEntityTypes } from "fishing_system/entities/custom_mobs";
 
 
 export class LootTable {
@@ -16,8 +17,9 @@ export class LootTable {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
-          "weight": 60,
-          "toEntity": MinecraftEntityTypes.Cod
+          "weight": 600,
+          // "toEntity": MinecraftEntityTypes.Cod
+          "toEntity": MyCustomEntityTypes.Coelacanth
         },
         {
           "item": MinecraftItemTypes.Salmon,

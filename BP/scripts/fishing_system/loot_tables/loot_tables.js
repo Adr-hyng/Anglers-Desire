@@ -1,6 +1,7 @@
 import { JungleCatch, DefaultCatch } from "./index";
 import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { OceanCatch } from "./biomes/OceanCatch";
+import { MyCustomEntityTypes } from "fishing_system/entities/custom_mobs";
 export class LootTable {
     static fishingModifier(LoTSLevel, isDeeplySubmerged = false) {
         const deepTreasureModifier = (isDeeplySubmerged ? 34.5 : 0);
@@ -11,8 +12,8 @@ export class LootTable {
             GeneralLoots: [
                 {
                     "item": MinecraftItemTypes.Cod,
-                    "weight": 60,
-                    "toEntity": MinecraftEntityTypes.Cod
+                    "weight": 600,
+                    "toEntity": MyCustomEntityTypes.Coelacanth
                 },
                 {
                     "item": MinecraftItemTypes.Salmon,

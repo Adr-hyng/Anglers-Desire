@@ -3,9 +3,8 @@
   "minecraft:entity": {
     "description": {
       "identifier": "yn:coelacanth",
-      "runtime_identifier": "minecraft:salmon",
       "is_spawnable": true,
-      "is_summonable": false,
+      "is_summonable": true,
       "is_experimental": false
     },
 
@@ -22,8 +21,8 @@
         "family": [ "coelacanth", "fish" ]
       },
       "minecraft:collision_box": {
-        "width": 1,
-        "height": 1
+        "width": 0.9,
+        "height": 0.6
       },
       "minecraft:breathable": {
         "total_supply": 15,
@@ -62,10 +61,11 @@
         "can_sink": false
       },
       "minecraft:movement.sway": {
-        "sway_amplitude": 0.0
+        "sway_amplitude": 0.00
       },
       "minecraft:physics": {
-        "has_gravity": false
+        "has_gravity": true,
+        "has_collision": true
       },
       "minecraft:pushable": {
         "is_pushable": true,
@@ -108,7 +108,7 @@
         "speed_multiplier": 1.0,
         "priority": 3,
         "xz_dist": 16,
-        "y_dist": 4,
+        "y_dist": 2,
         "interval": 0
       },
 
