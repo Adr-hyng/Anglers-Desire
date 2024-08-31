@@ -48,7 +48,24 @@
 				}
 			}
 		},
-		"animation.coelacanth.swim2": {
+		"animation.pitch_n_roll": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            "q.body_x_rotation",
+            0,
+            "variable.roll*-0.66"
+          ],
+          "position": [
+            "variable.roll*0.01",
+            0,
+            "q.body_x_rotation*0.025"
+          ]
+        }
+      }
+    },
+		"animation.coelacanth.test_bb": {
 			"loop": true,
 			"animation_length": 2,
 			"override_previous_animation": true,

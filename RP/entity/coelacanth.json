@@ -1,9 +1,9 @@
 {
-  "format_version": "1.8.0",
+  "format_version": "1.10.0",
   "minecraft:client_entity": {
     "description": {
       "identifier": "yn:coelacanth",
-      "materials": { "default": "salmon" },
+      "materials": { "default": "salmon", "solid": "entity" },
       "textures": {
         "default": "textures/entity/coelacanth"
       },
@@ -11,20 +11,31 @@
         "default": "geometry.coelacanth"
       },
       "scripts": {
+        "initialize": [
+          "v.last_anim_time = 0;"
+        ],
         "pre_animation": [
-          "variable.current_anim_time = q.modified_distance_moved;",
-          "variable.last_anim_time = ((v.current_anim_time - v.last_anim_time >= 2) ? v.current_anim_time : v.last_anim_time);",
           "variable.zrot = !query.is_in_water ? Math.cos((query.time_stamp + query.frame_alpha) * 14.32) * 90 : 0.0;",
-          "variable.animationamountblend = Math.lerp(variable.AnimationAmountPrev, variable.AnimationAmount, query.frame_alpha);"
+          "variable.animationamountblend = Math.lerp(variable.AnimationAmountPrev, variable.AnimationAmount, query.frame_alpha);",
+          "variable.roll=q.modified_move_speed*q.target_y_rotation;",
+          "variable.current_anim_time = q.modified_distance_moved;",
+          "variable.last_anim_time = ((v.current_anim_time - v.last_anim_time >= 2) ? v.current_anim_time : v.last_anim_time);"
+        ],
+        "animate": [
+          "pitch",
+          {
+            "swim": "query.is_in_water || query.is_levitating"
+          },
+          {
+            "flop": "!query.is_in_water && !query.is_levitating"
+          }
         ]
       },
       "animations": {
+        "pitch": "animation.pitch_n_roll",
         "swim": "animation.coelacanth.swim",
         "flop": "animation.coelacanth.flop"
       },
-      "animation_controllers": [
-        { "general": "controller.animation.custom_fish.general" }
-      ],
       "render_controllers": [ "controller.render.salmon" ],
       "spawn_egg": {
          "base_color": "#5e9ac6",
