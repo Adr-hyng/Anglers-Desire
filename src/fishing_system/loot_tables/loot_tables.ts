@@ -2,6 +2,7 @@ import {RangeInternal, LootTableContent } from "types/index";
 import { JungleCatch, DefaultCatch } from "./index";
 import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
+import { OceanCatch } from "./biomes/OceanCatch";
 
 
 export class LootTable {
@@ -127,7 +128,7 @@ export class LootTable {
 
   // 3
   static DeepOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -211,7 +212,7 @@ export class LootTable {
 
   // 5
   static DeepFrozenOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -295,7 +296,7 @@ export class LootTable {
 
   // 7
   static DeepColdOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -379,7 +380,7 @@ export class LootTable {
 
   // 9
   static DeepLukewarm(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
