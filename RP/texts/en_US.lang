@@ -1,10 +1,10 @@
-## Texts (Translateable) #2
+## Texts (Translateable)
 yn.fishing_got_reel.on_load_message=§a§lReelz Addon§r §ahas been loaded successfully. Created by Adr-hyng.
 yn.fishing_got_reel.on_caught_message=%s: There's something caught by the hook...
 yn.fishing_got_reel.on_drop_hook=%s: It got away...
 yn.fishing_got_reel.on_afk_detected=%s: Afk Detected. Cancelled the fishing system.
 
-## Send Command Message (Translateable) #14
+## Send Command Message (Translateable)
 yn:fishing_got_reel.on_caught_invalid_command=§cInvalid Usage Format. %1
 yn:fishing_got_reel.on_database_empty=§4No configuration record found in database.§r
 yn:fishing_got_reel.on_database_reset=§aThe database has been reset.§r
@@ -16,7 +16,7 @@ yn:fishing_got_reel.on_client_reset=§aClient Configuration has been reset.§r
 
 yn:fishing_got_reel.already_has_item=§cYou already have %1 in your inventory. Check your inventory.
 
-## Items (Translateable) #1
+## Items (Translateable) 
 item.yn:fishing_got_reel:nautilus_hook=Nautilus Hook
 item.yn:fishing_got_reel:luminous_siren_hook=Luminous Hook
 item.yn:fishing_got_reel:pyroclasm_hook=Pyroclasm Hook
@@ -25,14 +25,14 @@ item.yn:fishing_got_reel:normal_hook=Iron Hook
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Hook with Fermented Spider Eye
 item.yn:fishing_got_reel:addon_configuration=Reelz Configuration
 
-## General Configuration Stuffs (Translateable) #3
+## General Configuration Stuffs (Translateable) 
 yn:fishing_got_reel.configuration.general.back=Back
 yn:fishing_got_reel.configuration.general.exit=Exit
 yn:fishing_got_reel.configuration.general.usage=Usage
 yn:fishing_got_reel.configuration.general.remove_enchantment=Remove
 yn:fishing_got_reel.configuration.general.add_enchantment=Add
 
-## Fisher's Table Options (Translateable) #4
+## Fisher's Table Options (Translateable) 
 yn:fishing_got_reel.configuration.fishers_table.title=Fisher's Table
 yn:fishing_got_reel.configuration.fishers_table.open_enchantment_option=Add Enhancements
 yn:fishing_got_reel.configuration.fishers_table.open_disenchant_option=Remove Enhancements
@@ -40,47 +40,47 @@ yn:fishing_got_reel.configuration.fishers_table.view_enhancements_option=View En
 yn:fishing_got_reel.configuration.fishers_table.view_fishing_book_option=View Fishing Book
 yn:fishing_got_reel.configuration.fishers_table.get_settings_option=Give Configuration Item
 
-## Fisher's Table Options Title (Translateable) #5
+## Fisher's Table Options Title (Translateable) 
 yn:fishing_got_reel.configuration.view_enhancement_screen.title=Choose enhancement to inspect
 yn:fishing_got_reel.configuration.open_disenchant_screen.title=Choose enhancement to remove
 yn:fishing_got_reel.configuration.open_enchantment_screen.title=Choose enhancement to add
 
-## Configuration Options (Translateable) #6
+## Configuration Options (Translateable) 
 yn:fishing_got_reel.configuration.addon_options.title=%1 Settings
 yn:fishing_got_reel.configuration.addon_options.client=Client Options
 yn:fishing_got_reel.configuration.addon_options.server=Server Options
 yn:fishing_got_reel.configuration.addon_options.guide=Add-On Guide
 yn:fishing_got_reel.configuration.addon_options.credits=Special Thanks
 
-## Client Options Details (Translateable) #7
+## Client Options Details (Translateable) 
 yn:fishing_got_reel.configuration.client.caught_output=Caught Output Option
 yn:fishing_got_reel.configuration.client.escape_output=Escaped Output Option
 yn:fishing_got_reel.configuration.client.on_submerged_sound_effect=Enable Submerged Sound
 yn:fishing_got_reel.configuration.client.on_deep_submerged_sound_effect=Enable Deeply Submerged Sound
 
-## Server Options Details (Translateable) #8
+## Server Options Details (Translateable) 
 yn:fishing_got_reel.configuration.server.caught_fish_despawn_timer=Caught Fish Despawn Timer
 yn:fishing_got_reel.configuration.server.expiration_timer=Expiration Timer
 yn:fishing_got_reel.configuration.server.caught_direction=Caught Direction
 yn:fishing_got_reel.configuration.server.does_caught_fish_despawn=Caught Fish Despawns
 yn:fishing_got_reel.configuration.server.show_message_on_join=Show Message On Join
 
-## Addon Guide - Options (Translateable) #9
+## Addon Guide - Options (Translateable) 
 yn:fishing_got_reel.configuration.addon_guide.title=Add-On Guide
 yn:fishing_got_reel.configuration.addon_guide.introduction_section=Introduction
 yn:fishing_got_reel.configuration.addon_guide.fishers_table_section=Fisher's Table
 yn:fishing_got_reel.configuration.addon_guide.fishers_book_section=Fishing Book
 yn:fishing_got_reel.configuration.addon_guide.hook_enhancements_section=Hooks
 
-## Addon Guide - Contents (Translateable) #10
+## Addon Guide - Contents (Translateable) 
 yn:fishing_got_reel.configuration.addon_guide.introduction_guide.content=%1This addon completely improves the vanilla fishing experience, replacing the simple reeling of fish items with a dynamic system where you catch real entities. %2Similar to the fishing mechanics in games like Harvest Moon Series, Stardew Valley and Animal Crossing, you’ll now reel entities or items up into the sky. %2As well as adding more practical uses for amethyst shard, glowing ink sacs, nautilus shell, and more to enhance your fishing experience.
 yn:fishing_got_reel.configuration.addon_guide.fishers_table_guide.content=%1The Fisher's Table is a new useful block that functions similarly to the Smithing Table. While it doesn’t replace the barrel for the fisherman villager yet, it allows players to enhance fishing rod hooks, view available enhancements, and access the list of catchable fish.%2%1To craft one, you need the following materials and in a crafting table, follow this pattern:%2| A B |%2| X X | %2| X X |%2%2Materials:%2A = Stick%2B = Any vanilla fish%2X = Any vanilla planks"
 yn:fishing_got_reel.configuration.addon_guide.fishers_book_guide.content=%1A detailed list of all catchable fish in the addon, including lore, obtainability, and catch rates. This feature enriches the fishing experience by giving players more insight into what they can catch.%1%1    Working-in-progress, coming on the next update...
 
-## Miscellaneous (Translateable) #11
+## Miscellaneous (Translateable) 
 yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermentedEye=Ferm. Spider Eye Hook
 
-## Addon Guide - Hook Recipes (Translateable) #13
+## Addon Guide - Hook Recipes (Translateable) 
 yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.iron_hook_recipe=%1Crafting Type: Crafting Table%1Crafting Recipe:%1|      X |%1| X   X |%1|   X    |%1%1Material:%1X = Iron Nugget
 yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.nautilus_hook_recipe=%1Crafting Type: Any%1Crafting Recipe:%1| A B |%1%1Material:%1A = Nautilus Shell%1B = Iron Hook
 yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.luminous_hook_recipe=%1Crafting Type: Any%1Crafting Recipe:%1| A B |%1%1Material:%1A = Glow Ink Sac%1B = Iron Hook
@@ -88,7 +88,7 @@ yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.pyroclasm_h
 yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.tempus_hook_recipe=%1Crafting Type: Any%1Crafting Recipe:%1| A B |%1%1Material:%1A = Amethyst Shard%1B = Iron Hook
 yn:fishing_got_reel.configuration.addon_guide.hook_enhancement_guide.fermeye_hook_recipe=%1Crafting Type: Any%1Crafting Recipe:%1| A B |%1%1Material:%1A = Fermented Spider Eye%1B = Iron Hook
 
-## Hook Enhancements Details (Translateable) #12
+## Hook Enhancements Details (Translateable) 
 yn:fishing_got_reel.enchantments.description_text=§lDescription:§r
 yn:fishing_got_reel.enchantments.lore_text=§lLore:§r
 

@@ -62,6 +62,105 @@
               "set_property": {
                 "yn:current_biome_bit": 1
               }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "ocean"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 2
+              }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "deep_ocean"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 3
+              }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "frozen_ocean"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 4
+              }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "deep_frozen_ocean"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 5
+              }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "cold_ocean"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 6
+              }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "deep_cold_ocean"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 7
+              }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "lukewarm_ocean"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 8
+              }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "deep_lukewarm_ocean"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 9
+              }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "warm_ocean"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 10
+              }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "mangrove_swamp"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 11
+              }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "lush_caves"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 12
+              }
             }
           ]
         }

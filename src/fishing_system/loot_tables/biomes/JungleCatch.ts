@@ -1,64 +1,13 @@
 import { EntryContent, LootTableContent } from "types/loot_table_type";
 import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
-import { ModifierResult } from "./types";
+import { EntityLootResult, ModifierResult } from "./types";
 import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 import { world } from "@minecraft/server";
+import { Catch } from "../Catch";
 
-export class JungleCatch {
-  private static upgrade: HookUpgrades;
-  private static OnLuminousSirenUpgradeLoot(): EntryContent[] {
-    if(!this.upgrade.has("Luminous")) return [];
-    return [
-      {
-        "item": MinecraftItemTypes.Air,
-        "weight": 2,
-        "toEntity": MinecraftEntityTypes.GlowSquid
-      },
-      {
-        "item": MinecraftItemTypes.Air,
-        "weight": 1,
-        "toEntity": MinecraftEntityTypes.Axolotl
-      },
-    ]
-  }
-  private static OnRainEventLoot(): EntryContent[] {
-    const IsRainingChanceModifier = world.IsRaining;
-    if(!IsRainingChanceModifier) return [
-      {
-        "item": MinecraftItemTypes.InkSac,
-        "weight": 5,
-        "toEntity": MinecraftEntityTypes.Squid
-      },
-    ];
-    else if(IsRainingChanceModifier && this.upgrade.has("Luminous")) {
-      return [
-        {
-          "item": MinecraftItemTypes.InkSac,
-          "weight": 16,
-          "toEntity": MinecraftEntityTypes.Squid
-        },
-        {
-          "item": MinecraftItemTypes.Air,
-          "weight": 3,
-          "toEntity": MinecraftEntityTypes.GlowSquid
-        },
-        {
-          "item": MinecraftItemTypes.Air,
-          "weight": 2,
-          "toEntity": MinecraftEntityTypes.Axolotl
-        },
-      ];
-    }
-    return [
-      {
-        "item": MinecraftItemTypes.InkSac,
-        "weight": 7,
-        "toEntity": MinecraftEntityTypes.Squid
-      },
-    ];
-  }
-  static Loot (modifier: ModifierResult, upgrade: HookUpgrades): LootTableContent {
-    this.upgrade = upgrade;
+export class JungleCatch extends Catch{
+  static Loot (modifier: ModifierResult, upgrade: HookUpgrades, entityLoots: EntityLootResult, RAIN_INCREASE: number = 150): LootTableContent {
+    this.initializeAttributes(upgrade, RAIN_INCREASE, entityLoots);
     const fishWeight = ((85 - (modifier.LoTSModifier * 0.15)) - (modifier.deepnessModifier / 1.5)) * (upgrade.has("Nautilus") ? 0 : 1);
     const junkWeight = ((10 - (modifier.LoTSModifier * 1.95)) + (modifier.deepnessModifier / 2)) + (upgrade.has("Nautilus") ? 50 : 0);
     const treasureWeight = ((5 + (modifier.LoTSModifier * 2.1)) + modifier.deepnessModifier) + (upgrade.has("Nautilus") ? 15 : 0);
@@ -67,30 +16,7 @@ export class JungleCatch {
         {
           "rolls": 1,
           "weight": fishWeight,
-          "entries": [
-            {
-              "item": MinecraftItemTypes.Cod,
-              "weight": 60,
-              "toEntity": MinecraftEntityTypes.Cod
-            },
-            {
-              "item": MinecraftItemTypes.Salmon,
-              "weight": 40,
-              "toEntity": MinecraftEntityTypes.Salmon
-            },
-            {
-              "item": MinecraftItemTypes.TropicalFish,
-              "weight": 0,
-              "toEntity": MinecraftEntityTypes.Tropicalfish
-            },
-            {
-              "item": MinecraftItemTypes.Pufferfish,
-              "weight": 0,
-              "toEntity": MinecraftEntityTypes.Pufferfish
-            },
-            ...this.OnRainEventLoot(),
-            ...this.OnLuminousSirenUpgradeLoot()
-          ]
+          "entries": this.FilteredEntityEntry()
         },
         {
           "rolls": 1,
