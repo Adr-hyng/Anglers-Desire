@@ -17,9 +17,8 @@ export class LootTable {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
-          "weight": 600,
-          // "toEntity": MinecraftEntityTypes.Cod
-          "toEntity": MyCustomEntityTypes.Coelacanth
+          "weight": 60,
+          "toEntity": MinecraftEntityTypes.Cod
         },
         {
           "item": MinecraftItemTypes.Salmon,

@@ -116,14 +116,14 @@ export async function onHookLanded(player: Player): Promise<void> {
         throw new Error("AFK Fishing detected");
       }
     } catch (e){
-      if((fisher.canBeReeled || fisher.fishingHook.isSubmerged) && !fisher.caughtByHook?.isValid()) onHookedItem(fisher);
+      if((fisher.canBeReeled || fisher.fishingHook.isSubmerged) && !fisher.caughtByHook?.isValid() && fisher.fishingRod.isEquipped) onHookedItem(fisher);
       Logger.error(e, e.stack);
       system.clearRun(StartFishingInterval);
       delayTimer.reset();
       fisher.fishingHook.isSubmerged = false;
       fisher.canBeReeled = false;
       localFishersCache.set(player.id, fisher);
-      FishingStateIndicator.Escaped.reset();
+      FishingStateIndicator.Escaped?.reset();
     }
   }, 1);
 

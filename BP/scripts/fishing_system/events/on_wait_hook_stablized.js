@@ -108,7 +108,7 @@ export async function onHookLanded(player) {
             }
         }
         catch (e) {
-            if ((fisher.canBeReeled || fisher.fishingHook.isSubmerged) && !fisher.caughtByHook?.isValid())
+            if ((fisher.canBeReeled || fisher.fishingHook.isSubmerged) && !fisher.caughtByHook?.isValid() && fisher.fishingRod.isEquipped)
                 onHookedItem(fisher);
             Logger.error(e, e.stack);
             system.clearRun(StartFishingInterval);
@@ -116,7 +116,7 @@ export async function onHookLanded(player) {
             fisher.fishingHook.isSubmerged = false;
             fisher.canBeReeled = false;
             localFishersCache.set(player.id, fisher);
-            FishingStateIndicator.Escaped.reset();
+            FishingStateIndicator.Escaped?.reset();
         }
     }, 1);
     function HookOnSubmergedForItemFishing() {
