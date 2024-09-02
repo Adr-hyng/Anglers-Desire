@@ -134,7 +134,6 @@ export class AStar{
                         // Check it is safe to move to, fall down from, or jump ontop of
                         const safetyCheckResult: BlockSafetyCheckResult = BlockSafetyCheckerUtility.RunBlockSafetyCheck(blockAtLocation, safetyCheckOptions);
 
-                        // Adrian - The only thing we need is to make it move anywhere, and just add collision detection.
                         if (safetyCheckResult.IsSafe){
                             if(safetyCheckOptions.AllowYAxisFlood) {
                                 const belowBlock = blockAtLocation.below();

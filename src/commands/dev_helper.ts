@@ -39,10 +39,10 @@ const command: ICommandBase = {
         if(!requiredParams.includes(selectedReqParam)) return SendMessageTo(
             player, {
                 rawtext: [
-                {
-                    translate: "yn:fishing_got_reel.on_caught_invalid_command",
-                    with: [command.usage()]   
-                },
+                    {
+                        translate: "yn:fishing_got_reel.on_caught_invalid_command",
+                        with: [command.usage()]   
+                    },
                 ]
             }
         );
@@ -83,7 +83,8 @@ const command: ICommandBase = {
     
                     let aStar: AStar | BidirectionalAStar;
                     try{
-                        aStar = new AStar(options);
+                        aStar = new BidirectionalAStar(options);
+                        // aStar = new AStar(options);
                     }catch(e){
                         // Failed to construct - start/end blocks probably not loaded
                         console.warn("BROKE", e, e.stack);

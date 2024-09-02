@@ -5,7 +5,7 @@ import { overrideEverything } from "overrides/index";
 import { MinecraftBlockTypes, MinecraftEnchantmentTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
 import { AStarOptions } from "utils/NoxUtils/Pathfinder/AStarOptions";
-import { AStar } from "utils/NoxUtils/Pathfinder/index";
+import { BidirectionalAStar } from "utils/NoxUtils/Pathfinder/BidirectionalAStar";
 overrideEverything();
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
@@ -69,7 +69,7 @@ const command = {
                     options.DebugMode = false;
                     let aStar;
                     try {
-                        aStar = new AStar(options);
+                        aStar = new BidirectionalAStar(options);
                     }
                     catch (e) {
                         console.warn("BROKE", e, e.stack);
