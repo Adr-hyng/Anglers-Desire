@@ -66,17 +66,16 @@ const command: ICommandBase = {
                     // const options: AStarOptions = new AStarOptions(player.location, {x: parseInt(args[1]), y: parseInt(args[2]), z: parseInt(args[3])}, player.dimension);
                     
                     const options: AStarOptions = new AStarOptions(player.location, {x: Math.floor(parseInt(args[1])), y: Math.floor(parseInt(args[2])), z: Math.floor(parseInt(args[3]))}, player.dimension);
-                    // console.warn(player.dimension.getBlock(options.GoalLocation)?.typeId, player.dimension.getBlock(options.GoalLocation) === undefined);
-                    options.TypeIdsToConsiderPassable = [
-                        MinecraftBlockTypes.Water,
-                        MinecraftBlockTypes.Seagrass,
-                        MinecraftBlockTypes.Kelp,
-                        MinecraftBlockTypes.StructureVoid
-                    ];
                     // options.TypeIdsToConsiderPassable = [
-                    //     MinecraftBlockTypes.Air,
+                    //     MinecraftBlockTypes.Water,
+                    //     MinecraftBlockTypes.Seagrass,
+                    //     MinecraftBlockTypes.Kelp,
                     //     MinecraftBlockTypes.StructureVoid
                     // ];
+                    options.TypeIdsToConsiderPassable = [
+                        MinecraftBlockTypes.Air,
+                        MinecraftBlockTypes.StructureVoid
+                    ];
                     options.AllowYAxisFlood = true;
                     options.MaximumNodesToConsider = 3000;
                     options.DebugMode = false;
@@ -93,14 +92,12 @@ const command: ICommandBase = {
     
                     const blockPath: Block[] = await aStar.Pathfind();
                     for(const b of blockPath) {
-                        // player.teleport(b.location);
-                        player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.Conduit));
-                        // console.warn(JSON.stringify(b.location));
+                        player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.DiamondBlock));
                         await sleep(10);
                     }
                     await sleep(20);
                     for(const b of blockPath) {
-                        player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.Water));
+                        player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.Air));
                         await sleep(2);
                     }
                     console.warn("DONE");

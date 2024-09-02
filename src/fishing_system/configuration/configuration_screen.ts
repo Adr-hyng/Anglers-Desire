@@ -155,7 +155,7 @@ export class Configuration {
       for(const enchantmentToAdd of validEnchantmentsToAdd) {
         if(!enchantmentToAdd.value) continue;
         const customEnchantment = CustomEnchantmentTypes.get(new CustomEnchantment({ name: enchantmentToAdd.key, level: 1 }));
-        enchantments.override(equippedFishingRod).addCustomEnchantment(customEnchantment);
+        if(!enchantments.override(equippedFishingRod).addCustomEnchantment(customEnchantment)) continue;
         inventory.override(this.player).clearItem(customEnchantment.id, 1);
       }
       this.player.equippedToolSlot(EquipmentSlot.Mainhand).setItem(equippedFishingRod);

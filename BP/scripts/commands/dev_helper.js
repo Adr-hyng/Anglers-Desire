@@ -59,9 +59,7 @@ const command = {
                 system.run(async () => {
                     const options = new AStarOptions(player.location, { x: Math.floor(parseInt(args[1])), y: Math.floor(parseInt(args[2])), z: Math.floor(parseInt(args[3])) }, player.dimension);
                     options.TypeIdsToConsiderPassable = [
-                        MinecraftBlockTypes.Water,
-                        MinecraftBlockTypes.Seagrass,
-                        MinecraftBlockTypes.Kelp,
+                        MinecraftBlockTypes.Air,
                         MinecraftBlockTypes.StructureVoid
                     ];
                     options.AllowYAxisFlood = true;
@@ -77,12 +75,12 @@ const command = {
                     }
                     const blockPath = await aStar.Pathfind();
                     for (const b of blockPath) {
-                        player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.Conduit));
+                        player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.DiamondBlock));
                         await sleep(10);
                     }
                     await sleep(20);
                     for (const b of blockPath) {
-                        player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.Water));
+                        player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.Air));
                         await sleep(2);
                     }
                     console.warn("DONE");

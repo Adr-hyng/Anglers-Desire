@@ -119,7 +119,6 @@ export class BidirectionalAStar{
                     currentNode = currentNode.ParentNode;
                     yield;
                 }
-                console.warn("Found something for unknown reason");
                 return goalNodePromiseResolve(nodeList);
             }
             
@@ -224,7 +223,6 @@ export class BidirectionalAStar{
                         yield;
                     }
                     nodeList = nodeList.reverse();
-                    console.warn("Has found a path from start");
                     return goalNodePromiseResolve(nodeList);
                 }
     
@@ -316,7 +314,6 @@ export class BidirectionalAStar{
                         yield;
                     }
                     nodeList = nodeList.reverse();
-                    console.warn("Has found a path from end");
                     return goalNodePromiseResolve(nodeList);
                 }
 
