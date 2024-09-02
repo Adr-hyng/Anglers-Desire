@@ -95,8 +95,8 @@ const command: ICommandBase = {
                     for(const b of blockPath) {
                         // player.teleport(b.location);
                         player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.Conduit));
-                        console.warn(JSON.stringify(b.location));
-                        await sleep(15);
+                        // console.warn(JSON.stringify(b.location));
+                        await sleep(10);
                     }
                     await sleep(20);
                     for(const b of blockPath) {

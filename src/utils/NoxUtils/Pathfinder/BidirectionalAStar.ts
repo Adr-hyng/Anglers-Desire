@@ -13,6 +13,8 @@ import { MinecraftBlockTypes} from "vanilla-types/index";
  * Implementation of the Bidirectional A* algorithm for Minecraft
  */
 
+//! Update it to mc_bedrock_utilities repository.
+
 //! Use Hashmap instead of list, since most of the needed operations are lookup.
 export class BidirectionalAStar{
 
@@ -110,13 +112,14 @@ export class BidirectionalAStar{
                     currentNode = currentNode.ParentNode;
                     yield;
                 }
-                nodeList = nodeList.reverse();
+                nodeList = [nodeList[0], nodeList[nodeList.length - 1]];
                 currentNode = reverseNextNode;
                 while (currentNode !== null) {
                     if(!this.GetIndexOfNodeIfInList(currentNode, nodeList)) nodeList.push(currentNode);
                     currentNode = currentNode.ParentNode;
                     yield;
                 }
+                console.warn("Found something for unknown reason");
                 return goalNodePromiseResolve(nodeList);
             }
             
@@ -221,6 +224,7 @@ export class BidirectionalAStar{
                         yield;
                     }
                     nodeList = nodeList.reverse();
+                    console.warn("Has found a path from start");
                     return goalNodePromiseResolve(nodeList);
                 }
     
@@ -312,6 +316,7 @@ export class BidirectionalAStar{
                         yield;
                     }
                     nodeList = nodeList.reverse();
+                    console.warn("Has found a path from end");
                     return goalNodePromiseResolve(nodeList);
                 }
 

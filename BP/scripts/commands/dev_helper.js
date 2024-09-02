@@ -78,8 +78,7 @@ const command = {
                     const blockPath = await aStar.Pathfind();
                     for (const b of blockPath) {
                         player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.Conduit));
-                        console.warn(JSON.stringify(b.location));
-                        await sleep(15);
+                        await sleep(10);
                     }
                     await sleep(20);
                     for (const b of blockPath) {

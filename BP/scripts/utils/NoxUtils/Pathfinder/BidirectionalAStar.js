@@ -75,7 +75,7 @@ export class BidirectionalAStar {
                     currentNode = currentNode.ParentNode;
                     yield;
                 }
-                nodeList = nodeList.reverse();
+                nodeList = [nodeList[0], nodeList[nodeList.length - 1]];
                 currentNode = reverseNextNode;
                 while (currentNode !== null) {
                     if (!this.GetIndexOfNodeIfInList(currentNode, nodeList))
@@ -83,6 +83,7 @@ export class BidirectionalAStar {
                     currentNode = currentNode.ParentNode;
                     yield;
                 }
+                console.warn("Found something for unknown reason");
                 return goalNodePromiseResolve(nodeList);
             }
             openList.splice(nextIndex, 1);
@@ -184,6 +185,7 @@ export class BidirectionalAStar {
                         yield;
                     }
                     nodeList = nodeList.reverse();
+                    console.warn("Has found a path from start");
                     return goalNodePromiseResolve(nodeList);
                 }
                 this.SetDebugBlock(surroundingBlock);
@@ -273,6 +275,7 @@ export class BidirectionalAStar {
                         yield;
                     }
                     nodeList = nodeList.reverse();
+                    console.warn("Has found a path from end");
                     return goalNodePromiseResolve(nodeList);
                 }
                 this.SetDebugBlock(reverseSurroundingBlock);
