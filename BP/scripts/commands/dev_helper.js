@@ -1,9 +1,11 @@
-import { EnchantmentTypes, EntityComponentTypes, ItemComponentTypes, ItemStack, MolangVariableMap } from "@minecraft/server";
+import { BlockTypes, EnchantmentTypes, EntityComponentTypes, ItemComponentTypes, ItemStack, MolangVariableMap, system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
-import { SendMessageTo } from "utils/utilities";
+import { SendMessageTo, sleep } from "utils/utilities";
 import { overrideEverything } from "overrides/index";
-import { MinecraftEnchantmentTypes, MinecraftItemTypes } from "vanilla-types/index";
+import { MinecraftBlockTypes, MinecraftEnchantmentTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
+import { AStarOptions } from "utils/NoxUtils/Pathfinder/AStarOptions";
+import { AStar } from "utils/NoxUtils/Pathfinder/index";
 overrideEverything();
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
@@ -54,6 +56,38 @@ const command = {
                 player.getComponent(EntityComponentTypes.Inventory).container.addItem(fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
+                system.run(async () => {
+                    const options = new AStarOptions(player.location, { x: Math.floor(parseInt(args[1])), y: Math.floor(parseInt(args[2])), z: Math.floor(parseInt(args[3])) }, player.dimension);
+                    options.TypeIdsToConsiderPassable = [
+                        MinecraftBlockTypes.Water,
+                        MinecraftBlockTypes.Seagrass,
+                        MinecraftBlockTypes.Kelp,
+                        MinecraftBlockTypes.StructureVoid
+                    ];
+                    options.AllowYAxisFlood = true;
+                    options.MaximumNodesToConsider = 3000;
+                    options.DebugMode = false;
+                    let aStar;
+                    try {
+                        aStar = new AStar(options);
+                    }
+                    catch (e) {
+                        console.warn("BROKE", e, e.stack);
+                        return false;
+                    }
+                    const blockPath = await aStar.Pathfind();
+                    for (const b of blockPath) {
+                        player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.Conduit));
+                        console.warn(JSON.stringify(b.location));
+                        await sleep(15);
+                    }
+                    await sleep(20);
+                    for (const b of blockPath) {
+                        player.dimension.setBlockType(b.location, BlockTypes.get(MinecraftBlockTypes.Water));
+                        await sleep(2);
+                    }
+                    console.warn("DONE");
+                });
                 break;
             case REQUIRED_PARAMETER.PARTICLE:
                 const molang = new MolangVariableMap();
