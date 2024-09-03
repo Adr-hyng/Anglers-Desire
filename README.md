@@ -5,11 +5,11 @@
   ![DevelopmentStatus](https://img.shields.io/badge/Development-%20release-2ea44f?logo=visualstudiocode&logoColor=blue)
   ![ManualVersion](https://img.shields.io/badge/Version-v1.0.0-2ea44f?logo=git&logoColor=red)
   [![Twitter](https://img.shields.io/badge/Twitter-Follow_@h__YanG__0A-2ea44f?logo=twitter&logoColor=blue)](https://twitter.com/h_YanG_0A)
-  ![Minecraft BE Addon Latest Release](https://img.shields.io/github/v/release/Adr-hyng/Anglers-Desire?logo=xbox&logoColor=green&label=Minecraft)
+  ![GitHub Release](https://img.shields.io/github/v/release/Adr-hyng/Anglers-Desire?logo=xbox&logoColor=green&label=Minecraft)
+
   <!-- [![Release Downloads](https://img.shields.io/badge/dynamic/json?label=Downloads&query=%24%5B0%5D.assets%5B0%5D.download_count&url=https%3A%2F%2Fapi.github.com%2Frepos%2FAdr-hyng-OSS%2FLumber-Axe%2Freleases)](https://github.com/Adr-hyng-OSS/Lumber-Axe/releases/latest) -->
   
 </div>
-
 
 -----
 
@@ -23,13 +23,13 @@ This addon improves vanilla fishing mechanics, transforming it into an engaging 
   <a href="./CONTRIBUTE.md">
     <img src="https://img.shields.io/static/v1?label=&message=Contribute&color=dark+green&style=for-the-badge" alt="Contribute badge">
   </a>
-  <a href="https://github.com/Adr-hyng-OSS/Lumber-Axe/releases">
+  <a href="https://github.com/Adr-hyng/Anglers-Desire/releases">
     <img src="https://img.shields.io/static/v1?label=&message=CHANGELOGS&color=dark+green&style=for-the-badge" alt="Changelogs badge">
   </a>
-  <a href="https://bstlar.com/195/Lumber-Axe-Bedrock-v1.20.10">
+  <a href="https://bstlar.com/195/anglers_desire_addon">
     <img src="https://img.shields.io/static/v1?label=&message=DOWNLOAD&color=dark+green&style=for-the-badge&logo=download&logoColor=black" alt="Download badge">
   </a>
-  <a href="https://github.com/Adr-hyng-OSS/Lumber-Axe/releases/latest">
+  <a href="https://github.com/Adr-hyng/Anglers-Desire/releases/latest">
     <img src="https://img.shields.io/static/v1?label=&message=LATEST%20RELEASE&color=dark+green&style=for-the-badge" alt="Release badges">
   </a>
 </div>
