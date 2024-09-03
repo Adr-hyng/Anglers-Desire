@@ -81,7 +81,7 @@ export async function onHookLanded(player: Player): Promise<void> {
           // Avoid duplicate execution when it already executed on lost particle, it will not execute again unless 1 real-world second passes by.
           oldLog = onLostParticleLogMap.get(player.id) as number;
           onLostParticleLogMap.set(player.id, system.currentTick);
-          if ((oldLog + 20) >= system.currentTick) return;
+          if ((oldLog + 27) >= system.currentTick) return;
 
           delayTimer.reset();
           fisher.canBeReeled = false;

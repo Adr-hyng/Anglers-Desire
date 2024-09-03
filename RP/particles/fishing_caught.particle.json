@@ -5,7 +5,7 @@
 			"identifier": "yn:fish_caught_event_particle",
 			"basic_render_parameters": {
 				"material": "particles_alpha",
-				"texture": "textures/particle/AquaticReelz/fish_caught_2"
+				"texture": "textures/particle/fish_caught_2"
 			}
 		},
 		"curves": {

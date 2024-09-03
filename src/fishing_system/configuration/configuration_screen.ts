@@ -1,4 +1,4 @@
-import { EntityInventoryComponent, EquipmentSlot, ItemEnchantableComponent, ItemStack, ItemTypes, Player, system } from "@minecraft/server";
+import { EntityInventoryComponent, EquipmentSlot, ItemTypes, Player, system } from "@minecraft/server";
 import { ActionFormData, ActionFormResponse, FormCancelationReason, MessageFormData, ModalFormData, ModalFormResponse } from "@minecraft/server-ui";
 import { cloneConfiguration, ConfigurationCollections_DB, ConfigurationTypes} from "./configuration_handler";
 import {ADDON_NAME, db, localFishersCache, fetchFisher} from "constant";
@@ -9,7 +9,7 @@ import { SendMessageTo } from "utils/index";
 import { FormBuilder } from "utils/form_builder";
 import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
 import { CustomEnchantmentTypes, FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
-import { CustomEnchantment } from "custom_enchantment/custom_enchantment";
+import { CustomEnchantment } from "custom_enchantment/custom_enchantment"
 import { MinecraftItemTypes } from "vanilla-types/index";
 import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 import { ItemStackOptions } from "overrides/container_override";
@@ -96,7 +96,7 @@ export class Configuration {
               SendMessageTo(this.player, {rawtext: [
                 {
                   translate: "yn:fishing_got_reel.already_has_item",
-                  with: ["Reelz Configuration (Item)"]
+                  with: ["Angler's Desire Configuration (Item)"]
                 }
               ]});
             }

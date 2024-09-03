@@ -5,7 +5,7 @@
 			"identifier": "yn:fish_flee_event_particle",
 			"basic_render_parameters": {
 				"material": "particles_alpha",
-				"texture": "textures/particle/AquaticReelz/fish_escaped.png"
+				"texture": "textures/particle/fish_escaped_2.png"
 			}
 		},
 		"components": {
@@ -34,9 +34,9 @@
 				"size": [1, 1],
 				"facing_camera_mode": "rotate_xyz",
 				"uv": {
-					"texture_width": 4,
-					"texture_height": 1,
-					"uv": ["t.frame = math.floor(v.particle_age*4);return t.frame >= 4 ? 0 : t.frame;", 0],
+					"texture_width": 1,
+					"texture_height": 6,
+					"uv": [0, "t.max_frame = 8;t.last_frame = 5;t.frame = math.floor(v.particle_age*8);(t.frame <= 2) ? { return t.frame;};(t.frame >= 3 && t.frame <= t.last_frame) ? { return 3;};(t.frame > t.last_frame && t.frame <= t.max_frame-2) ? { return 4;};(t.frame > t.last_frame+1 && t.frame <= t.max_frame-1) ? { return 5;};(t.frame >= t.max_frame) ? { return 6;};"],
 					"uv_size": [1, 1]
 				}
 			},

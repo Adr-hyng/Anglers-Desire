@@ -1,5 +1,5 @@
 ## Texts (Translateable)
-yn.fishing_got_reel.on_load_message=§a§lReelz Addon§r §ahas been loaded successfully. Created by Adr-hyng.
+yn.fishing_got_reel.on_load_message=§a§lAngler's Desire Addon§r §ahas been loaded successfully. Created by Adr-hyng.
 yn.fishing_got_reel.on_caught_message=%s: There's something caught by the hook...
 yn.fishing_got_reel.on_drop_hook=%s: It got away...
 yn.fishing_got_reel.on_afk_detected=%s: Afk Detected. Cancelled the fishing system.
@@ -23,7 +23,7 @@ item.yn:fishing_got_reel:pyroclasm_hook=Pyroclasm Hook
 item.yn:fishing_got_reel:tempus_hook=Tempus Hook
 item.yn:fishing_got_reel:normal_hook=Iron Hook
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Hook with Fermented Spider Eye
-item.yn:fishing_got_reel:addon_configuration=Reelz Configuration
+item.yn:fishing_got_reel:addon_configuration=Add-On Configuration
 item.yn:fishing_got_reel:empty_map_bottle=Mystery Bottle
 
 ## General Configuration Stuffs (Translateable) 

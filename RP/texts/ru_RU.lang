@@ -1,7 +1,7 @@
 ## Note
 ## All localization files excluding English (en_US) is generated with GPT 4o, feel free to correct the grammar through contributing in the github repository.
 
-yn.fishing_got_reel.on_load_message=§a§lReelz Addon§r §aуспешно загружен. Создано Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn.fishing_got_reel.on_load_message=§a§lAngler's Desire Addon§r §aуспешно загружен. Создано Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
 yn.fishing_got_reel.on_caught_message=%s: Что-то попалось на крючок...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
 yn.fishing_got_reel.on_drop_hook=%s: Оно сорвалось...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
 yn.fishing_got_reel.on_afk_detected=%s: Обнаружено отсутствие активности. Система рыбалки отменена.	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
@@ -22,7 +22,7 @@ item.yn:fishing_got_reel:pyroclasm_hook=Крючок Пироклазма	###
 item.yn:fishing_got_reel:tempus_hook=Крючок Темпус	###
 item.yn:fishing_got_reel:normal_hook=Железный Крючок	###
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Крючок с ферментированным паучьим глазом	###
-item.yn:fishing_got_reel:addon_configuration=Конфигурация Reelz	###
+item.yn:fishing_got_reel:addon_configuration=Конфигурация дополнения	###
 item.yn:fishing_got_reel:empty_map_bottle=Загадочная Бутылка
 
 yn:fishing_got_reel.configuration.general.back=Назад	###

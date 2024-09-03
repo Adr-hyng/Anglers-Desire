@@ -1,7 +1,7 @@
 ## Note
 ## All localization files excluding English (en_US) is generated with GPT 4o, feel free to correct the grammar through contributing in the github repository.
 
-yn.fishing_got_reel.on_load_message=§a§lReelz Addon§r §atelah berhasil dimuat. Dibuat oleh Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn.fishing_got_reel.on_load_message=§a§lAngler's Desire Addon§r §atelah berhasil dimuat. Dibuat oleh Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
 yn.fishing_got_reel.on_caught_message=%s: Ada sesuatu yang tertangkap oleh kail...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
 yn.fishing_got_reel.on_drop_hook=%s: Itu lepas...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
 yn.fishing_got_reel.on_afk_detected=%s: Terdeteksi AFK. Sistem memancing dibatalkan.	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
@@ -22,7 +22,7 @@ item.yn:fishing_got_reel:pyroclasm_hook=Kail Pyroclasm	###
 item.yn:fishing_got_reel:tempus_hook=Kail Tempus	###
 item.yn:fishing_got_reel:normal_hook=Kail Besi	###
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Kail dengan Mata Laba-laba Fermentasi	###
-item.yn:fishing_got_reel:addon_configuration=Konfigurasi Reelz	###
+item.yn:fishing_got_reel:addon_configuration=Konfigurasi Add-On	###
 item.yn:fishing_got_reel:empty_map_bottle=Botol Misteri
 
 yn:fishing_got_reel.configuration.general.back=Kembali	###

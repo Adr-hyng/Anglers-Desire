@@ -468,7 +468,7 @@ export class LootTable {
             SpecialRainLoots: [
                 {
                     "item": MinecraftItemTypes.Air,
-                    "weight": 20,
+                    "weight": 15,
                     "toEntity": MinecraftEntityTypes.Tadpole
                 },
                 {

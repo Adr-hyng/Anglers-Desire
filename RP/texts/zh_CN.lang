@@ -1,7 +1,7 @@
 ## Note
 ## All localization files excluding English (en_US) is generated with GPT 4o, feel free to correct the grammar through contributing in the github repository.
 
-yn.fishing_got_reel.on_load_message=§a§lReelz 插件§r §a已成功加载。由 Adr-hyng 创建。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn.fishing_got_reel.on_load_message=§a§lAngler's Desire 插件§r §a已成功加载。由 Adr-hyng 创建。	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
 yn.fishing_got_reel.on_caught_message=%s: 有什么东西被钩住了……	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
 yn.fishing_got_reel.on_drop_hook=%s: 它逃走了……	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
 yn.fishing_got_reel.on_afk_detected=%s: 检测到挂机。取消了钓鱼系统。	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
@@ -22,7 +22,7 @@ item.yn:fishing_got_reel:pyroclasm_hook=火山爆发钩	###
 item.yn:fishing_got_reel:tempus_hook=时间钩	###
 item.yn:fishing_got_reel:normal_hook=铁钩	###
 item.yn:fishing_got_reel:fermented_spider_eye_hook=发酵蜘蛛眼钩	###
-item.yn:fishing_got_reel:addon_configuration=Reelz 配置	###
+item.yn:fishing_got_reel:addon_configuration=附加组件配置	###
 item.yn:fishing_got_reel:empty_map_bottle=神秘瓶子
 
 yn:fishing_got_reel.configuration.general.back=返回	###

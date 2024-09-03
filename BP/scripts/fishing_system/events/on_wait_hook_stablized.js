@@ -75,7 +75,7 @@ export async function onHookLanded(player) {
                         return;
                     oldLog = onLostParticleLogMap.get(player.id);
                     onLostParticleLogMap.set(player.id, system.currentTick);
-                    if ((oldLog + 20) >= system.currentTick)
+                    if ((oldLog + 27) >= system.currentTick)
                         return;
                     delayTimer.reset();
                     fisher.canBeReeled = false;

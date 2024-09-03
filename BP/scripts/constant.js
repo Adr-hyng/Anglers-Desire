@@ -1,8 +1,8 @@
 import { JsonDatabase } from "./utils/Database/con-database";
 import { Fisher } from "./fishing_system/entities/fisher";
 export const ADDON_NAMESPACE = "yn";
-export const ADDON_NAME = "Reelz";
-export const ADDON_IDENTIFIER = `${ADDON_NAMESPACE}:reelz`;
+export const ADDON_NAME = "Anglers_Desire";
+export const ADDON_IDENTIFIER = `${ADDON_NAMESPACE}:anglers`;
 export const db = new JsonDatabase(ADDON_NAME);
 export const localFishersCache = new Map();
 export const spawnedLogMap = new Map();

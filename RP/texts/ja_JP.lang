@@ -1,7 +1,7 @@
 ## Note
 ## All localization files excluding English (en_US) is generated with GPT 4o, feel free to correct the grammar through contributing in the github repository.
 
-yn.fishing_got_reel.on_load_message=§a§lReelz Addon§r §aが正常に読み込まれました。作成者: Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn.fishing_got_reel.on_load_message=§a§lAngler's Desire Addon§r §aが正常に読み込まれました。作成者: Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
 yn.fishing_got_reel.on_caught_message=%s: 釣り針に何かが引っかかっている...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
 yn.fishing_got_reel.on_drop_hook=%s: 逃げられた...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
 yn.fishing_got_reel.on_afk_detected=%s: 放置が検出されました。釣りシステムがキャンセルされました。	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
@@ -22,7 +22,7 @@ item.yn:fishing_got_reel:pyroclasm_hook=パイロクラズムフック	###
 item.yn:fishing_got_reel:tempus_hook=テンパスフック	###
 item.yn:fishing_got_reel:normal_hook=アイアンフック	###
 item.yn:fishing_got_reel:fermented_spider_eye_hook=発酵したクモの目付きフック	###
-item.yn:fishing_got_reel:addon_configuration=Reelz構成	###
+item.yn:fishing_got_reel:addon_configuration=アドオンの設定	###
 item.yn:fishing_got_reel:empty_map_bottle=謎のボトル
 
 yn:fishing_got_reel.configuration.general.back=戻る	###

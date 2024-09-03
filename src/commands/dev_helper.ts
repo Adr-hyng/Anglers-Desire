@@ -1,4 +1,4 @@
-import { Block, BlockType, BlockTypes, EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, EquipmentSlot, ItemComponentTypes, ItemEnchantableComponent, ItemStack, MolangVariableMap, system } from "@minecraft/server";
+import { Block, BlockTypes, EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, ItemComponentTypes, ItemEnchantableComponent, ItemStack, MolangVariableMap, system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { ICommandBase} from "./ICommandBase";
 import { SendMessageTo, sleep} from "utils/utilities";
@@ -7,7 +7,7 @@ import { MinecraftBlockTypes, MinecraftEnchantmentTypes, MinecraftItemTypes } fr
 import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
 import { AStarOptions } from "utils/NoxUtils/Pathfinder/AStarOptions";
 import { BidirectionalAStar } from "utils/NoxUtils/Pathfinder/BidirectionalAStar";
-import { AStar } from "utils/NoxUtils/Pathfinder/index";
+import { AStar } from "utils/NoxUtils/Pathfinder/AStar";
 overrideEverything();
 
 // Automate this, the values should be the description.
@@ -61,10 +61,7 @@ const command: ICommandBase = {
                 (player.getComponent(EntityComponentTypes.Inventory) as EntityInventoryComponent).container.addItem(fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
-                system.run(async () => {
-                    
-                    // const options: AStarOptions = new AStarOptions(player.location, {x: parseInt(args[1]), y: parseInt(args[2]), z: parseInt(args[3])}, player.dimension);
-                    
+                system.run( async () => {
                     const options: AStarOptions = new AStarOptions(player.location, {x: Math.floor(parseInt(args[1])), y: Math.floor(parseInt(args[2])), z: Math.floor(parseInt(args[3]))}, player.dimension);
                     // options.TypeIdsToConsiderPassable = [
                     //     MinecraftBlockTypes.Water,

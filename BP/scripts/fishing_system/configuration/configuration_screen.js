@@ -86,7 +86,7 @@ export class Configuration {
                             SendMessageTo(this.player, { rawtext: [
                                     {
                                         translate: "yn:fishing_got_reel.already_has_item",
-                                        with: ["Reelz Configuration (Item)"]
+                                        with: ["Angler's Desire Configuration (Item)"]
                                     }
                                 ] });
                         }

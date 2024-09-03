@@ -4,8 +4,8 @@
     "description": {
       "identifier": "yn:coelacanth",
       "spawn_category": "underground_water_creature",
-      "is_spawnable": true,
-      "is_summonable": true,
+      "is_spawnable": false,
+      "is_summonable": false,
       "is_experimental": false
     },
 

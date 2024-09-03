@@ -1,7 +1,7 @@
 ## Note
 ## All localization files excluding English (en_US) is generated with GPT 4o, feel free to correct the grammar through contributing in the github repository.
 
-yn.fishing_got_reel.on_load_message=§a§lReelz Addon§r §ase ha cargado correctamente. Creado por Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
+yn.fishing_got_reel.on_load_message=§a§lAngler's Desire Addon§r §ase ha cargado correctamente. Creado por Adr-hyng.	### **Contains Minecraft formatting codes (§ followed by one character). Ensure they are kept in the translation!**
 yn.fishing_got_reel.on_caught_message=%s: Algo se ha enganchado en el anzuelo...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
 yn.fishing_got_reel.on_drop_hook=%s: Se escapó...	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
 yn.fishing_got_reel.on_afk_detected=%s: AFK detectado. Sistema de pesca cancelado.	### **Contains important format specifiers (%s, %0, etc). Ensure they are kept in the translation within the correct position!**
@@ -22,7 +22,7 @@ item.yn:fishing_got_reel:pyroclasm_hook=Anzuelo de Piroclasma	###
 item.yn:fishing_got_reel:tempus_hook=Anzuelo de Tempus	###
 item.yn:fishing_got_reel:normal_hook=Anzuelo de Hierro	###
 item.yn:fishing_got_reel:fermented_spider_eye_hook=Anzuelo con Ojo de Araña Fermentado	###
-item.yn:fishing_got_reel:addon_configuration=Configuración de Reelz	###
+item.yn:fishing_got_reel:addon_configuration=Configuración del Complemento	###
 item.yn:fishing_got_reel:empty_map_bottle=Botella Misteriosa
 
 yn:fishing_got_reel.configuration.general.back=Atrás	###
