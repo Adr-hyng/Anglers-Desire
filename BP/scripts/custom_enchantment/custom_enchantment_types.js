@@ -4,8 +4,8 @@ export class FishingCustomEnchantmentType {
     static get Nautilus() {
         return new CustomEnchantment({
             icon: "textures/items/nautilus_hook",
-            dynamicPropId: "Nautilus",
-            id: MyCustomItemTypes.NautilusHook,
+            id: "Nautilus",
+            itemID: MyCustomItemTypes.NautilusHook,
             name: "Nautilus Hook",
             description: "yn:fishing_got_reel.enchantments.nautilus.description",
             lore: "yn:fishing_got_reel.enchantments.nautilus.lore",
@@ -17,8 +17,8 @@ export class FishingCustomEnchantmentType {
     static get Luminous() {
         return new CustomEnchantment({
             icon: "textures/items/luminous_siren_hook",
-            dynamicPropId: "Luminous",
-            id: MyCustomItemTypes.LuminousHook,
+            id: "Luminous",
+            itemID: MyCustomItemTypes.LuminousHook,
             name: "Luminous Hook",
             description: "yn:fishing_got_reel.enchantments.luminous.description",
             lore: "yn:fishing_got_reel.enchantments.luminous.lore",
@@ -29,8 +29,8 @@ export class FishingCustomEnchantmentType {
     static get Pyroclasm() {
         return new CustomEnchantment({
             icon: "textures/items/pyroclasm_hook",
-            dynamicPropId: "Pyroclasm",
-            id: MyCustomItemTypes.PyroclasmHook,
+            id: "Pyroclasm",
+            itemID: MyCustomItemTypes.PyroclasmHook,
             name: "Pyroclasm Hook",
             description: "yn:fishing_got_reel.enchantments.pyroclasm.description",
             lore: "yn:fishing_got_reel.enchantments.pyroclasm.lore",
@@ -42,8 +42,8 @@ export class FishingCustomEnchantmentType {
     static get Tempus() {
         return new CustomEnchantment({
             icon: "textures/items/tempus_hook",
-            dynamicPropId: "Tempus",
-            id: MyCustomItemTypes.TempusHook,
+            id: "Tempus",
+            itemID: MyCustomItemTypes.TempusHook,
             name: "Tempus Hook",
             description: "yn:fishing_got_reel.enchantments.tempus.description",
             lore: "yn:fishing_got_reel.enchantments.tempus.lore",
@@ -54,8 +54,8 @@ export class FishingCustomEnchantmentType {
     static get FermentedEye() {
         return new CustomEnchantment({
             icon: "textures/items/fermented_spider_eye_hook",
-            dynamicPropId: "FermentedEye",
-            id: MyCustomItemTypes.FermentedSpiderEyeHook,
+            id: "FermentedEye",
+            itemID: MyCustomItemTypes.FermentedSpiderEyeHook,
             name: "Fermented Hook",
             description: "yn:fishing_got_reel.enchantments.fermentedeye.description",
             lore: "yn:fishing_got_reel.enchantments.fermentedeye.lore",
@@ -77,7 +77,7 @@ export class CustomEnchantmentTypes {
             const customEnchantments = Object.getOwnPropertyNames(FishingCustomEnchantmentType).filter((prop) => !(['length', 'name', 'prototype'].includes(prop)));
             const availableEnchantments = [];
             for (const customEnchantmentKey of customEnchantments) {
-                availableEnchantments.push(FishingCustomEnchantmentType[customEnchantmentKey]);
+                availableEnchantments.push(FishingCustomEnchantmentType[customEnchantmentKey].clone());
             }
             this.CachedAvailableEnchantments = availableEnchantments;
         }

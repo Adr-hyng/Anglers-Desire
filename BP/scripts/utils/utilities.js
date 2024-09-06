@@ -5,10 +5,10 @@ export function sleep(ticks) {
     });
 }
 ;
-export function generateUUID16() {
+export function generateUUID16(characterLength = 16) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let uuid = '';
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < characterLength; i++) {
         const randomIndex = Math.floor(Math.random() * characters.length);
         uuid += characters[randomIndex];
     }

@@ -125,7 +125,7 @@ export class Configuration {
     form.title({rawtext: [{translate: "yn:fishing_got_reel.configuration.open_enchantment_screen.title"}]});
     for(const customEnchantment of allCustomEnchantments){
       let isAvailable = false;
-      const result = this.player.runCommand(`testfor @s[hasItem={item=${customEnchantment.id}}]`);
+      const result = this.player.runCommand(`testfor @s[hasItem={item=${customEnchantment.itemID}}]`);
       if(result.successCount && !enchantments.hasCustomEnchantment(customEnchantment) && !enchantments.hasConflicts(customEnchantment.name)) {
         isAvailable = true;
       }
@@ -156,7 +156,7 @@ export class Configuration {
         if(!enchantmentToAdd.value) continue;
         const customEnchantment = CustomEnchantmentTypes.get(new CustomEnchantment({ name: enchantmentToAdd.key, level: 1 }));
         if(!enchantments.override(equippedFishingRod).addCustomEnchantment(customEnchantment)) continue;
-        inventory.override(this.player).clearItem(customEnchantment.id, 1);
+        inventory.override(this.player).clearItem(customEnchantment.itemID, 1);
       }
       this.player.equippedToolSlot(EquipmentSlot.Mainhand).setItem(equippedFishingRod);
     });

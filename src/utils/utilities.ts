@@ -19,10 +19,10 @@ export function sleep(ticks: number): Promise<void> {
  * Generates a random 16-character UUID.
  * @returns {string} - A 16-character UUID.
 */
-export function generateUUID16(): string {
+export function generateUUID16(characterLength: number = 16): string {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let uuid = '';
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < characterLength; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
     uuid += characters[randomIndex];
   }

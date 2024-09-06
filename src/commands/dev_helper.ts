@@ -1,19 +1,22 @@
-import { Block, BlockTypes, EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, ItemComponentTypes, ItemEnchantableComponent, ItemStack, MolangVariableMap, system } from "@minecraft/server";
+import { Block, BlockTypes, EnchantmentTypes, EntityComponentTypes, EntityInventoryComponent, EquipmentSlot, ItemComponentTypes, ItemEnchantableComponent, ItemStack, MolangVariableMap, system } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { ICommandBase} from "./ICommandBase";
 import { SendMessageTo, sleep} from "utils/utilities";
 import { overrideEverything } from "overrides/index";
 import { MinecraftBlockTypes, MinecraftEnchantmentTypes, MinecraftItemTypes } from "vanilla-types/index";
-import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
+import { CustomEnchantmentTypes, FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
 import { AStarOptions } from "utils/NoxUtils/Pathfinder/AStarOptions";
 import { BidirectionalAStar } from "utils/NoxUtils/Pathfinder/BidirectionalAStar";
 import { AStar } from "utils/NoxUtils/Pathfinder/AStar";
+import { CustomEnchantment } from "custom_enchantment/custom_enchantment";
 overrideEverything();
 
 // Automate this, the values should be the description.
 enum REQUIRED_PARAMETER {
     GET = "get",
     TEST = "test",
+    RELOAD = "reload",
+    DAMAGE_USAGE = "damage",
     PARTICLE = "particle",
 }
 
@@ -29,6 +32,8 @@ const command: ICommandBase = {
         Usage:
         > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.GET} = GETS an enchanted fishing rod for development.
         > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.TEST} = TEST a Working-in-progress features.
+        > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.RELOAD} = Reload the fishing rod bug.
+        > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.DAMAGE_USAGE} = Damages fishing rod hook usage.
         > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.PARTICLE} = TEST a Working-in-progress particle.
         `).replaceAll("        ", "");
     },
@@ -49,16 +54,46 @@ const command: ICommandBase = {
         let fishingRod: ItemStack;
         switch(selectedReqParam) {
             case REQUIRED_PARAMETER.GET:
-                fishingRod = new ItemStack(MinecraftItemTypes.FishingRod, 1);
-                (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).addEnchantment({type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Lure), level: 3});
-                (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).addEnchantment({type: EnchantmentTypes.get(MinecraftEnchantmentTypes.LuckOfTheSea), level: 3});
-                (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).addEnchantment({type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Mending), level: 1});
-                (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.FermentedEye);
-                (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Luminous);
-                (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Nautilus);
-                (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Pyroclasm);
-                (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Tempus);
-                (player.getComponent(EntityComponentTypes.Inventory) as EntityInventoryComponent).container.addItem(fishingRod);
+                fishingRod = player.equippedTool(EquipmentSlot.Mainhand);
+                console.warn(JSON.stringify(fishingRod.getDynamicPropertyIds()));
+                // fishingRod.getDynamicPropertyIds().forEach((p) => {
+                //     console.warn(p + ": " + fishingRod.getDynamicProperty(p));
+                // })
+                // fishingRod = new ItemStack(MinecraftItemTypes.FishingRod, 1);
+                // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).addEnchantment({type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Lure), level: 3});
+                // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).addEnchantment({type: EnchantmentTypes.get(MinecraftEnchantmentTypes.LuckOfTheSea), level: 3});
+                // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).addEnchantment({type: EnchantmentTypes.get(MinecraftEnchantmentTypes.Mending), level: 1});
+                // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.FermentedEye);
+                // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Luminous);
+                // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Nautilus);
+                // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Pyroclasm);
+                // (fishingRod.getComponent(ItemComponentTypes.Enchantable) as ItemEnchantableComponent).override(fishingRod).addCustomEnchantment(FishingCustomEnchantmentType.Tempus);
+                // (player.getComponent(EntityComponentTypes.Inventory) as EntityInventoryComponent).container.addItem(fishingRod);
+                break;
+            case REQUIRED_PARAMETER.DAMAGE_USAGE:
+                fishingRod = player.equippedTool(EquipmentSlot.Mainhand);
+                fishingRod.enchantment.override(fishingRod).getCustomEnchantments().forEach((c) => {
+                    c.init(fishingRod).damageUsage(1);
+                })
+                player.equippedToolSlot(EquipmentSlot.Mainhand).setItem(fishingRod);
+                break;
+            case REQUIRED_PARAMETER.RELOAD:
+                fishingRod = player.equippedTool(EquipmentSlot.Mainhand);
+                const enchantment = fishingRod.enchantment.override(fishingRod);
+                for (const customEnchantment of enchantment.getCustomEnchantments()) {
+                    const usage = fishingRod.getDynamicProperty(`Fishing${customEnchantment.id}Usage`) as number | undefined;
+                    const maxUsage = fishingRod.getDynamicProperty(`Fishing${customEnchantment.id}MaxUsage`) as number | undefined;
+                    if(usage) {
+                        fishingRod.setDynamicProperty(`Fishing${customEnchantment.id}Usage`, undefined);
+                        fishingRod.setDynamicProperty(`${customEnchantment.dynamicPropID}Usage`, usage);
+                        
+                    }
+                    if(maxUsage) {
+                        fishingRod.setDynamicProperty(`Fishing${customEnchantment.id}MaxUsage`, undefined);
+                        fishingRod.setDynamicProperty(`${customEnchantment.dynamicPropID}MaxUsage`, maxUsage);
+                    }
+                }
+                player.equippedToolSlot(EquipmentSlot.Mainhand).setItem(fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
                 system.run( async () => {
