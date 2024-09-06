@@ -1,0 +1,1 @@
+execute as @s[hasitem={item=minecraft:fishing_rod}] run function AnglersDesire/reload
