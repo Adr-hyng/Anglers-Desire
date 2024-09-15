@@ -25,6 +25,7 @@ class Fisher {
         this.caughtByHook = null;
         this.currentBiomeLootTable = Object.getOwnPropertyNames(LootTable).filter(prop => !['name', 'prototype', 'length', 'fishingModifier'].includes(prop));
         this.currentBiome = 0;
+        this.currentWeather = 0;
         this.canBeReeled = false;
         this._source = player;
         this._particleSplashMolang = new MolangVariableMap();

@@ -3,7 +3,6 @@ import { EntityEquippableComponent, EquipmentSlot } from "@minecraft/server";
 import { MinecraftEnchantmentTypes, MinecraftItemTypes} from "vanilla-types/index";
 import { OverTakes } from "overrides/partial_overtakes";
 import { HookUpgrades } from "fishing_system/upgrades/upgrades";
-import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
 
 declare module "@minecraft/server" {
   interface EntityEquippableComponent {

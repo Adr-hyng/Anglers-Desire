@@ -216,9 +216,22 @@ OverTakes(Dimension.prototype, {
           }
 
           // check if it's summonable
-          if(entry?.toEntity && Boolean(EntityTypes.get(entry.toEntity) !== undefined)) {
-            item.asEntity = entry.toEntity;
-          }
+          if(entry?.toEntity) {
+            /* Plan:
+             !Not Implemented Yet:
+             - Make if it's missing something from all the entries, just make sure the total weight sums to 100
+             Like if there are missing entry, from the total weights, since some entities are not existing
+             just make it sum the total weight to 100.
+             */
+
+            /** Current Implementation
+              Just create different fish loot tables for other compatibility stuffs.
+              In the long term, if the above is implemented, then just delete those temporary solution.
+            */
+
+            if(Boolean(EntityTypes.get(entry.toEntity) !== undefined)) item.asEntity = entry.toEntity;
+            else continue;
+          } 
 
           // Spawns the item at the specified location.
           rollEntries.addEntry(item, entry.weight);

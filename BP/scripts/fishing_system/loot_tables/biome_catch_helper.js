@@ -1,11 +1,10 @@
-import { world } from "@minecraft/server";
 export class ParentCatchLoot {
     static FilteredEntityEntry() {
         const rainChanceModifier = this.RAIN_INCREASED_CHANCE / 100;
-        const isRaining = world.IsRaining;
+        const isRaining = this.fisher.currentWeather > 0;
         const totalGeneralWeight = this.GeneralLoots.reduce((sum, loot) => sum + loot.weight, 0);
         const additionalLoots = [
-            ...(this.upgrade.has("Luminous") ? this.LuminousLoots : []),
+            ...(this.fisher.fishingRod.upgrade.has("Luminous") ? this.LuminousLoots : []),
             ...(isRaining ? this.SpecialRainLoots : [])
         ];
         const additionalWeight = additionalLoots.reduce((sum, loot) => sum + loot.weight, 0);
@@ -26,12 +25,12 @@ export class ParentCatchLoot {
         }
         return BlendedLoots;
     }
-    static initializeAttributes(upgrade, RAIN_INCREASE, entityLoots) {
+    static initializeAttributes(fisher, RAIN_INCREASE, entityLoots) {
         this.GeneralLoots = entityLoots.GeneralLoots;
         this.SpecialRainLoots = entityLoots.SpecialRainLoots;
         this.LuminousLoots = entityLoots.LuminousLoots;
         this.RAIN_INCREASED_CHANCE = RAIN_INCREASE;
-        this.upgrade = upgrade;
+        this.fisher = fisher;
     }
 }
 ParentCatchLoot.RAIN_INCREASED_CHANCE = 150;

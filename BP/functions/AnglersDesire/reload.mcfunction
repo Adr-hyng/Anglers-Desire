@@ -1,1 +1,1 @@
-execute as @s[hasitem={item=minecraft:fishing_rod}] run function AnglersDesire/reload
+execute as @s[hasitem={item=minecraft:fishing_rod}] run scriptevent yn:anglers dev_helper reload

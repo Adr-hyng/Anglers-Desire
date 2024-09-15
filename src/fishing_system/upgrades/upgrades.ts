@@ -2,7 +2,7 @@
 
 
 import { ItemEnchantableComponent, ItemStack } from "@minecraft/server";
-import { AvailableCustomEnchantments, FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
+import { AvailableCustomEnchantments, FishingCustomEnchantmentType } from "custom_enchantment/available_custom_enchantments";
 import { overrideEverything } from "overrides/index";
 overrideEverything()
 

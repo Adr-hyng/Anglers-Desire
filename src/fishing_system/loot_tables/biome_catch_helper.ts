@@ -1,10 +1,10 @@
 import { world } from "@minecraft/server";
-import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 import { EntryContent } from "types";
 import { EntityLootResult } from "./biomes/types";
+import { Fisher } from "fishing_system/entities/fisher";
 
 export class ParentCatchLoot {
-  protected static upgrade: HookUpgrades;
+  protected static fisher: Fisher;
   protected static RAIN_INCREASED_CHANCE: number = 150;
 
   protected static LuminousLoots: EntryContent[];
@@ -13,14 +13,14 @@ export class ParentCatchLoot {
 
   protected static FilteredEntityEntry(): EntryContent[] {
     const rainChanceModifier = this.RAIN_INCREASED_CHANCE / 100;
-    const isRaining = world.IsRaining;
+    const isRaining = this.fisher.currentWeather > 0;
 
     // Calculate the total weight of GeneralLoots
     const totalGeneralWeight = this.GeneralLoots.reduce((sum, loot) => sum + loot.weight, 0);
 
     // Determine the additional weight added by special loots
     const additionalLoots = [
-      ...(this.upgrade.has("Luminous") ? this.LuminousLoots : []),
+      ...(this.fisher.fishingRod.upgrade.has("Luminous") ? this.LuminousLoots : []),
       ...(isRaining ? this.SpecialRainLoots : [])
     ];
 
@@ -51,11 +51,11 @@ export class ParentCatchLoot {
     return BlendedLoots;
   }
 
-  protected static initializeAttributes(upgrade: HookUpgrades, RAIN_INCREASE: number, entityLoots: EntityLootResult) {
+  protected static initializeAttributes(fisher: Fisher, RAIN_INCREASE: number, entityLoots: EntityLootResult) {
     this.GeneralLoots = entityLoots.GeneralLoots;
     this.SpecialRainLoots = entityLoots.SpecialRainLoots;
     this.LuminousLoots = entityLoots.LuminousLoots;
     this.RAIN_INCREASED_CHANCE = RAIN_INCREASE;
-    this.upgrade = upgrade;
+    this.fisher = fisher;
   }
 }

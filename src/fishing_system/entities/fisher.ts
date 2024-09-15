@@ -57,6 +57,7 @@ class Fisher {
 
     currentBiomeLootTable: Array<string> = Object.getOwnPropertyNames(LootTable).filter(prop => !['name', 'prototype', 'length', 'fishingModifier'].includes(prop));
     currentBiome: number = 0;
+    currentWeather: number = 0;
 
     canBeReeled: boolean = false;
     

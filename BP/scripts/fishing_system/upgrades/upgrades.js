@@ -1,5 +1,5 @@
 import { ItemEnchantableComponent } from "@minecraft/server";
-import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
+import { FishingCustomEnchantmentType } from "custom_enchantment/available_custom_enchantments";
 import { overrideEverything } from "overrides/index";
 overrideEverything();
 export class HookUpgrades {

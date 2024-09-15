@@ -12,6 +12,12 @@
           "client_sync": true,
           "range": [0, 16],
           "default": 0
+        },
+        "yn:current_weather_bit": {
+          "type": "int",
+          "client_sync": true,
+          "range": [0, 2],
+          "default": 0
         }
       }
     },
@@ -53,6 +59,33 @@
       "events": {
         "minecraft:entity_spawned": {
           "sequence": [
+            {
+              "filters": {
+                "test": "weather_at_position",
+                "value": "clear"
+              },
+              "set_property": {
+                "yn:current_weather_bit": 0
+              }
+            },
+            {
+              "filters": {
+                "test": "weather_at_position",
+                "value": "rain"
+              },
+              "set_property": {
+                "yn:current_weather_bit": 1
+              }
+            },
+            {
+              "filters": {
+                "test": "weather_at_position",
+                "value": "thunderstorm"
+              },
+              "set_property": {
+                "yn:current_weather_bit": 2
+              }
+            },
             {
               "filters": {
                 "test": "is_biome",

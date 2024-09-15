@@ -3,7 +3,9 @@ import { JungleCatch, DefaultCatch } from "./index";
 import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { OceanCatch } from "./biomes/OceanCatch";
-import { MyCustomEntityTypes } from "fishing_system/entities/custom_mobs";
+import { CompatibleAddonHandler } from "./compatible_loot_manager";
+import { TacosFishEntityTypes } from "fishing_system/entities/compatibility/tacos_fish_mobs";
+import { Fisher } from "fishing_system/entities/fisher";
 
 
 export class LootTable {
@@ -12,8 +14,8 @@ export class LootTable {
     return {LoTSModifier: LoTSLevel, deepnessModifier: deepTreasureModifier};
   }
   // 0
-  static Anywhere(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static Anywhere(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -49,8 +51,8 @@ export class LootTable {
   }
 
   // 1
-  static Jungle(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return JungleCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static Jungle(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return JungleCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -86,8 +88,8 @@ export class LootTable {
   }
 
   // 2
-  static Ocean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static Ocean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -128,8 +130,8 @@ export class LootTable {
   }
 
   // 3
-  static DeepOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static DeepOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -170,8 +172,8 @@ export class LootTable {
   }
 
   // 4
-  static FrozenOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static FrozenOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -212,8 +214,8 @@ export class LootTable {
   }
 
   // 5
-  static DeepFrozenOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static DeepFrozenOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -254,8 +256,8 @@ export class LootTable {
   }
 
   // 6
-  static ColdOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static ColdOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -296,8 +298,8 @@ export class LootTable {
   }
 
   // 7
-  static DeepColdOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static DeepColdOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -333,8 +335,8 @@ export class LootTable {
   }
 
   // 8
-  static Lukewarm(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static Lukewarm(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -380,8 +382,8 @@ export class LootTable {
   }
 
   // 9
-  static DeepLukewarm(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static DeepLukewarm(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return OceanCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -432,8 +434,8 @@ export class LootTable {
   }
 
   // 10
-  static WarmOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static WarmOcean(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Cod,
@@ -479,8 +481,8 @@ export class LootTable {
   }
 
   // 11
-  static MangroveSwamp(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static MangroveSwamp(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Air,
@@ -516,8 +518,8 @@ export class LootTable {
   }
 
   // 12
-  static LushCave(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, upgrade: HookUpgrades): LootTableContent {
-    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), upgrade, {
+  static LushCave(level: RangeInternal<0, 4>, isDeeplySubmerged: boolean = false, fisher: Fisher): LootTableContent {
+    return DefaultCatch.Loot( this.fishingModifier(level, isDeeplySubmerged), fisher, {
       GeneralLoots: [
         {
           "item": MinecraftItemTypes.Air,

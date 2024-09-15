@@ -1,4 +1,4 @@
-import { world, system, Player, ScriptEventSource, WeatherType, EntityInventoryComponent, ItemTypes } from "@minecraft/server";
+import { world, system, Player, ScriptEventSource, EntityInventoryComponent, ItemTypes } from "@minecraft/server";
 import { ADDON_IDENTIFIER, ADDON_NAME, db, fetchFisher, onCustomBlockInteractLogMap } from "./constant";
 import { onFishingHookCreated } from "./fishing_system/events/on_hook_created";
 import { overrideEverything } from "overrides/index";
@@ -27,6 +27,31 @@ world.beforeEvents.worldInitialize.subscribe((e) => {
 world.afterEvents.playerSpawn.subscribe((e) => {
     if (!e.initialSpawn)
         return;
+    if (!db.has(`playerFirstJoined-${e.player.id}`)) {
+        db.set(`playerFirstJoined-${e.player.id}`, false);
+    }
+    if (!db.get(`playerFirstJoined-${e.player.id}`)) {
+        db.set(`playerFirstJoined-${e.player.id}`, true);
+        const addonConfigItemType = ItemTypes.get(MyCustomItemTypes.AddonConfiguration);
+        e.player.runCommandAsync(`testfor @s[hasItem={item=${addonConfigItemType.id}}]`).then((result) => {
+            if (!result.successCount) {
+                const inventory = e.player.getComponent(EntityInventoryComponent.componentId).container.override(e.player);
+                inventory.giveItem(addonConfigItemType, 1, {
+                    lore: [
+                        `§l${ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}`
+                    ]
+                });
+            }
+            else {
+                SendMessageTo(e.player, { rawtext: [
+                        {
+                            translate: "yn:fishing_got_reel.already_has_item",
+                            with: ["Angler's Desire Configuration"]
+                        }
+                    ] });
+            }
+        });
+    }
     if (!serverConfigurationCopy.ShowMessageUponJoin.defaultValue)
         return;
     SendMessageTo(e.player, {
@@ -35,25 +60,6 @@ world.afterEvents.playerSpawn.subscribe((e) => {
                 translate: "yn.fishing_got_reel.on_load_message"
             }
         ]
-    });
-    const addonConfigItemType = ItemTypes.get(MyCustomItemTypes.AddonConfiguration);
-    e.player.runCommandAsync(`testfor @s[hasItem={item=${addonConfigItemType.id}}]`).then((result) => {
-        if (!result.successCount) {
-            const inventory = e.player.getComponent(EntityInventoryComponent.componentId).container.override(e.player);
-            inventory.giveItem(addonConfigItemType, 1, {
-                lore: [
-                    `§l${ADDON_NAME.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}`
-                ]
-            });
-        }
-        else {
-            SendMessageTo(e.player, { rawtext: [
-                    {
-                        translate: "yn:fishing_got_reel.already_has_item",
-                        with: ["Angler's Desire Configuration"]
-                    }
-                ] });
-        }
     });
 });
 world.beforeEvents.itemUse.subscribe((event) => {
@@ -89,18 +95,6 @@ world.beforeEvents.itemUse.subscribe((event) => {
                 onHookedItem(fisher);
         });
     }, 0);
-});
-world.afterEvents.weatherChange.subscribe((e) => {
-    if ([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather))
-        db.set("WorldIsRaining", true);
-    else if (!([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather)))
-        db.set("WorldIsRaining", false);
-});
-world.beforeEvents.weatherChange.subscribe((e) => {
-    if ([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather))
-        db.set("WorldIsRaining", true);
-    else if (!([WeatherType.Rain, WeatherType.Thunder].includes(e.newWeather)))
-        db.set("WorldIsRaining", false);
 });
 system.afterEvents.scriptEventReceive.subscribe((event) => {
     if (event.sourceType !== ScriptEventSource.Entity)

@@ -1,21 +1,25 @@
-import { BlockTypes, EnchantmentTypes, EntityComponentTypes, EquipmentSlot, ItemComponentTypes, ItemEnchantableComponent, ItemStack, MolangVariableMap, system } from "@minecraft/server";
+import { BlockTypes, EnchantmentTypes, EntityComponentTypes, EquipmentSlot, ItemComponentTypes, ItemEnchantableComponent, ItemStack, MolangVariableMap, system, world } from "@minecraft/server";
 import { CommandHandler } from "commands/command_handler";
 import { SendMessageTo, sleep } from "utils/utilities";
 import { overrideEverything } from "overrides/index";
 import { MinecraftBlockTypes, MinecraftEnchantmentTypes, MinecraftItemTypes } from "vanilla-types/index";
-import { FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
 import { AStarOptions } from "utils/NoxUtils/Pathfinder/AStarOptions";
 import { BidirectionalAStar } from "utils/NoxUtils/Pathfinder/BidirectionalAStar";
+import { FishingCustomEnchantmentType } from "custom_enchantment/available_custom_enchantments";
+import { TacosFishEntityTypes } from "fishing_system/entities/compatibility/tacos_fish_mobs";
+import { db } from "constant";
 overrideEverything();
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
     REQUIRED_PARAMETER["GET"] = "get";
-    REQUIRED_PARAMETER["TEST"] = "test";
-    REQUIRED_PARAMETER["RELOAD_INVENTORY"] = "reload";
     REQUIRED_PARAMETER["LOAD_OLD"] = "load_old";
+    REQUIRED_PARAMETER["RELOAD_INVENTORY"] = "reload";
+    REQUIRED_PARAMETER["UPDATE_ADDON"] = "update";
+    REQUIRED_PARAMETER["TEST"] = "test";
     REQUIRED_PARAMETER["PATHFIND_TEST"] = "pathfind";
     REQUIRED_PARAMETER["DAMAGE_TEST"] = "damage";
     REQUIRED_PARAMETER["PARTICLE_TEST"] = "particle";
+    REQUIRED_PARAMETER["TACO_FISH_TEST"] = "test_tacofish";
 })(REQUIRED_PARAMETER || (REQUIRED_PARAMETER = {}));
 const command = {
     name: 'dev_helper',
@@ -28,8 +32,8 @@ const command = {
         Usage:
         > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.GET} = GETS an enchanted fishing rod for development.
         > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.RELOAD_INVENTORY} = Reload the fishing rod's hook bug.
-        > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.DAMAGE_TEST} = Damages fishing rod hook usage.
-        > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.PARTICLE_TEST} = TEST a Working-in-progress particle.
+        > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.LOAD_OLD} = Loads the old custom dynamic property for fishing rod. For bug fixing purposes. It's chained with reload command after.
+        > ${CommandHandler.prefix}${this.name} ${REQUIRED_PARAMETER.UPDATE_ADDON} = Updates the addon to the latest, after deleting the old addon, and installing the new one.
         `).replaceAll("        ", "");
     },
     execute(player, args) {
@@ -63,6 +67,32 @@ const command = {
                 break;
             case REQUIRED_PARAMETER.TEST:
                 break;
+            case REQUIRED_PARAMETER.UPDATE_ADDON:
+                if (db.has("WorldIsRaining"))
+                    db.delete("WorldIsRaining");
+                world.sendMessage("§a§lAngler's Desire Addon's Scripts§r §ahas been updated successfully.");
+                break;
+            case REQUIRED_PARAMETER.TACO_FISH_TEST:
+                let successCount = 0;
+                system.run(async () => {
+                    for (const tacoFishType of Object.values(TacosFishEntityTypes)) {
+                        try {
+                            const t = player.dimension.spawnEntity(tacoFishType, player.location);
+                            await system.waitTicks(3);
+                            t.kill();
+                            successCount++;
+                        }
+                        catch (e) {
+                            continue;
+                        }
+                    }
+                    SendMessageTo(player, {
+                        rawtext: [
+                            { text: `Success: ${successCount}\nTotal: ${(Object.values(TacosFishEntityTypes).length)}` }
+                        ]
+                    });
+                });
+                break;
             case REQUIRED_PARAMETER.DAMAGE_TEST:
                 if (!args[1].length)
                     return;
@@ -92,6 +122,13 @@ const command = {
                     }
                     inventory.setItem(slot, fishingRod);
                 }
+                SendMessageTo(player, {
+                    rawtext: [
+                        {
+                            text: "§a§lAngler's Desire§r §afishing hook enhancement bug located in your current inventory has been fully reloaded."
+                        }
+                    ]
+                });
                 break;
             case REQUIRED_PARAMETER.LOAD_OLD:
                 fishingRod = player.equippedTool(EquipmentSlot.Mainhand);

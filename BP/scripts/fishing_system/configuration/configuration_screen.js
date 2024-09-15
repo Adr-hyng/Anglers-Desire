@@ -6,10 +6,11 @@ import { clientConfiguration } from "./client_configuration";
 import { FishingOutputBuilder } from "fishing_system/outputs/output_builder";
 import { SendMessageTo } from "utils/index";
 import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
-import { CustomEnchantmentTypes, FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
+import { CustomEnchantmentTypes } from "custom_enchantment/custom_enchantment_types";
 import { CustomEnchantment } from "custom_enchantment/custom_enchantment";
 import { MinecraftItemTypes } from "vanilla-types/index";
 import { MyCustomItemTypes } from "fishing_system/items/custom_items";
+import { FishingCustomEnchantmentType } from "custom_enchantment/available_custom_enchantments";
 export class Configuration {
     constructor(player) {
         this.player = player;

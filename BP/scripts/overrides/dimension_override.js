@@ -196,8 +196,11 @@ OverTakes(Dimension.prototype, {
                             item.getComponent(ItemComponentTypes.Enchantable).addEnchantment(enchant);
                         }
                     }
-                    if (entry?.toEntity && Boolean(EntityTypes.get(entry.toEntity) !== undefined)) {
-                        item.asEntity = entry.toEntity;
+                    if (entry?.toEntity) {
+                        if (Boolean(EntityTypes.get(entry.toEntity) !== undefined))
+                            item.asEntity = entry.toEntity;
+                        else
+                            continue;
                     }
                     rollEntries.addEntry(item, entry.weight);
                 }

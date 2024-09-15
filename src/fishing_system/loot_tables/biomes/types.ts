@@ -9,4 +9,5 @@ export type EntityLootResult = {
   GeneralLoots: EntryContent[],
   SpecialRainLoots: EntryContent[],
   LuminousLoots: EntryContent[],
+  TacoFishLoots?: EntryContent[]
 }

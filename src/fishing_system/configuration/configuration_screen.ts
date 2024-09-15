@@ -8,11 +8,12 @@ import { Fisher } from "fishing_system/entities/fisher";
 import { SendMessageTo } from "utils/index";
 import { FormBuilder } from "utils/form_builder";
 import { resetServerConfiguration, serverConfigurationCopy, setServerConfiguration } from "./server_configuration";
-import { CustomEnchantmentTypes, FishingCustomEnchantmentType } from "custom_enchantment/custom_enchantment_types";
+import { CustomEnchantmentTypes } from "custom_enchantment/custom_enchantment_types";
 import { CustomEnchantment } from "custom_enchantment/custom_enchantment"
 import { MinecraftItemTypes } from "vanilla-types/index";
 import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 import { ItemStackOptions } from "overrides/container_override";
+import { FishingCustomEnchantmentType } from "custom_enchantment/available_custom_enchantments";
 
 type DisassembleFormContent = {
   key: string,

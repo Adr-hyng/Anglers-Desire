@@ -8,7 +8,7 @@ export const ADDON_IDENTIFIER: string = `${ADDON_NAMESPACE}:anglers`;
 export const db = new JsonDatabase(ADDON_NAME);
 
 export const localFishersCache: Map<string, Fisher> = new Map();
-export const spawnedLogMap: Map<string, number> = new Map();
+export const onSpawnHookLogMap: Map<string, number> = new Map();
 
 export const onCaughtParticleLogMap: Map<string, number> = new Map();
 export const onLostParticleLogMap: Map<string, number> = new Map();
