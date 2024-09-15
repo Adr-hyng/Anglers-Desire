@@ -7,7 +7,7 @@ import { AStarOptions } from "utils/NoxUtils/Pathfinder/AStarOptions";
 import { BidirectionalAStar } from "utils/NoxUtils/Pathfinder/BidirectionalAStar";
 import { FishingCustomEnchantmentType } from "custom_enchantment/available_custom_enchantments";
 import { TacosFishEntityTypes } from "fishing_system/entities/compatibility/tacos_fish_mobs";
-import { db, fetchFisher } from "constant";
+import { db } from "constant";
 overrideEverything();
 var REQUIRED_PARAMETER;
 (function (REQUIRED_PARAMETER) {
@@ -66,7 +66,6 @@ const command = {
                 player.getComponent(EntityComponentTypes.Inventory).container.addItem(fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
-                console.warn(fetchFisher(player).currentBiome);
                 break;
             case REQUIRED_PARAMETER.UPDATE_ADDON:
                 if (db.has("WorldIsRaining"))

@@ -1,14 +1,11 @@
 import { ItemTypes } from "@minecraft/server";
+import { TacosFishEntityTypes } from "fishing_system/entities/compatibility/tacos_fish_mobs";
 class CompatibilityLootManager {
     static get TacosFish() {
-        return ItemTypes.get('taco:catfish');
+        return ItemTypes.get(TacosFishEntityTypes.Bass);
     }
 }
 export class CompatibleAddonHandler {
-    static getAll() {
-        const allAvailableCompatibleAddons = Object.getOwnPropertyNames(CompatibilityLootManager).filter((prop) => !(['length', 'name', 'prototype'].includes(prop)));
-        return allAvailableCompatibleAddons;
-    }
     static isInstalled(addonCompatibilityName) {
         return CompatibilityLootManager[addonCompatibilityName] !== undefined;
     }

@@ -5,7 +5,7 @@
       "entries": [
         {
           "type": "item",
-          "name": "minecraft:map",
+          "name": "minecraft:filled_map",
           "weight": 1,
           "functions": [
             {
@@ -16,7 +16,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:map",
+          "name": "minecraft:filled_map",
           "weight": 3,
           "functions": [
             {

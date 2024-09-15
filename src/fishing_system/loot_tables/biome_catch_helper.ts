@@ -1,4 +1,3 @@
-import { world } from "@minecraft/server";
 import { EntryContent } from "types";
 import { EntityLootResult } from "./biomes/types";
 import { Fisher } from "fishing_system/entities/fisher";

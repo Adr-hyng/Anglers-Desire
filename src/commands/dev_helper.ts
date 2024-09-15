@@ -71,7 +71,6 @@ const command: ICommandBase = {
                 (player.getComponent(EntityComponentTypes.Inventory) as EntityInventoryComponent).container.addItem(fishingRod);
                 break;
             case REQUIRED_PARAMETER.TEST:
-                console.warn(fetchFisher(player).currentBiome);
                 break;
             case REQUIRED_PARAMETER.UPDATE_ADDON:
                 if(db.has("WorldIsRaining")) db.delete("WorldIsRaining"); // Delete world dynamic property from v1.0.1

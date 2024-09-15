@@ -1,6 +1,5 @@
 import {RangeInternal, LootTableContent } from "types/index";
 import { JungleCatch, DefaultCatch } from "./index";
-import { HookUpgrades } from "fishing_system/upgrades/upgrades";
 import { MinecraftEntityTypes, MinecraftItemTypes } from "vanilla-types/index";
 import { OceanCatch } from "./biomes/OceanCatch";
 import { CompatibleAddonHandler } from "./compatible_loot_manager";
