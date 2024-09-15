@@ -1,13 +1,13 @@
 {
     "format_version": 2,
     "header": {
-        "name": "Angler's Desire BP §8(1.1.0) [DEBUG]",
+        "name": "Angler's Desire BP §8(1.0.3)",
         "description": "Adding immersion to vanilla fishing mechanics in Minecraft \n @Made By: https://twitter.com/h_YanG_0A",
         "uuid": "f36713ae-a50d-4eae-ab09-14bef4e580ec",
         "version": [
             1,
-            1,
-            0
+            0,
+            3
         ],
         "min_engine_version": [
             1,
@@ -33,8 +33,8 @@
             "uuid": "02a44d23-5962-4bb5-8a78-ef87d1eb0726",
             "version": [
                 1,
-                1,
-                0
+                0,
+                3
             ],
             "entry": "scripts/main.js"
         }
@@ -55,8 +55,8 @@
             "uuid": "54ee84f3-7b81-421c-8602-2d399940fd59",
             "version": [
                 1,
-                1,
-                0
+                0,
+                3
             ]
         }
     ],
