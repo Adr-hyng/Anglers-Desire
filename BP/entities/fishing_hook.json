@@ -178,19 +178,21 @@
               }
             },
             {
-              "filters": {
-                "test": "has_biome_tag",
-                "value": "mangrove_swamp"
-              },
-              "set_property": {
-                "yn:current_biome_bit": 11
-              }
-            },
-            {
-              "filters": {
-                "test": "is_biome",
-                "value": "swamp"
-              },
+              "filters": [
+                {
+                  "any_of": [
+                    {
+                      "test": "has_biome_tag",
+                      "value": "mangrove_swamp"
+                    }, 
+                    {
+                      "test": "is_biome",
+                      "value": "swamp"
+                    }
+                  ]
+                }
+              ],
+              
               "set_property": {
                 "yn:current_biome_bit": 11
               }
@@ -202,6 +204,15 @@
               },
               "set_property": {
                 "yn:current_biome_bit": 12
+              }
+            },
+            {
+              "filters": {
+                "test": "is_biome",
+                "value": "taiga"
+              },
+              "set_property": {
+                "yn:current_biome_bit": 13
               }
             }
           ]

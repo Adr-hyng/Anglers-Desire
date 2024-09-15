@@ -1,6 +1,5 @@
 import { MinecraftItemTypes } from "vanilla-types/index";
 import { ParentCatchLoot } from "../biome_catch_helper";
-import { MyCustomItemTypes } from "fishing_system/items/custom_items";
 export class DefaultCatch extends ParentCatchLoot {
     static Loot(modifier, fisher, entityLoots, RAIN_INCREASE = 150) {
         const upgrade = fisher.fishingRod.upgrade;
@@ -78,14 +77,6 @@ export class DefaultCatch extends ParentCatchLoot {
                     "rolls": 1,
                     "weight": treasureWeight,
                     "entries": [
-                        {
-                            "item": MyCustomItemTypes.MysteryBottle,
-                            "weight": 5
-                        },
-                        {
-                            "item": MinecraftItemTypes.NautilusShell,
-                            "weight": 5
-                        },
                         {
                             "item": MinecraftItemTypes.Waterlily,
                             "weight": 5

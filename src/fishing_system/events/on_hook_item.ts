@@ -21,7 +21,7 @@ export function onHookedItem(fisher: Fisher) {
         (
           enchantmentLevel, 
           isDeeplySubmerged, 
-          fisher.fishingRod.upgrade
+          fisher
         ), hookLandedVector);
       fisher.setEntityCaughtByHook(drops[0]);
       fisher.reelHook();

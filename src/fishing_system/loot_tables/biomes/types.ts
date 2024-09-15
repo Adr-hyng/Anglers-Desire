@@ -7,7 +7,12 @@ export type ModifierResult = {
 
 export type EntityLootResult = {
   GeneralLoots: EntryContent[],
+  /**
+   * Special Rain Aquatic Mobs to catch when it's raining.
+   */
   SpecialRainLoots: EntryContent[],
-  LuminousLoots: EntryContent[],
-  TacoFishLoots?: EntryContent[]
+  /**
+   * Special Aquatic Mobs to catch when you have luminous hook.
+   */
+  LuminousLoots: EntryContent[]
 }

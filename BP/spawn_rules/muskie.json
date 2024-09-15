@@ -1,0 +1,46 @@
+{
+	"format_version": "1.8.0",
+	"minecraft:spawn_rules": {
+		"description": {
+		"identifier": "taco:muskie",
+		"population_control": "water_animal"
+		},
+		"conditions": [
+			{
+				"minecraft:spawns_on_surface": {},
+				"minecraft:spawns_underwater": {},
+
+				"minecraft:distance_filter": {
+				"min": 12,
+				"max": 32
+				},
+				"minecraft:weight": {
+				"default": 0
+				},
+				"minecraft:herd": {
+				"min_size":2,
+				"max_size":5
+				},
+				"minecraft:biome_filter": {
+					"all_of": [
+						{ "test": "has_biome_tag", "subject": "self", "operator": "not", "value": "taiga" },
+						{ "test": "has_biome_tag", "subject": "self", "operator": "not", "value": "roofed" },
+						{ "test": "has_biome_tag", "subject": "self", "operator": "not", "value": "extreme_hills" },
+						{ "test": "has_biome_tag", "subject": "self", "operator": "not", "value": "meadow" },
+						{ "test": "has_biome_tag", "subject": "self", "operator": "not", "value": "frozen" },
+						{
+							"any_of": [
+								{ "test": "has_biome_tag", "subject": "self", "operator": "equals", "value": "forest" },
+								{ "test": "has_biome_tag", "subject": "self", "operator": "equals", "value": "bee_habitat" },
+								{ "test": "has_biome_tag", "subject": "self", "operator": "equals", "value": "river" },
+								{ "test": "has_biome_tag", "subject": "self", "operator": "equals", "value": "swamp" },
+								{ "test": "has_biome_tag", "subject": "self", "operator": "equals", "value": "mushroom_island" }
+
+							]
+						}
+					]
+				}
+			}
+		]
+	}
+}

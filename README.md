@@ -2,8 +2,8 @@
 
 <div align="center">
 
-  ![DevelopmentStatus](https://img.shields.io/badge/Development-%20release-2ea44f?logo=visualstudiocode&logoColor=blue)
-  ![ManualVersion](https://img.shields.io/badge/Version-v1.0.0-2ea44f?logo=git&logoColor=red)
+  ![DevelopmentStatus](https://img.shields.io/badge/Development-%20released🚀-2ea44f?logo=visualstudiocode&logoColor=blue)
+  ![ManualVersion](https://img.shields.io/badge/Version-v1.0.2-2ea44f?logo=git&logoColor=red)
   [![Twitter](https://img.shields.io/badge/Twitter-Follow_@h__YanG__0A-2ea44f?logo=twitter&logoColor=blue)](https://twitter.com/h_YanG_0A)
   <!-- ![GitHub Release](https://img.shields.io/github/v/release/Adr-hyng/Anglers-Desire?logo=xbox&logoColor=green&label=Minecraft) -->
 

@@ -86,14 +86,6 @@ export class DefaultCatch extends ParentCatchLoot {
           "weight": treasureWeight,
           "entries": [
             {
-              "item": MyCustomItemTypes.MysteryBottle,
-              "weight": 5
-            },
-            {
-              "item": MinecraftItemTypes.NautilusShell,
-              "weight": 5
-            },
-            {
               "item": MinecraftItemTypes.Waterlily,
               "weight": 5
             },

@@ -1,4 +1,3 @@
-import { world } from "@minecraft/server";
 import { EntryContent } from "types";
 import { EntityLootResult } from "./biomes/types";
 import { Fisher } from "fishing_system/entities/fisher";
@@ -12,6 +11,8 @@ export class ParentCatchLoot {
   protected static GeneralLoots: EntryContent[];
 
   protected static FilteredEntityEntry(): EntryContent[] {
+    // Not Implemented Yet: 
+    // When there's same item name, and entity name, then just rewrite the old one.
     const rainChanceModifier = this.RAIN_INCREASED_CHANCE / 100;
     const isRaining = this.fisher.currentWeather > 0;
 
@@ -41,7 +42,8 @@ export class ParentCatchLoot {
       ...this.GeneralLoots
     ];
 
-    // Increase weights when raining
+    // Increase weights of rare, and decrease weights of common when raining
+    // Currently, it only just increases 150% instead of adjusting everything else.
     if (isRaining) {
       for (let loot of BlendedLoots) {
         loot.weight *= rainChanceModifier;

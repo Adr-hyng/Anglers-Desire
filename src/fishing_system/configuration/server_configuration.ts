@@ -25,7 +25,7 @@ export const serverConfiguration = {
   /**
    * Enables debug messages to content logs.
    */
-  debug: new FormBuilder("Debug Mode").createToggle(true),
+  debug: new FormBuilder("Debug Mode").createToggle(false),
 };
 
 export let serverConfigurationCopy = cloneConfiguration(serverConfiguration);
@@ -33,4 +33,4 @@ export let setServerConfiguration = (newServerConfig) => serverConfigurationCopy
 export let resetServerConfiguration = () => serverConfigurationCopy = cloneConfiguration(serverConfiguration);
 
 // version (do not change)
-export const VERSION = "1.1.0";
+export const VERSION = "1.0.2";
