@@ -6,7 +6,7 @@
 		"description": "Adding immersion to vanilla fishing mechanics in Minecraft \n @Made By: https://twitter.com/h_YanG_0A",
 		"bp_uuid": "f36713ae-a50d-4eae-ab09-14bef4e580ec",
 		"rp_uuid": "54ee84f3-7b81-421c-8602-2d399940fd59",
-		"version": [1, 0, 3],
+		"version": [1, 0, 2],
 		"min_engine_version": [ 1, 21, 0 ]
 	},
 	"bp_modules": [
@@ -21,7 +21,7 @@
 			"type": "script",
 			"language": "javascript",
 			"uuid": "02a44d23-5962-4bb5-8a78-ef87d1eb0726",
-			"version": [ 1, 0, 3 ],
+			"version": [ 1, 0, 2 ],
 			"entry": "scripts/main.js"
 		}
 	],
@@ -30,7 +30,7 @@
 		{
 			"type": "resources",
 			"uuid": "a74c51a8-a015-4f9e-b55a-98aa2c38aff5",
-			"version": [ 1, 0, 3 ]
+			"version": [ 1, 0, 2 ]
 		}
 	],
 	"bp_dependencies": [

@@ -33,4 +33,4 @@ export let setServerConfiguration = (newServerConfig) => serverConfigurationCopy
 export let resetServerConfiguration = () => serverConfigurationCopy = cloneConfiguration(serverConfiguration);
 
 // version (do not change)
-export const VERSION = "1.0.3";
+export const VERSION = "1.0.2";
